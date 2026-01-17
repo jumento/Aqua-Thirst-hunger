@@ -34,6 +34,10 @@ public class HungerComponent implements Component<EntityStore> {
         return this.hungerLevel;
     }
 
+    public void setHungerLevel (float hungerLevel) {
+        this.hungerLevel = Math.max(0.0f, Math.min(hungerLevel, maxHungerLevel));
+    }
+
     public void feed (float amount) {
         this.hungerLevel = Math.min(this.hungerLevel + amount, maxHungerLevel);
     }
