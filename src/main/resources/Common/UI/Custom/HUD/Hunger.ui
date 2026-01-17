@@ -2,11 +2,10 @@
 
 Group #HUD {
     LayoutMode: Bottom;
-    Anchor: (Bottom: 140);
 
     Group #Container {
         LayoutMode: Left;
-        Anchor: (Width: 332, Height: 20);
+        Anchor: (Width: 332, Height: 20, Bottom: 12, Left: 12);
 
         Group #Icon {
             Background: @ChickenTex;
