@@ -27,17 +27,20 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
     private final float starvationPerTick;
     private final float starvationDamage;
     private final float starvationStaminaModifier;
+    private final float hungryThreshold;
 
     private StarveSystem(
         float starvationTickRate,
         float starvationPerTick,
         float starvationDamage,
-        float starvationStaminaModifier
+        float starvationStaminaModifier,
+        float hungryThreshold
     ) {
         super(starvationTickRate);
         this.starvationPerTick = starvationPerTick;
         this.starvationDamage = starvationDamage;
         this.starvationStaminaModifier = starvationStaminaModifier;
+        this.hungryThreshold = hungryThreshold;
     }
 
     public static StarveSystem create () {
@@ -46,7 +49,8 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             conf.getStarvationTickRate(),
             conf.getStarvationPerTick(),
             conf.getStarvationDamage(),
-            conf.getStarvationStaminaModifier()
+            conf.getStarvationStaminaModifier(),
+            conf.getHungryThreshold()
         );
     }
 
@@ -91,7 +95,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
         float hungerLevel = hunger.getHungerLevel();
 
         // Apply hungry effect when hunger level is below 20
-        if (hungerLevel != 0 && hungerLevel < 20.0f) {
+        if (hungerLevel != 0 && hungerLevel < this.hungryThreshold) {
             EffectControllerComponent effectController = commandBuffer.getComponent(ref, EffectControllerComponent.getComponentType());
             if (effectController == null) return;
             // apply hungry effect
