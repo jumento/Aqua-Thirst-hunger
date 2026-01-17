@@ -38,7 +38,7 @@ public class OnDeathSystem extends DeathSystems.OnDeathSystem {
         PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
         if (playerRef == null || hungerComponent == null) return;
-        hungerComponent.setHungerLevel(100.0f);
-        HHMHud.updatePlayerHud(playerRef, 100.0f);
+        hungerComponent.setHungerLevel(HungerComponent.maxHungerLevel);
+        HHMHud.updatePlayerHud(playerRef, HungerComponent.maxHungerLevel);
     }
 }

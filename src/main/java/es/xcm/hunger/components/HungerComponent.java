@@ -17,11 +17,11 @@ public class HungerComponent implements Component<EntityStore> {
                     HungerComponent::getHungerLevel).add()
             .build();
 
-    private static float maxHungerLevel = 100.0f;
+    public static final float maxHungerLevel = 100.0f;
     private float hungerLevel;
 
     public HungerComponent() {
-        this.hungerLevel = 100.0f; // Max hunger level
+        this.hungerLevel = maxHungerLevel; // Max hunger level
     }
 
     public HungerComponent (float hungerLevel) {

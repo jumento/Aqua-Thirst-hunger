@@ -3,15 +3,12 @@ package es.xcm.hunger.systems;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.DelayedEntitySystem;
-import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.damage.*;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatValue;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.Config;
 import es.xcm.hunger.HHMConfig;
 import es.xcm.hunger.HytaleHungerMod;
 import es.xcm.hunger.ui.HHMHud;
@@ -60,7 +57,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
         return Query.and(
             HungerComponent.getComponentType(),
             EntityStatMap.getComponentType(),
-            Player.getComponentType(),
+            PlayerRef.getComponentType(),
             Query.not(DeathComponent.getComponentType())
         );
     }
