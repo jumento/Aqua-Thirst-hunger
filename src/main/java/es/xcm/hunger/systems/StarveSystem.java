@@ -22,6 +22,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
     private final float starvationPerTick;
     private final float starvationDamage;
     private final float starvationStaminaModifier;
+    private static DamageCause damageCause;
 
     private StarveSystem(
         float starvationTickRate,
@@ -43,6 +44,13 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             conf.getStarvationDamage(),
             conf.getStarvationStaminaModifier()
         );
+    }
+
+    @NonNullDecl
+    private static DamageCause getDamageCause () {
+        if (damageCause != null) return damageCause;
+        damageCause = new DamageCause("Starvation", "Starvation", false, true, true);
+        return damageCause;
     }
 
     @Nullable
@@ -85,7 +93,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
 
         // Apply damage to the player due to starvation
         if (hunger.getHungerLevel() == 0) {
-            Damage damage = new Damage(Damage.NULL_SOURCE, DamageCause.OUT_OF_WORLD, this.starvationDamage);
+            Damage damage = new Damage(Damage.NULL_SOURCE, getDamageCause(), this.starvationDamage);
             DamageSystems.executeDamage(ref, commandBuffer, damage);
         }
 
