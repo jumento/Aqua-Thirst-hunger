@@ -16,21 +16,20 @@ import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-// https://hytalemodding.dev/en/docs/guides/ecs/hytale-ecs
 public class StarveSystem extends DelayedEntitySystem<EntityStore> {
     private final ComponentType<EntityStore, HungerComponent> hungerComponentType;
-    private final float starvationRate;
+    private final float starvationPerTick;
     private final float starvationDamage;
 
     private StarveSystem(
             ComponentType<EntityStore, HungerComponent> hungerComponentType,
-            float starvationInterval,
-            float starvationRate,
+            float starvationTickRate,
+            float starvationPerTick,
             float starvationDamage
     ) {
-        super(starvationInterval); // Tick every 5 seconds
+        super(starvationTickRate);
         this.hungerComponentType = hungerComponentType;
-        this.starvationRate = starvationRate;
+        this.starvationPerTick = starvationPerTick;
         this.starvationDamage = starvationDamage;
     }
 
@@ -39,10 +38,10 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             Config<HHMConfig> config
     ) {
         HHMConfig hhmConfig = config.get();
-        float starvationInterval = hhmConfig.getStarvationInterval();
-        float starvationRate = hhmConfig.getStarvationRate();
+        float starvationTickRate = hhmConfig.getStarvationTickRate();
+        float starvationPerTick = hhmConfig.getStarvationPerTick();
         float starvationDamage = hhmConfig.getStarvationDamage();
-        return new StarveSystem(hungerComponentType, starvationInterval, starvationRate, starvationDamage);
+        return new StarveSystem(hungerComponentType, starvationTickRate, starvationPerTick, starvationDamage);
     }
 
     @Nullable
@@ -76,7 +75,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             return;
         }
 
-        hunger.starve(this.starvationRate);
+        hunger.starve(this.starvationPerTick);
 
         // Apply damage to the player due to starvation
         if (hunger.getHungerLevel() == 0) {
