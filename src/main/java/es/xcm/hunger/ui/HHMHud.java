@@ -12,7 +12,8 @@ import java.util.HashMap;
 // https://www.youtube.com/watch?v=cha7YFULwxY&t=1330s
 
 public class HHMHud extends CustomUIHud {
-    static final HashMap<PlayerRef, HHMHud> hudMap = new HashMap<>();
+    static private final HashMap<PlayerRef, HHMHud> hudMap = new HashMap<>();
+    static public final String hudIdentifier = "es.xcm.hunger.hud.hunger";
 
     public HHMHud(@NonNullDecl PlayerRef playerRef) {
         super(playerRef);
@@ -36,7 +37,7 @@ public class HHMHud extends CustomUIHud {
         update(false, uiCommandBuilder);
     }
 
-    static public void updatePlayerHud(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
+    static public void updatePlayerHungerLevel(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
         HHMHud hud = hudMap.get(playerRef);
         if (hud == null) return;
         hud.updateHungerLevel(hungerLevel);

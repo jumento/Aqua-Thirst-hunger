@@ -42,5 +42,5 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### Hytale ###
-/libs/HytaleServer.jar
+### Hytale Libs ###
+/libs/*.jar

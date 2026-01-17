@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import es.xcm.hunger.compat.hud.CompatHUD;
 import es.xcm.hunger.ui.HHMHud;
 import es.xcm.hunger.components.HungerComponent;
 
@@ -22,7 +23,7 @@ public class HHMPlayerReady {
         float hungerLevel = hungerComponent.getHungerLevel();
 
         HHMHud hud = new HHMHud(playerRef);
-        player.getHudManager().setCustomHud(playerRef, hud);
+        CompatHUD.get().setCustomHud(player, playerRef, HHMHud.hudIdentifier, hud);
         hud.updateHungerLevel(hungerLevel);
     }
 }

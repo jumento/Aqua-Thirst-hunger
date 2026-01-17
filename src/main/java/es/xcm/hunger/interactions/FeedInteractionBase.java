@@ -28,6 +28,6 @@ class FeedInteractionBase extends SimpleInstantInteraction {
         if (playerRef == null || hungerComponent == null) return;
         hungerComponent.feed(this.feedAmount);
         float hunger = hungerComponent.getHungerLevel();
-        HHMHud.updatePlayerHud(playerRef, hunger);
+        HHMHud.updatePlayerHungerLevel(playerRef, hunger);
     }
 }

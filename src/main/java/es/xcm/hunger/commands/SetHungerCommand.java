@@ -44,7 +44,7 @@ public class SetHungerCommand extends AbstractPlayerCommand {
         }
         hungerComponent.setHungerLevel(newHungerLevel);
         context.sendMessage(Message.raw("Hunger level has been set to " + newHungerLevel + " for player " + targetPlayerRef.getUsername() + "."));
-        HHMHud.updatePlayerHud(targetPlayerRef, newHungerLevel);
+        HHMHud.updatePlayerHungerLevel(targetPlayerRef, newHungerLevel);
     }
 
     @Override

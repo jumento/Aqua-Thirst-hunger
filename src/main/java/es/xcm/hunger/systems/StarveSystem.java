@@ -92,7 +92,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             DamageSystems.executeDamage(ref, commandBuffer, damage);
         }
 
-        HHMHud.updatePlayerHud(playerRef, hunger.getHungerLevel());
+        HHMHud.updatePlayerHungerLevel(playerRef, hunger.getHungerLevel());
     }
 
     public static float getStaminaValue(@NonNullDecl EntityStatMap entityStatMap) {

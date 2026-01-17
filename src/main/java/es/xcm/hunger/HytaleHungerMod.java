@@ -18,6 +18,8 @@ import es.xcm.hunger.systems.OnDeathSystem;
 import es.xcm.hunger.systems.StarveSystem;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
+import java.util.logging.Level;
+
 public class HytaleHungerMod extends JavaPlugin {
     private static HytaleHungerMod instance;
     private final Config<HHMConfig> config;
@@ -69,5 +71,9 @@ public class HytaleHungerMod extends JavaPlugin {
 
     public static HytaleHungerMod get() {
         return instance;
+    }
+
+    public static void logInfo(String message) {
+        LOGGER.at(Level.INFO).log(message);
     }
 }
