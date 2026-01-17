@@ -15,12 +15,16 @@ public class HHMConfig {
             .append(new KeyedCodec<>("StarvationDamage", Codec.FLOAT),
                     ((config, value) -> config.starvationDamage = value),
                     HHMConfig::getStarvationDamage).add()
+            .append(new KeyedCodec<>("StarvationStaminaModifier", Codec.FLOAT),
+                    ((config, value) -> config.starvationStaminaModifier = value),
+                    HHMConfig::getStarvationStaminaModifier).add()
 
             .build();
 
     private float starvationTickRate = 2f;
     private float starvationPerTick = 0.125f;
     private float starvationDamage = 5.0f;
+    private float starvationStaminaModifier = 3f;
 
     public float getStarvationTickRate() {
         return starvationTickRate;
@@ -30,5 +34,8 @@ public class HHMConfig {
     }
     public float getStarvationDamage() {
         return starvationDamage;
+    }
+    public float getStarvationStaminaModifier() {
+        return starvationStaminaModifier;
     }
 }
