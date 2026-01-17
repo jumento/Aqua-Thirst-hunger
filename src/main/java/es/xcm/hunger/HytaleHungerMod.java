@@ -14,6 +14,7 @@ import es.xcm.hunger.events.HHMPlayerReady;
 import es.xcm.hunger.interactions.FeedInteractionT1;
 import es.xcm.hunger.interactions.FeedInteractionT2;
 import es.xcm.hunger.interactions.FeedInteractionT3;
+import es.xcm.hunger.systems.OnDeathSystem;
 import es.xcm.hunger.systems.StarveSystem;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
@@ -43,6 +44,7 @@ public class HytaleHungerMod extends JavaPlugin {
         // register starve system
         final var entityStoreRegistry = this.getEntityStoreRegistry();
         entityStoreRegistry.registerSystem(StarveSystem.create());
+        entityStoreRegistry.registerSystem(new OnDeathSystem());
 
         // register feed interaction
         final var interactionRegistry = this.getCodecRegistry(Interaction.CODEC);
