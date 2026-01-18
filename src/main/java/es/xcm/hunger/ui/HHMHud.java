@@ -33,7 +33,7 @@ public class HHMHud extends CustomUIHud {
     @Override
     protected void build(@NonNullDecl UICommandBuilder uiCommandBuilder) {
         HHMConfig config = HytaleHungerMod.get().getConfig();
-        HudPosition hudPosition = config.getDefaultHudPosition();
+        HudPosition hudPosition = config.getHudPosition();
         uiCommandBuilder.append("HUD/Hunger/Hunger.ui");
         updateHudPosition(uiCommandBuilder, hudPosition);
         updateGameMode(uiCommandBuilder, this.gameMode);

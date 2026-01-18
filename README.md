@@ -33,7 +33,7 @@ This mod will create a configuration file under `mods/es.xcm_HytaleHungerMod/Hun
 - `InteractionFeedT1Amount`: How much hunger is restored when consuming a Tier 1 food item.
 - `InteractionFeedT2Amount`: How much hunger is restored when consuming a Tier 2 food item.
 - `InteractionFeedT3Amount`: How much hunger is restored when consuming a Tier 3 food item.
-- `DefaultHudPosition`: Where the HUD will be rendered. Defaults to BottomLeft. Can be set to AboveHotbarCentered
+- `HudPosition`: The position where the HUD will be rendered. Defaults to AboveHotbarCentered. Can be set to BottomLeft for better compatibility with other HUD mods.
 
 The max hunger is non-configurable and is set to 100. If you want to check the default values, you can find them in the [HHMConfig](src/main/java/es/xcm/hunger/HHMConfig.java) class. 
 

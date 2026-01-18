@@ -30,9 +30,9 @@ public class HHMConfig {
             .append(new KeyedCodec<>("InteractionFeedT3Amount", Codec.FLOAT),
                     ((config, value) -> config.interactionFeedT3Amount = value),
                     HHMConfig::getInteractionFeedT3Amount).add()
-            .append(new KeyedCodec<>("DefaultHudPosition", Codec.STRING),
-                    ((config, value) -> config.defaultHudPosition = HudPosition.valueOf(value)),
-                    ((config) -> config.getDefaultHudPosition().name())).add()
+            .append(new KeyedCodec<>("HudPosition", Codec.STRING),
+                    ((config, value) -> config.hudPosition = HudPosition.valueOf(value)),
+                    ((config) -> config.getHudPosition().name())).add()
             .build();
 
     private float starvationTickRate = 2f;
@@ -43,7 +43,7 @@ public class HHMConfig {
     private float interactionFeedT1Amount = 15.0f;
     private float interactionFeedT2Amount = 25.0f;
     private float interactionFeedT3Amount = 45.0f;
-    private HudPosition defaultHudPosition = HudPosition.BottomLeft;
+    private HudPosition hudPosition = HudPosition.AboveHotbarCentered;
 
     public float getStarvationTickRate() {
         return starvationTickRate;
@@ -69,7 +69,7 @@ public class HHMConfig {
     public float getInteractionFeedT3Amount() {
         return interactionFeedT3Amount;
     }
-    public HudPosition getDefaultHudPosition() {
-        return defaultHudPosition;
+    public HudPosition getHudPosition() {
+        return hudPosition;
     }
 }
