@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.system.tick.DelayedEntitySystem;
 import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect;
 import com.hypixel.hytale.server.core.entity.effect.ActiveEntityEffect;
 import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.damage.*;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatValue;
@@ -67,7 +68,8 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             HungerComponent.getComponentType(),
             EntityStatMap.getComponentType(),
             PlayerRef.getComponentType(),
-            Query.not(DeathComponent.getComponentType())
+            Query.not(DeathComponent.getComponentType()),
+            Query.not(Invulnerable.getComponentType())
         );
     }
 
