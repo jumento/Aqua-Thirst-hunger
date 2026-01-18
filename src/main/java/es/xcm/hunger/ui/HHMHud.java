@@ -1,5 +1,6 @@
 package es.xcm.hunger.ui;
 
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
@@ -19,10 +20,12 @@ import java.util.WeakHashMap;
 public class HHMHud extends CustomUIHud {
     static private final WeakHashMap<PlayerRef, HHMHud> hudMap = new WeakHashMap<>();
     static public final String hudIdentifier = "es.xcm.hunger.hud.hunger";
+    private GameMode gameMode;
     private float hungerLevel;
 
-    public HHMHud(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
+    public HHMHud(@NonNullDecl PlayerRef playerRef, GameMode gameMode, float hungerLevel) {
         super(playerRef);
+        this.gameMode = gameMode;
         this.hungerLevel = hungerLevel;
         hudMap.put(playerRef, this);
     }
@@ -31,8 +34,9 @@ public class HHMHud extends CustomUIHud {
     protected void build(@NonNullDecl UICommandBuilder uiCommandBuilder) {
         HHMConfig config = HytaleHungerMod.get().getConfig();
         HudPosition hudPosition = config.getDefaultHudPosition();
-        uiCommandBuilder.append("HUD/Hunger.ui");
+        uiCommandBuilder.append("HUD/Hunger/Hunger.ui");
         updateHudPosition(uiCommandBuilder, hudPosition);
+        updateGameMode(uiCommandBuilder, this.gameMode);
         updateHungerLevel(uiCommandBuilder, this.hungerLevel);
     }
 
@@ -56,11 +60,19 @@ public class HHMHud extends CustomUIHud {
 
     protected void updateHungerLevel(UICommandBuilder uiCommandBuilder, float hungerLevel) {
         this.hungerLevel = hungerLevel;
-        Anchor anchor = new Anchor();
-        int fillWidth = (int) hungerLevel * 3; // hunger bar is 300 pixels wide, while max hunger is 100
-        anchor.setWidth(Value.of(fillWidth));
-        anchor.setHeight(Value.of(12));
-        uiCommandBuilder.setObject("#HHMFill.Anchor", anchor);
+        float barValue = hungerLevel / HungerComponent.maxHungerLevel;
+        uiCommandBuilder.set("#HHMHungerBar.Value", barValue);
+        uiCommandBuilder.set("#HHMCreativeHungerBar.Value", barValue);
+    }
+
+    protected void updateGameMode(UICommandBuilder uiCommandBuilder, GameMode gameMode) {
+        this.gameMode = gameMode;
+        String iconBackground = gameMode == GameMode.Adventure
+            ? "HUD/Hunger/HungerIcon.png"
+            : "HUD/Hunger/CreativeHungerIcon.png";
+        uiCommandBuilder.set("#HHMIcon.Background", iconBackground);
+        uiCommandBuilder.set("#HHMHungerBar.Visible", gameMode == GameMode.Adventure);
+        uiCommandBuilder.set("#HHMCreativeHungerBar.Visible", gameMode == GameMode.Creative);
     }
 
     static public void updatePlayerHungerLevel(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
@@ -68,6 +80,13 @@ public class HHMHud extends CustomUIHud {
         if (hud == null) return;
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateHungerLevel(uiCommandBuilder, hungerLevel);
+        hud.update(false, uiCommandBuilder);
+    }
+    static public void updatePlayerGameMode(@NonNullDecl PlayerRef playerRef, GameMode gameMode) {
+        HHMHud hud = hudMap.get(playerRef);
+        if (hud == null) return;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        hud.updateGameMode(uiCommandBuilder, gameMode);
         hud.update(false, uiCommandBuilder);
     }
 }

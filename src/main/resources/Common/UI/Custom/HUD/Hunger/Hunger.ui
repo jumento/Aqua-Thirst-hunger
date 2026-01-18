@@ -1,0 +1,36 @@
+@HHMAdventureBarFill = "HungerBarFill.png";
+@HHMCreativeBarFill = "CreativeHungerBarFill.png";
+
+Group {
+    LayoutMode: Bottom;
+
+    Group #HHMContainer {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12, Left: 12);
+
+        Group #HHMIcon {
+            Anchor: (Left: 0, Width: 20, Height: 20, Right: 4);
+            Background: "HungerIcon.png";
+        }
+
+        Group {
+            Anchor: (Left: 0, Width: 318, Height: 12);
+            Background: "HungerBackground.png";
+
+            ProgressBar #HHMHungerBar {
+                Anchor: (Width: 318, Height: 12);
+                BarTexturePath: @HHMAdventureBarFill;
+                Visible: true;
+            }
+            ProgressBar #HHMCreativeHungerBar {
+                Anchor: (Width: 318, Height: 12);
+                BarTexturePath: @HHMCreativeBarFill;
+                Visible: false;
+            }
+            ProgressBar #HHMProgressBarEffect {
+                Anchor: (Width: 318, Height: 12);
+                BarTexturePath: "HungerBarEffect.png";
+            }
+        }
+    }
+}

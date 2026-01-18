@@ -23,7 +23,7 @@
   },
   "OverlapBehavior": "Overwrite",
   "Debuff": true,
-  "StatusEffectIcon": "UI/Custom/HUD/Pataepollo.png",
+  "StatusEffectIcon": "UI/Custom/HUD/Hunger/HungerIcon.png",
   "Infinite": false,
   "Duration": 300
 }
