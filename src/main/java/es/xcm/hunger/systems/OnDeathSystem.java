@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import es.xcm.hunger.HHMUtils;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -35,10 +36,6 @@ public class OnDeathSystem extends DeathSystems.OnDeathSystem {
 
     @Override
     public void onComponentRemoved(@NonNullDecl Ref<EntityStore> ref, @NonNullDecl DeathComponent component, @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
-        PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-        HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
-        if (playerRef == null || hungerComponent == null) return;
-        hungerComponent.setHungerLevel(HungerComponent.maxHungerLevel);
-        HHMHud.updatePlayerHungerLevel(playerRef, HungerComponent.maxHungerLevel);
+        HHMUtils.setPlayerHungerLevel(ref, store, HungerComponent.maxHungerLevel);
     }
 }

@@ -3,6 +3,7 @@ package es.xcm.hunger;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
+import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -11,6 +12,7 @@ import com.hypixel.hytale.server.core.util.Config;
 import es.xcm.hunger.commands.SetHungerCommand;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMConfig;
+import es.xcm.hunger.events.GameModePacketWatcher;
 import es.xcm.hunger.events.HHMPlayerReady;
 import es.xcm.hunger.interactions.FeedInteractionT1;
 import es.xcm.hunger.interactions.FeedInteractionT2;
@@ -57,6 +59,9 @@ public class HytaleHungerMod extends JavaPlugin {
 
         // setup hunger component and hud on player join
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, HHMPlayerReady::handle);
+
+        // listen to gamemode changes
+        PacketAdapters.registerOutbound(new GameModePacketWatcher());
 
         // register admin commands
         this.getCommandRegistry().registerCommand(new SetHungerCommand());

@@ -110,12 +110,7 @@ public class StarveSystem extends DelayedEntitySystem<EntityStore> {
             EffectControllerComponent effectController = commandBuffer.getComponent(ref, EffectControllerComponent.getComponentType());
             if (effectController == null) return;
             // remove all buffs when starving
-            final ActiveEntityEffect[] activeEffects = effectController.getAllActiveEntityEffects();
-            if (activeEffects != null && activeEffects.length > 0) {
-                Arrays.stream(activeEffects).filter(StarveSystem::shouldRemoveEffectOnStarvation).forEach(effect -> {
-                    effectController.removeEffect(ref, effect.getEntityEffectIndex(), commandBuffer);
-                });
-            }
+            HHMUtils.removeHungerRelatedEffectsFromEntity(ref, commandBuffer, effectController);
             // apply starving effect
             EntityEffect starvingEffect = HHMUtils.getStarvingEntityEffect();
             effectController.addEffect(ref, starvingEffect, commandBuffer);
