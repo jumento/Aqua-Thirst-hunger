@@ -40,6 +40,7 @@ public class HHMHud extends CustomUIHud {
             case BottomLeft:
                 anchor.setBottom(Value.of(12));
                 anchor.setLeft(Value.of(12));
+                break;
             case AboveHotbarCentered:
                 anchor.setBottom(Value.of(138));
                 break;
