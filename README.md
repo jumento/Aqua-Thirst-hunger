@@ -8,6 +8,7 @@ Introduces a Hunger system to Hytale, requiring players to manage their food int
 - **Status effects**: When hunger drops below a certain threshold, players experience reduced movement speed and disabled sprint.
 - **Starvation Damage**: Players take damage over time when their hunger reaches zero.
 - **SFX and VFX**: Includes screen effects and sound effects when starving.
+- **Safe areas**: Hunger depletion is paused when players are in designated safe zones (provided by other plugins).
 - **Configurable Settings**: Customize hunger depletion rates, starvation interval, starvation damage, hungry threshold, and food restoration values via a configuration file.
 
 ## Balance
