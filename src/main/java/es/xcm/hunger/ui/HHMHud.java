@@ -34,7 +34,7 @@ public class HHMHud extends CustomUIHud {
     protected void build(@NonNullDecl UICommandBuilder uiCommandBuilder) {
         HHMConfig config = HytaleHungerMod.get().getConfig();
         HudPosition hudPosition = config.getHudPosition();
-        uiCommandBuilder.append("HUD/Hunger/Hunger.ui");
+        uiCommandBuilder.append("Hungry/HUD/Hunger.ui");
         updateHudPosition(uiCommandBuilder, hudPosition);
         updateGameMode(uiCommandBuilder, this.gameMode);
         updateHungerLevel(uiCommandBuilder, this.hungerLevel);
@@ -68,8 +68,8 @@ public class HHMHud extends CustomUIHud {
     protected void updateGameMode(UICommandBuilder uiCommandBuilder, GameMode gameMode) {
         this.gameMode = gameMode;
         String iconBackground = gameMode == GameMode.Adventure
-            ? "HUD/Hunger/HungerIcon.png"
-            : "HUD/Hunger/CreativeHungerIcon.png";
+            ? "Hungry/HUD/HungerIcon.png"
+            : "Hungry/HUD/CreativeHungerIcon.png";
         uiCommandBuilder.set("#HHMIcon.Background", iconBackground);
         uiCommandBuilder.set("#HHMHungerBar.Visible", gameMode == GameMode.Adventure);
         uiCommandBuilder.set("#HHMCreativeHungerBar.Visible", gameMode == GameMode.Creative);
