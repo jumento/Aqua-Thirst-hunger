@@ -73,3 +73,6 @@ In high pop servers its recommended that the `StarvationTickRate` is set to at l
 - To all the helpful people in both Hytale and HytaleModding discords
 
 This project could not have been possible without the shared effort of the Hytale modding community!
+
+## Open source
+Licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.txt)
