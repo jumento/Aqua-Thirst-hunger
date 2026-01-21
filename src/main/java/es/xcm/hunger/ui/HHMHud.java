@@ -26,6 +26,7 @@ public class HHMHud extends CustomUIHud {
     static public final String hudIdentifier = "es.xcm.hunger.hud.hunger";
     private GameMode gameMode;
     private float hungerLevel;
+    private boolean visible = true;
 
     public HHMHud(@NonNullDecl PlayerRef playerRef, GameMode gameMode, float hungerLevel) {
         super(playerRef);
@@ -42,6 +43,7 @@ public class HHMHud extends CustomUIHud {
         updateHudPosition(uiCommandBuilder, hudPosition);
         updateGameMode(uiCommandBuilder, this.gameMode);
         updateHungerLevel(uiCommandBuilder, this.hungerLevel);
+        updateVisibility(uiCommandBuilder, this.visible);
     }
 
     protected void updateHudPosition(UICommandBuilder uiCommandBuilder, HudPosition hudPosition) {
@@ -79,6 +81,11 @@ public class HHMHud extends CustomUIHud {
         uiCommandBuilder.set("#HHMCreativeHungerBar.Visible", gameMode == GameMode.Creative);
     }
 
+    protected void updateVisibility (UICommandBuilder uiCommandBuilder, boolean visible) {
+        this.visible = visible;
+        uiCommandBuilder.set("#HHMContainer.Visible", visible);
+    }
+
     static public void updatePlayerHungerLevel(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
         HHMHud hud = hudMap.get(playerRef);
         if (hud == null) return;
@@ -93,6 +100,14 @@ public class HHMHud extends CustomUIHud {
         hud.updateGameMode(uiCommandBuilder, gameMode);
         hud.update(false, uiCommandBuilder);
     }
+    static public void updatePlayerHudVisibility(@NonNullDecl PlayerRef playerRef, boolean visible) {
+        HHMHud hud = hudMap.get(playerRef);
+        if (hud == null) return;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        hud.updateVisibility(uiCommandBuilder, visible);
+        hud.update(false, uiCommandBuilder);
+    }
+
     static public void createPlayerHud(
         @NonNullDecl Store<EntityStore> store,
         @NonNullDecl Ref<EntityStore> ref,

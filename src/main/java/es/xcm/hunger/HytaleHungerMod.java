@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.Config;
-import es.xcm.hunger.commands.SetHungerCommand;
+import es.xcm.hunger.commands.HungryCommand;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMConfig;
 import es.xcm.hunger.events.GameModePacketWatcher;
@@ -64,7 +64,7 @@ public class HytaleHungerMod extends JavaPlugin {
         PacketAdapters.registerOutbound(new GameModePacketWatcher());
 
         // register admin commands
-        this.getCommandRegistry().registerCommand(new SetHungerCommand());
+        this.getCommandRegistry().registerCommand(new HungryCommand());
     }
 
     public ComponentType<EntityStore, HungerComponent> getHungerComponentType() {

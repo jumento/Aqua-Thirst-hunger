@@ -1,7 +1,7 @@
 @HHMAdventureBarFill = "HungerBarFill.png";
 @HHMCreativeBarFill = "CreativeHungerBarFill.png";
 
-Group {
+Group #HHMHUD {
     LayoutMode: Bottom;
 
     Group #HHMContainer {

@@ -16,11 +16,11 @@ import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
-public class SetHungerCommand extends AbstractPlayerCommand {
+class SetHungerCommand extends AbstractPlayerCommand {
     private final RequiredArg<Float> hungerLevel = this.withRequiredArg("hungerLevel", "A value between 0 and 100", ArgTypes.FLOAT);
 
     public SetHungerCommand() {
-        super("sethunger", "Set own hunger level", false);
+        super("set", "Set own hunger level", false);
         this.requirePermission(HytalePermissions.fromCommand("sethunger.self"));
         this.addUsageVariant(new SetHungerOtherCommand());
     }
