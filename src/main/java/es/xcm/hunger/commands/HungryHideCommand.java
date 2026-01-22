@@ -11,8 +11,10 @@ import es.xcm.hunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class HungryHideCommand extends AbstractPlayerCommand {
+    public static final String requiredPermission = "hungry.hunger.hide";
     public HungryHideCommand() {
         super("hide", "Hide Hungry Bar", false);
+        this.requirePermission(requiredPermission);
     }
 
     @Override

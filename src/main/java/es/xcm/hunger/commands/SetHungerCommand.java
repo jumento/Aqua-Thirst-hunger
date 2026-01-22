@@ -16,12 +16,14 @@ import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
-class SetHungerCommand extends AbstractPlayerCommand {
+public class SetHungerCommand extends AbstractPlayerCommand {
+    public static final String requiredPermission = "hungry.hunger.set.self";
+
     private final RequiredArg<Float> hungerLevel = this.withRequiredArg("hungerLevel", "A value between 0 and 100", ArgTypes.FLOAT);
 
     public SetHungerCommand() {
         super("set", "Set own hunger level", false);
-        this.requirePermission(HytalePermissions.fromCommand("hunger.set.self"));
+        this.requirePermission(requiredPermission);
         this.addUsageVariant(new SetHungerOtherCommand());
     }
 
@@ -59,13 +61,15 @@ class SetHungerCommand extends AbstractPlayerCommand {
         setHungerLevel(context, store, ref, playerRef, newHungerLevel);
     }
 
-    private static class SetHungerOtherCommand extends CommandBase {
+    public static class SetHungerOtherCommand extends CommandBase {
+        public static final String requiredPermission = "hungry.hunger.set.other";
+
         private final RequiredArg<PlayerRef> playerArg = this.withRequiredArg("player", "The target player", ArgTypes.PLAYER_REF);
         private final RequiredArg<Float> hungerLevel = this.withRequiredArg("hungerLevel", "A value between 0 and 100", ArgTypes.FLOAT);
 
         public SetHungerOtherCommand() {
             super("Set another player's hunger level");
-            this.requirePermission(HytalePermissions.fromCommand("hunger.set.other"));
+            this.requirePermission(requiredPermission);
         }
 
         @Override
