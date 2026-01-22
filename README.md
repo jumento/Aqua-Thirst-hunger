@@ -47,6 +47,13 @@ You can use the following formula to calculate how long it takes to starve from 
 ```
 The result is in minutes.
 
+## Commands
+This mod adds the following commands:
+- `/hunger set <player> <amount>`: Sets the hunger of the specified player to the specified amount (0-100). Requires the `hunger.set.other` permission.
+- `/hunger set <amount>`: Sets the hunger of the player executing the command to the specified amount (0-100). Requires `hunger.set.self` permission.
+- `/hunger hide`: Hides the hunger HUD for the player executing the command. No permissions required
+- `/hunger show`: Shows the hunger HUD for the player executing the command. No permissions required
+
 ## Performance
 This mod is optimized for performance in high pop servers, ensuring minimal impact on TPS.
 It achieves so by:
