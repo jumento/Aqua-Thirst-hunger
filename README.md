@@ -29,15 +29,18 @@ This mod have been designed with compatibility in mind, ensuring it works well a
 
 ## Configuration
 This mod will create a configuration file under `mods/es.xcm_HytaleHungerMod/HungerConfig.json` after the first run. You can customize the following settings:
-- `StarvationTickRate`: How often (in seconds) the hunger depletes. Also affect how often you take damage when starving.
-- `StarvationPerTick`: How much hunger is lost every tick (as defined by StarvationTickRate).
-- `StarvationStaminaModifier`: How much stamina affects starvation. The modifier is added to the StarvationPerTick when stamina is below its max value. Currently it interpolates the value depending in how much stamina you've used.
-- `StarvationDamage`: How much damage is taken every tick (as defined by StarvationTickRate) when starving.
-- `HungryThreshold`: When hunger drops below this value, the player will receive the hungry status effects (slower movement speed and disabled sprint).
-- `InteractionFeedT1Amount`: How much hunger is restored when consuming a Tier 1 food item.
-- `InteractionFeedT2Amount`: How much hunger is restored when consuming a Tier 2 food item.
-- `InteractionFeedT3Amount`: How much hunger is restored when consuming a Tier 3 food item.
-- `HudPosition`: The position where the HUD will be rendered. Defaults to AboveHotbarCentered. Can be set to BottomLeft for better compatibility with other HUD mods.
+
+| Key                         | Valid value                                                                                                                                         | Default Value          | Description                                                                                                                                                                                             |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `StarvationTickRate`        | Number (seconds)                                                                                                                                    | 2.0                    | How often (in seconds) the hunger depletes. Also affect how often you take damage when starving.                                                                                                        |
+| `StarvationPerTick`         | Number                                                                                                                                              | 0.125                  | How much hunger is lost every tick (as defined by StarvationTickRate).                                                                                                                                  |
+| `StarvationStaminaModifier` | Number                                                                                                                                              | 0.175                  | How much stamina affects starvation. The modifier is added to the StarvationPerTick when stamina is below its max value. Currently it interpolates the value depending in how much stamina you've used. |
+| `StarvationDamage`          | Number                                                                                                                                              | 5                      | How much damage is taken every tick (as defined by StarvationTickRate) when starving.                                                                                                                   |
+| `HungryThreshold`           | Number (0-100)                                                                                                                                      | 20                     | When hunger drops below this value, the player will receive the hungry status effects (slower movement speed and disabled sprint).                                                                      |
+| `InteractionFeedT1Amount`   | Number (0-100)                                                                                                                                      | 15                     | How much hunger is restored when consuming a Tier 1 food item.                                                                                                                                          |
+| `InteractionFeedT2Amount`   | Number (0-100)                                                                                                                                      | 25                     | How much hunger is restored when consuming a Tier 2 food item.                                                                                                                                          |
+| `InteractionFeedT3Amount`   | Number (0-100)                                                                                                                                      | 40                     | How much hunger is restored when consuming a Tier 3 food item.                                                                                                                                          |
+| `HudPosition`               | `BottomLeft` <br/> `AboveHotbarCentered` <br/> `AboveHotbarLeft` <br/> `BelowHotbarCentered` <br/> `BelowHotbarLeft` <br/> `Custom:<left>:<bottom>` | `AboveHotbarCentered`  | The position where the HUD will be rendered. `Custom:12:12` is equivalent to `BottomLeft`.                                                                                                              |
 
 The max hunger is non-configurable and is set to 100. If you want to check the default values, you can find them in the [HHMConfig](src/main/java/es/xcm/hunger/HHMConfig.java) class. 
 
@@ -49,10 +52,17 @@ The result is in minutes.
 
 ## Commands
 This mod adds the following commands:
-- `/hunger set <player> <amount>`: Sets the hunger of the specified player to the specified amount (0-100). Requires the `hunger.set.other` permission.
-- `/hunger set <amount>`: Sets the hunger of the player executing the command to the specified amount (0-100). Requires `hunger.set.self` permission.
-- `/hunger hide`: Hides the hunger HUD for the player executing the command. No permissions required
-- `/hunger show`: Shows the hunger HUD for the player executing the command. No permissions required
+
+| Command                         | Permission                | Description                                                                                                                                                                                          |
+|---------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/hunger`                       | `hungry.command.base`     | Shows a list of available commands based on user permissions.                                                                                                                                        |
+| `/hunger hide`                  | `hungry.hunger.hide`      | Hides the hunger HUD for the player executing the command.                                                                                                                                           |
+| `/hunger show`                  | `hungry.hunger.show`      | Shows the hunger HUD for the player executing the command.                                                                                                                                           |
+| `/hunger position <position>`   | `hungry.config.position`  | Updates the hunger bar position (server-side). The updated value is saved to the config file. For a list of available positions read the configuration section or run the `/hunger position` command |
+| `/hunger set <amount>`          | `hungry.hunger.set.self`  | Sets the hunger of the player executing the command to the specified amount (0-100).                                                                                                                 |
+| `/hunger set <player> <amount>` | `hungry.hunger.set.other` | Sets the hunger of the specified player to the specified amount (0-100).                                                                                                                             |
+
+When this mods runs in a single player world, the user get access to the commands `/hunger`, `/hunger hide`, `/hunger show`, `/hunger position <position>`.
 
 ## Performance
 This mod is optimized for performance in high pop servers, ensuring minimal impact on TPS.
@@ -63,6 +73,10 @@ It achieves so by:
 - Use partial UI updates (Please note some other popular HUD mods such as EyeSpy and RPGLeveling forces full UI updates for all HUD mods)
 
 In high pop servers its recommended that the `StarvationTickRate` is set to at least 2 seconds (default). Setting it to a lower value may result in performance issues.
+
+## Recommended mods
+- [Poisonous Raw Meat](https://www.curseforge.com/hytale/mods/poisonous-raw-meat)
+- [MultipleHUD](https://www.curseforge.com/hytale/mods/multiplehud)
 
 ## Special thanks
 - [trouble-dev](https://github.com/trouble-dev): For his [UI guides](https://www.youtube.com/watch?v=cha7YFULwxY) and [noels-whitelist-manager](https://github.com/trouble-dev/noels-whitelist-manager) plugin, which I used as a reference for updating UI elements.
