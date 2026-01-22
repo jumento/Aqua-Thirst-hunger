@@ -21,7 +21,7 @@ class SetHungerCommand extends AbstractPlayerCommand {
 
     public SetHungerCommand() {
         super("set", "Set own hunger level", false);
-        this.requirePermission(HytalePermissions.fromCommand("sethunger.self"));
+        this.requirePermission(HytalePermissions.fromCommand("hunger.set.self"));
         this.addUsageVariant(new SetHungerOtherCommand());
     }
 
@@ -65,7 +65,7 @@ class SetHungerCommand extends AbstractPlayerCommand {
 
         public SetHungerOtherCommand() {
             super("Set another player's hunger level");
-            this.requirePermission(HytalePermissions.fromCommand("sethunger.other"));
+            this.requirePermission(HytalePermissions.fromCommand("hunger.set.other"));
         }
 
         @Override
