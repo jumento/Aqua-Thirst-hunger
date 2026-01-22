@@ -1,15 +1,19 @@
 package es.xcm.hunger;
 
+import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.io.adapter.PacketAdapters;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
+import com.hypixel.hytale.server.core.permissions.PermissionsModule;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
+import com.hypixel.hytale.server.core.plugin.PluginBase;
+import com.hypixel.hytale.server.core.plugin.PluginManager;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.Config;
-import es.xcm.hunger.commands.HungryCommand;
+import es.xcm.hunger.commands.*;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMConfig;
 import es.xcm.hunger.events.GameModePacketWatcher;
@@ -21,14 +25,16 @@ import es.xcm.hunger.systems.OnDeathSystem;
 import es.xcm.hunger.systems.StarveSystem;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
+import java.util.Set;
 import java.util.logging.Level;
 
 public class HytaleHungerMod extends JavaPlugin {
+    public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static HytaleHungerMod instance;
+
     private final Config<HHMConfig> config;
     private ComponentType<EntityStore, HungerComponent> hungerComponentType;
 
-    public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     public HytaleHungerMod(@NonNullDecl JavaPluginInit init) {
         super(init);
@@ -65,6 +71,24 @@ public class HytaleHungerMod extends JavaPlugin {
 
         // register admin commands
         this.getCommandRegistry().registerCommand(new HungryCommand());
+    }
+
+    @Override
+    protected void start () {
+        super.start();
+
+        // single player worlds get extra permissions to manage config
+        PluginBase singleplayerModule = PluginManager.get().getPlugin(PluginIdentifier.fromString("Hytale:SingleplayerModule"));
+        if (singleplayerModule != null && singleplayerModule.isEnabled()) {
+            final Set<String> singleplayerPermissions = Set.of(
+                    HungryCommand.requiredPermission,
+                    HungryHideCommand.requiredPermission,
+                    HungryShowCommand.requiredPermission
+            );
+            PermissionsModule.get().addGroupPermission("Adventure", singleplayerPermissions);
+            PermissionsModule.get().addGroupPermission("Creative", singleplayerPermissions);
+            logInfo("Singleplayer module detected, added permissions to Adventure and Creative groups.");
+        }
     }
 
     public ComponentType<EntityStore, HungerComponent> getHungerComponentType() {
