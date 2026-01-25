@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "es.xcm"
-version = "0.1.12"
+version = "0.1.13"
 
 repositories {
     mavenCentral()
