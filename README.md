@@ -57,19 +57,52 @@ The result is in minutes.
 ## Food Configuration
 You can customize how much hunger is restored by particular food items by modifying the JSON file under `mods/es.xcm_HytaleHungerMod/FoodValuesConfig.json` in your world folder.
 
-| Key                   | Valid value          | Default Value | Description                                                    |
-|-----------------------|----------------------|---------------|----------------------------------------------------------------|
-| `T1HungerRestoration` | Number (0-100)       | 15            | How much hunger is restored when consuming a Tier 1 food item. |
-| `T2HungerRestoration` | Number (0-100)       | 25            | How much hunger is restored when consuming a Tier 2 food item. |
-| `T3HungerRestoration` | Number (0-100)       | 40            | How much hunger is restored when consuming a Tier 3 food item. |
-| `HungerRestoration`   | Map<String, Number>  | Empty         | Per item hunger restoration values.                            |
+| Key                       | Valid value           | Default Value | Description                                                                                                   |
+|---------------------------|-----------------------|---------------|---------------------------------------------------------------------------------------------------------------|
+| `IgnoreInteractionValues` | Boolean               | false         | Whether or not to honor values at the interaction level (authored by custom food mod authors)                 |
+| `IgnoreCustomAssetValues` | Boolean               | false         | Whether or not to honor values defined on the custom asset FoodValue (authored by hunger balance mod authors) |
+| `TierHungerRestoration`   | Map<ItemTier, Number> | See below     | How much hunger is restored depending on the food item tier.                                                  |
+| `TierMaxHungerSaturation` | Map<ItemTier, Number> | See below     | How much hunger is saturated depending on the food item tier .                                                |
+| `ItemHungerRestoration`   | Map<String, Number>   | Empty         | Per item hunger restoration values.                                                                           |
+| `ItemMaxHungerSaturation` | Map<String, Number>   | Empty         | Per item hunger saturation values.                                                                            |
 
-Here is an example on how the `HungerRestoration` value should look like:
+Default values:
+```json
+{
+  "IgnoreInteractionValues": false,
+  "IgnoreCustomAssetValues": false,
+  "TierHungerRestoration": {
+    "Common": 15.0,
+    "Uncommon": 25.0,
+    "Rare": 45.0,
+    "Epic": 70.0,
+    "Legendary": 100.0,
+    "Mythic": 140.0,
+    "Unique": 190.0
+  },
+  "TierMaxHungerSaturation": {
+    "Common": 0.0,
+    "Uncommon": 15.0,
+    "Rare": 30.0,
+    "Epic": 45.0,
+    "Legendary": 65.0,
+    "Mythic": 80.0,
+    "Unique": 100.0
+  },
+  "ItemHungerRestoration": {},
+  "ItemMaxHungerSaturation": {}
+}
+```
+Here is an example on how the `ItemHungerRestoration` and `ItemMaxHungerSaturation` value should look like. Note this are optional and the mod will always fallback to tier based values if not defined.
 ```json
 {
   "HungerRestoration": {
     "Food_Pie_Meat": 60.0,
     "Food_Pie_Apple": 50.0
+  },
+  "MaxHungerSaturation": {
+    "Food_Pie_Meat": 40.0,
+    "Food_Pie_Apple": 35.0
   }
 }
 ```

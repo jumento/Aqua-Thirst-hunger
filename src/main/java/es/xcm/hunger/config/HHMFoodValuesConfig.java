@@ -3,71 +3,104 @@ package es.xcm.hunger.config;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HHMFoodValuesConfig {
     public static final BuilderCodec<HHMFoodValuesConfig> CODEC = BuilderCodec.builder(HHMFoodValuesConfig.class, HHMFoodValuesConfig::new)
+            // migrated values
             .append(new KeyedCodec<>("T1HungerRestoration", Codec.FLOAT),
-                    ((config, value) -> config.T1HungerRestoration = value),
-                    HHMFoodValuesConfig::getT1HungerRestoration).add()
+                    ((config, value) -> config.tierHungerRestoration.put(ItemTier.Common, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("T2HungerRestoration", Codec.FLOAT),
-                    ((config, value) -> config.T2HungerRestoration = value),
-                    HHMFoodValuesConfig::getT2HungerRestoration).add()
+                    ((config, value) -> config.tierHungerRestoration.put(ItemTier.Uncommon, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("T3HungerRestoration", Codec.FLOAT),
-                    ((config, value) -> config.T3HungerRestoration = value),
-                    HHMFoodValuesConfig::getT3HungerRestoration).add()
+                    ((config, value) -> config.tierHungerRestoration.put(ItemTier.Rare, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("T1MaxHungerSaturation", Codec.FLOAT),
-                    ((config, value) -> config.T1MaxHungerSaturation = value),
-                    HHMFoodValuesConfig::getT1MaxHungerSaturation).add()
+                    ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Common, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("T2MaxHungerSaturation", Codec.FLOAT),
-                    ((config, value) -> config.T2MaxHungerSaturation = value),
-                    HHMFoodValuesConfig::getT2MaxHungerSaturation).add()
+                    ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Uncommon, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("T3MaxHungerSaturation", Codec.FLOAT),
-                    ((config, value) -> config.T3MaxHungerSaturation = value),
-                    HHMFoodValuesConfig::getT3MaxHungerSaturation).add()
+                    ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Rare, value)),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("HungerRestoration", new MapCodec<>(Codec.FLOAT, HashMap::new)),
-                    ((config, value) -> config.hungerRestoration = value),
-                    (c) -> c.hungerRestoration).add()
+                    ((config, value) -> config.itemHungerRestoration = value),
+                    (c) -> null).add()
             .append(new KeyedCodec<>("MaxHungerSaturation", new MapCodec<>(Codec.FLOAT, HashMap::new)),
-                    ((config, value) -> config.maxHungerSaturation = value),
-                    (c) -> c.maxHungerSaturation).add()
+                    ((config, value) -> config.itemMaxHungerSaturation = value),
+                    (c) -> null).add()
+
+            // current values
+            .append(new KeyedCodec<>("IgnoreInteractionValues", Codec.BOOLEAN),
+                    ((config, value) -> config.ignoreInteractionValues = value),
+                    (c) -> c.ignoreInteractionValues).add()
+            .append(new KeyedCodec<>("IgnoreCustomAssetValues", Codec.BOOLEAN),
+                    ((config, value) -> config.ignoreCustomAssetValues = value),
+                    (c) -> c.ignoreCustomAssetValues).add()
+            .append(new KeyedCodec<>("TierHungerRestoration", new EnumMapCodec<>(ItemTier.class, Codec.FLOAT)),
+                    ((config, value) -> config.tierHungerRestoration.putAll(value)),
+                    (c) -> c.tierHungerRestoration).add()
+            .append(new KeyedCodec<>("TierMaxHungerSaturation", new EnumMapCodec<>(ItemTier.class, Codec.FLOAT)),
+                    ((config, value) -> config.tierMaxHungerSaturation.putAll(value)),
+                    (c) -> c.tierMaxHungerSaturation).add()
+            .append(new KeyedCodec<>("ItemHungerRestoration", new MapCodec<>(Codec.FLOAT, HashMap::new)),
+                    ((config, value) -> config.itemHungerRestoration = value),
+                    (c) -> c.itemHungerRestoration).add()
+            .append(new KeyedCodec<>("ItemMaxHungerSaturation", new MapCodec<>(Codec.FLOAT, HashMap::new)),
+                    ((config, value) -> config.itemMaxHungerSaturation = value),
+                    (c) -> c.itemMaxHungerSaturation).add()
             .build();
 
-    private float T1HungerRestoration = 15.0f;
-    private float T2HungerRestoration = 25.0f;
-    private float T3HungerRestoration = 45.0f;
-    private float T1MaxHungerSaturation = 0.0f;
-    private float T2MaxHungerSaturation = 15.0f;
-    private float T3MaxHungerSaturation = 30.0f;
-    private Map<String, Float> hungerRestoration = new HashMap<>();
-    private Map<String, Float> maxHungerSaturation = new HashMap<>();
+    private boolean ignoreInteractionValues = false;
+    private boolean ignoreCustomAssetValues = false;
+    private final Map<ItemTier, Float> tierHungerRestoration = new EnumMap<>(ItemTier.class);
+    private final Map<ItemTier, Float> tierMaxHungerSaturation = new EnumMap<>(ItemTier.class);
+    private Map<String, Float> itemHungerRestoration = new HashMap<>();
+    private Map<String, Float> itemMaxHungerSaturation = new HashMap<>();
 
-    public Float getFoodHungerRestoration(@NonNullDecl String itemId) {
-        return hungerRestoration.get(itemId);
+    public HHMFoodValuesConfig () {
+        tierHungerRestoration.put(ItemTier.Common, 15.0f);
+        tierHungerRestoration.put(ItemTier.Uncommon, 25.0f);
+        tierHungerRestoration.put(ItemTier.Rare, 45.0f);
+        tierHungerRestoration.put(ItemTier.Epic, 70.0f);
+        tierHungerRestoration.put(ItemTier.Legendary, 100.0f);
+        tierHungerRestoration.put(ItemTier.Mythic, 140.0f);
+        tierHungerRestoration.put(ItemTier.Unique, 190.0f);
+
+        tierMaxHungerSaturation.put(ItemTier.Common, 0.0f);
+        tierMaxHungerSaturation.put(ItemTier.Uncommon, 15.0f);
+        tierMaxHungerSaturation.put(ItemTier.Rare, 30.0f);
+        tierMaxHungerSaturation.put(ItemTier.Epic, 45.0f);
+        tierMaxHungerSaturation.put(ItemTier.Legendary, 65.0f);
+        tierMaxHungerSaturation.put(ItemTier.Mythic, 80.0f);
+        tierMaxHungerSaturation.put(ItemTier.Unique, 100.0f);
     }
-    public Float getFoodMaxHungerSaturation(@NonNullDecl String itemId) {
-        return maxHungerSaturation.get(itemId);
+
+    public Float getItemHungerRestoration(@NonNullDecl String itemId) {
+        return itemHungerRestoration.get(itemId);
     }
-    public float getT1HungerRestoration() {
-        return T1HungerRestoration;
+    public Float getItemMaxHungerSaturation(@NonNullDecl String itemId) {
+        return itemMaxHungerSaturation.get(itemId);
     }
-    public float getT2HungerRestoration() {
-        return T2HungerRestoration;
+    public float getTierHungerRestoration(@NonNullDecl ItemTier tier) {
+        return tierHungerRestoration.getOrDefault(tier, 0.0f);
     }
-    public float getT3HungerRestoration() {
-        return T3HungerRestoration;
+    public float getTierMaxHungerSaturation(@NonNullDecl ItemTier tier) {
+        return tierMaxHungerSaturation.getOrDefault(tier, 0.0f);
     }
-    public float getT1MaxHungerSaturation() {
-        return T1MaxHungerSaturation;
+    public boolean isIgnoreInteractionValues() {
+        return ignoreInteractionValues;
     }
-    public float getT2MaxHungerSaturation() {
-        return T2MaxHungerSaturation;
-    }
-    public float getT3MaxHungerSaturation() {
-        return T3MaxHungerSaturation;
+    public boolean isIgnoreCustomAssetValues() {
+        return ignoreCustomAssetValues;
     }
 }
