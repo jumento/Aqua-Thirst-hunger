@@ -16,8 +16,7 @@ import es.xcm.hunger.ui.HHMHud;
 public class GameModePacketWatcher implements PlayerPacketWatcher {
     @Override
     public void accept(PlayerRef playerRef, Packet packet) {
-        if (packet.getId() != SetGameMode.PACKET_ID) return;
-        SetGameMode setGameMode = (SetGameMode) packet;
+        if (!(packet instanceof SetGameMode setGameMode)) return;
 
         Ref<EntityStore> ref = playerRef.getReference();
         if (ref == null) return;

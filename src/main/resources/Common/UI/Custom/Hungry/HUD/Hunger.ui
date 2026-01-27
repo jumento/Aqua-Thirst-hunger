@@ -1,5 +1,7 @@
 @HHMAdventureBarFill = "HungerBarFill.png";
+@HHMHungerBarFillTranslucent = "HungerBarFillTranslucent.png";
 @HHMSaturationBarFill = "HungerBarSaturation.png";
+@HHMSaturationBarFillTranslucent = "HungerBarSaturationTranslucent.png";
 @HHMCreativeBarFill = "CreativeHungerBarFill.png";
 
 Group #HHMHUD {
@@ -18,10 +20,22 @@ Group #HHMHUD {
             Anchor: (Left: 0, Width: 318, Height: 12);
             Background: "HungerBackground.png";
 
+            ProgressBar #HHMHungerRestorePreviewBar {
+                Anchor: (Width: 318, Height: 12);
+                BarTexturePath: @HHMHungerBarFillTranslucent;
+                Value: 0;
+                Visible: true;
+            }
             ProgressBar #HHMHungerBar {
                 Anchor: (Width: 318, Height: 12);
                 BarTexturePath: @HHMAdventureBarFill;
                 Value: 1.0;
+                Visible: true;
+            }
+            ProgressBar #HHMHungerSaturationRestorePreviewBar {
+                Anchor: (Width: 318, Height: 12);
+                BarTexturePath: @HHMSaturationBarFillTranslucent;
+                Value: 0;
                 Visible: true;
             }
             ProgressBar #HHMHungerSaturationBar {

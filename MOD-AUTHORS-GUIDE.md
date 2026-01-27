@@ -24,12 +24,25 @@ Then, you should add the following configuration:
           "MaxHungerSaturation": 30
         }
       ]
+    },
+    "Hungry_Start_Feeding": {
+      "Interactions": [
+        {
+          "Type": "Hungry_Start_Feeding",
+          "HungerRestoration": 60,
+          "MaxHungerSaturation": 30
+        }
+      ]
     }
   }
 }
 ```
 
 You can adjust the `HungerRestoration` and `MaxHungerSaturation` values as needed.
+
+Both values under `Hungry_Feed` and `Hungry_Start_Feeding` should match.
+The `Hungry_Feed` interaction var is used to determine the hunger restoration values after the food is sucessfully feeded.
+The `Hungry_Start_Feeding` interaction var is used to display the preview hunger restoration value during the feed animation.
 
 If you prefer your items to infer the values from a template, you can create template Item assets, and then have your food items inherit from them by specifying the parent:
 ```json
@@ -44,7 +57,7 @@ Hytale will merge interaction vars from the parent template into the child item,
 
 This method is prefered if you don't own the item asset, for example if you're developing a hunger balance mod.
 
-
+If you own the food item asset, you can still use this method if you prefer to separate the food values from the item asset, or if you don't want to deal with two interaction vars.
 
 First you should create a new JSON asset under `Server/Item/Hungry/FoodValues`. The name of the JSON file must be the same as the name of your food item asset.
 

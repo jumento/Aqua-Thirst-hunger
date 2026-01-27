@@ -7,6 +7,7 @@ Designed with maximum compatibility and performance in mind.
 - **Hunger Bar**: A visual representation of the player's hunger level displayed on the HUD 
 - **Hunger Depletion**: Hunger decreases over time, with the rate influenced by player actions such as stamina usage, or mining blocks.
 - **Hunger Saturation**: Some foods will saturate your hunger bar over the 100% value, providing a buffer before hunger starts depleting again.
+- **Preview Hunger Restoration**: When initiating the food consumption animation, a preview of the hunger restoration and saturation values is displayed.
 - **Food Consumption**: Players can consume various food items to restore their hunger levels.
 - **Status effects**: When hunger drops below a certain threshold, players experience reduced movement speed and disabled sprint.
 - **Starvation Damage**: Players take damage over time when their hunger reaches zero.

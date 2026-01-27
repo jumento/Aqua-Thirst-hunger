@@ -76,6 +76,12 @@ public class FeedInteraction extends SimpleInstantInteraction {
         // finally the tier config value
         return config.getTierMaxHungerSaturation(HHMUtils.getItemTier(item));
     }
+    public static float getExpectedHungerLevel (float currentHungerLevel, float hungerRestoration, float maxHungerSaturation) {
+        return Math.min(
+            currentHungerLevel + hungerRestoration,
+            100.0f + maxHungerSaturation
+        );
+    }
 
     public float getHungerRestoration(Item item) {
         return getHungerRestoration(item, this.hungerRestoration);
@@ -101,10 +107,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
         float hungerRestoration = getHungerRestoration(item);
         float maxHungerSaturation = getMaxHungerSaturation(item);
 
-        float targetHungerLevel = Math.min(
-            currentHungerLevel + hungerRestoration,
-            100.0f + maxHungerSaturation
-        );
+        float targetHungerLevel = getExpectedHungerLevel(currentHungerLevel, hungerRestoration, maxHungerSaturation);
 
         // Avoid unnecessary updates
         if (currentHungerLevel >= targetHungerLevel) return;
@@ -114,6 +117,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
         final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (commandBuffer == null || playerRef == null) return;
 
+        HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
         HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
         HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);
     }

@@ -8,6 +8,9 @@
   },
   "HorizontalSpeedMultiplier": 0.4,
   "Next": {
+    "0.0": {
+      "Type": "Hungry_Failed_Feeding"
+    },
     "3.0": {
       "Type": "ModifyInventory",
       "AdjustHeldItemQuantity": -1,
@@ -53,6 +56,6 @@
     }
   },
   "Failed": {
-    "Type": "Simple"
+    "Type": "Hungry_Failed_Feeding"
   }
 }

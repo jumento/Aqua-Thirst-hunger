@@ -22,7 +22,9 @@ import es.xcm.hunger.config.HHMHungerConfig;
 import es.xcm.hunger.config.HHMFoodValuesConfig;
 import es.xcm.hunger.events.GameModePacketWatcher;
 import es.xcm.hunger.events.HHMPlayerReady;
+import es.xcm.hunger.interactions.FailedFeedingInteraction;
 import es.xcm.hunger.interactions.FeedInteraction;
+import es.xcm.hunger.interactions.StartFeedingInteraction;
 import es.xcm.hunger.systems.OnBlockHitSystem;
 import es.xcm.hunger.systems.OnDeathSystem;
 import es.xcm.hunger.systems.StarveSystem;
@@ -66,6 +68,8 @@ public class HytaleHungerMod extends JavaPlugin {
         // register feed interaction
         final var interactionRegistry = this.getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("Hungry_Feed", FeedInteraction.class, FeedInteraction.CODEC);
+        interactionRegistry.register("Hungry_Start_Feeding", StartFeedingInteraction.class, StartFeedingInteraction.CODEC);
+        interactionRegistry.register("Hungry_Failed_Feeding", FailedFeedingInteraction.class, FailedFeedingInteraction.CODEC);
 
         // setup hunger component and hud on player join
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, HHMPlayerReady::handle);
