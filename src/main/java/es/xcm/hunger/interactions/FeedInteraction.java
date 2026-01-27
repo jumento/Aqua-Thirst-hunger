@@ -9,7 +9,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -95,12 +94,12 @@ public class FeedInteraction extends SimpleInstantInteraction {
         final Store<EntityStore> store = ref.getStore();
 
         final HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
-        final ItemStack heldItem = context.getHeldItem();
-        if (hungerComponent == null || heldItem == null) return;
+        final Item item = context.getOriginalItemType();
+        if (hungerComponent == null || item == null) return;
 
         float currentHungerLevel = hungerComponent.getHungerLevel();
-        float hungerRestoration = getHungerRestoration(heldItem.getItem());
-        float maxHungerSaturation = getMaxHungerSaturation(heldItem.getItem());
+        float hungerRestoration = getHungerRestoration(item);
+        float maxHungerSaturation = getMaxHungerSaturation(item);
 
         float targetHungerLevel = Math.min(
             currentHungerLevel + hungerRestoration,
