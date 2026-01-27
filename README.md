@@ -135,31 +135,8 @@ In high pop servers its recommended that the `StarvationTickRate` is set to at l
 - [Poisonous Raw Meat](https://www.curseforge.com/hytale/mods/poisonous-raw-meat)
 - [MultipleHUD](https://www.curseforge.com/hytale/mods/multiplehud)
 
-## Custom Assets (For mod authors)
-If you're developing your own food mod and want to define custom hunger restoration values for your food items, you can do so by defining a new asset this mod will process.
-
-Please note this is optional, and if you don't define a custom `FoodValue` asset for your food items, the mod will fallback to the default configuration value based on the food tier interaction used.
-
-This asset was specifically designed to remain compatible with users who don’t use this mod. It can be safely included in your asset pack without affecting those who don’t have this mod installed.
-
-First you should create a new JSON asset under `Server/Item/Hungry/FoodValues`. The name of the JSON file must be the same as the name of your food item asset.
-
-Then, you should define the following structure:
-```json
-{
-  "HungerRestoration": <number>
-}
-```
-Where `<number>` is the amount of hunger that will be restored when consuming that food item.
-
-This new asset support inheritance, so you can create a template asset for each one of your food tiers, and then have your food items inherit from one of them.
-
-To do so, simply create a new template asset, like `Server/Item/Hungry/FoodValues/Template_MyMod_T1.json`, define the `HungerRestoration` value, and then have your food items inherit from that template by specifying the parent:
-```json
-{
-  "Parent": "Template_MyMod_T1"
-}
-```
+## Mod authors guide
+If you're a mod author and want to customise the hunger restoration and saturation values of your food items, please refer to the [MOD-AUTHORS-GUIDE.md](MOD-AUTHORS-GUIDE.md) file.
 
 ## Special thanks
 - [trouble-dev](https://github.com/trouble-dev): For his [UI guides](https://www.youtube.com/watch?v=cha7YFULwxY) and [noels-whitelist-manager](https://github.com/trouble-dev/noels-whitelist-manager) plugin, which I used as a reference for updating UI elements.
