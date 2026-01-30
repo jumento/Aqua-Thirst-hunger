@@ -1,10 +1,12 @@
 # Hytale Hunger Mod
+
 Introduces a Hunger system to Hytale, requiring players to manage their food intake to survive and thrive in the game world.
 
 Designed with maximum compatibility and performance in mind.
 
 ## Features
-- **Hunger Bar**: A visual representation of the player's hunger level displayed on the HUD 
+
+- **Hunger Bar**: A visual representation of the player's hunger level displayed on the HUD
 - **Hunger Depletion**: Hunger decreases over time, with the rate influenced by player actions such as stamina usage, or mining blocks.
 - **Hunger Saturation**: Some foods will saturate your hunger bar over the 100% value, providing a buffer before hunger starts depleting again.
 - **Preview Hunger Restoration**: When initiating the food consumption animation, a preview of the hunger restoration and saturation values is displayed.
@@ -16,17 +18,21 @@ Designed with maximum compatibility and performance in mind.
 - **Configurable Settings**: Customize hunger depletion rates, starvation interval, starvation damage, hungry threshold, how much stamina usage and mining affects hunger, and food restoration values via a configuration file.
 
 ## Actions affecting hunger
+
 - **Basal Metabolic Rate**: Hunger slowly depletes over time, even when the player is idle.
 - **Stamina usage**: The more stamina the player uses, the faster their hunger depletes. This includes sprinting, blocking, bashing, and charging attacks.
 - **Hitting blocks**: Each time the player hits a block, a small amount of hunger is depleted. Using better tools requires fewer hits to break a block, resulting in less hunger lost per block broken.
 
 ## Balance
+
 Currently, the default configuration is pretty forgiving, if you want a more challenging experience, you may want to tweak the configuration file to increase the starvation rate and damage.
 
 With the default configuration, you'll go from max hunger (100) to starvation (0) in about 27 minutes of real-life time. If you're running all the time, it may take around 15 minutes.
 
 ## Compatibility
+
 This mod have been designed with compatibility in mind, ensuring it works well alongside other mods, including HUD, food and safe zone mods.
+
 - If you use other HUD mods, make sure to use the [MultipleHUD](https://www.curseforge.com/hytale/mods/multiplehud) mod.
   The other HUD mods that you use must support it too.
 - This mod is works in both single-player worlds and multiplayer servers.
@@ -35,6 +41,7 @@ This mod have been designed with compatibility in mind, ensuring it works well a
 - This mod modifies the `Server.Item.Interactions.Consumables.Consume_Charge_Food_T*.json` assets, so it won't be compatible with other mods that modify that asset.
 
 ## Hunger Configuration
+
 This mod will create a configuration file under `mods/es.xcm_HytaleHungerMod/HungerConfig.json` in your world folder after the first run. You can customize the following settings:
 
 | Key                         | Valid value                                                                                                                                         | Default Value         | Description                                                                                                                                                                                                                                                     |
@@ -50,15 +57,18 @@ This mod will create a configuration file under `mods/es.xcm_HytaleHungerMod/Hun
 | `HudPosition`               | `BottomLeft` <br/> `AboveHotbarCentered` <br/> `AboveHotbarLeft` <br/> `BelowHotbarCentered` <br/> `BelowHotbarLeft` <br/> `Custom:<left>:<bottom>` | `AboveHotbarCentered` | The position where the HUD will be rendered. `Custom:12:12` is equivalent to `BottomLeft`.                                                                                                                                                                      |
 | `SinglePlayer`              | true / false                                                                                                                                        | true                  | Whether to run this mod in single player mode. Setting this to true will add some default permissions to the `Adventure` and `Creative` group for using some commands.                                                                                          |
 
-The max hunger is non-configurable and is set to 100. If you want to check the default values, you can find them in the [HHMConfig](src/main/java/es/xcm/hunger/HHMConfig.java) class. 
+The max hunger is non-configurable and is set to 100. If you want to check the default values, you can find them in the [HHMConfig](src/main/java/es/xcm/hunger/HHMConfig.java) class.
 
 You can use the following formula to calculate how long it takes to starve from full hunger to zero:
+
 ```
-(100/(StarvationPerTick/StarvationTickRate)/60
+(100/(StarvationPerTick/StarvationTickRate))/60
 ```
+
 The result is in minutes.
 
 ## Food Configuration
+
 You can customize how much hunger is restored by particular food items by modifying the JSON file under `mods/es.xcm_HytaleHungerMod/FoodValuesConfig.json` in your world folder.
 
 | Key                       | Valid value           | Default Value | Description                                                                                                   |
@@ -71,6 +81,7 @@ You can customize how much hunger is restored by particular food items by modify
 | `ItemMaxHungerSaturation` | Map<String, Number>   | Empty         | Per item hunger saturation values.                                                                            |
 
 Default values:
+
 ```json
 {
   "IgnoreInteractionValues": false,
@@ -97,14 +108,16 @@ Default values:
   "ItemMaxHungerSaturation": {}
 }
 ```
+
 Here is an example on how the `ItemHungerRestoration` and `ItemMaxHungerSaturation` value should look like. Note this are optional and the mod will always fallback to tier based values if not defined.
+
 ```json
 {
-  "HungerRestoration": {
+  "ItemHungerRestoration": {
     "Food_Pie_Meat": 60.0,
     "Food_Pie_Apple": 50.0
   },
-  "MaxHungerSaturation": {
+  "ItemMaxHungerSaturation": {
     "Food_Pie_Meat": 40.0,
     "Food_Pie_Apple": 35.0
   }
@@ -112,6 +125,7 @@ Here is an example on how the `ItemHungerRestoration` and `ItemMaxHungerSaturati
 ```
 
 ## Commands
+
 This mod adds the following commands:
 
 | Command                         | Permission                | Description                                                                                                                                                                                          |
@@ -126,8 +140,10 @@ This mod adds the following commands:
 When this mods runs in a single player world, the user get access to the commands `/hunger`, `/hunger hide`, `/hunger show`, `/hunger position <position>`.
 
 ## Performance
+
 This mod is optimized for performance in high pop servers, ensuring minimal impact on TPS.
 It achieves so by:
+
 - Ensure that hunger updates are distributed evenly across multiple ticks
 - Hunger ticks only apply to elegible players (Not dead, not in safe zone, not in creative, spawned in a world)
 - Use events whenever possible instead of polling
@@ -136,13 +152,16 @@ It achieves so by:
 In high pop servers its recommended that the `StarvationTickRate` is set to at least 2 seconds (default). Setting it to a lower value may result in performance issues.
 
 ## Recommended mods
+
 - [Poisonous Raw Meat](https://www.curseforge.com/hytale/mods/poisonous-raw-meat)
 - [MultipleHUD](https://www.curseforge.com/hytale/mods/multiplehud)
 
 ## Mod authors guide
+
 If you're a mod author and want to customise the hunger restoration and saturation values of your food items, please refer to the [MOD-AUTHORS-GUIDE.md](MOD-AUTHORS-GUIDE.md) file.
 
 ## Special thanks
+
 - [trouble-dev](https://github.com/trouble-dev): For his [UI guides](https://www.youtube.com/watch?v=cha7YFULwxY) and [noels-whitelist-manager](https://github.com/trouble-dev/noels-whitelist-manager) plugin, which I used as a reference for updating UI elements.
 - [Darkhax](https://github.com/Darkhax): For his [Spellbook](https://github.com/Hytale-Mods/Spellbook) mod that I used as reference for creating new interactions
 - [oskarscot](https://github.com/oskarscot): For his [Hytale ECS Basics guide](https://hytalemodding.dev/en/docs/guides/ecs/hytale-ecs)
@@ -160,9 +179,11 @@ If you're a mod author and want to customise the hunger restoration and saturati
 This project could not have been possible without the shared effort of the Hytale modding community!
 
 ## LICENSE
+
 Copyright (c) 2026 Alejandro Caston Molero
 
 Licensed under GNU Affero General Public License as stated in the [LICENSE](LICENSE) file.
+
 ```
 Copyright (c) 2026 Alejandro Caston Molero
 

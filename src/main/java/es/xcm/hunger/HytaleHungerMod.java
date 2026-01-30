@@ -46,7 +46,7 @@ public class HytaleHungerMod extends JavaPlugin {
     }
 
     @Override
-    protected void setup () {
+    protected void setup() {
         super.setup();
 
         this.hungerConfig.save();
@@ -65,8 +65,10 @@ public class HytaleHungerMod extends JavaPlugin {
         // register feed interaction
         final var interactionRegistry = this.getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("Hungry_Feed", FeedInteraction.class, FeedInteraction.CODEC);
-        interactionRegistry.register("Hungry_Start_Feeding", StartFeedingInteraction.class, StartFeedingInteraction.CODEC);
-        interactionRegistry.register("Hungry_Failed_Feeding", FailedFeedingInteraction.class, FailedFeedingInteraction.CODEC);
+        interactionRegistry.register("Hungry_Start_Feeding", StartFeedingInteraction.class,
+                StartFeedingInteraction.CODEC);
+        interactionRegistry.register("Hungry_Failed_Feeding", FailedFeedingInteraction.class,
+                FailedFeedingInteraction.CODEC);
 
         // setup hunger component and hud on player join
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, HHMPlayerReady::handle);
@@ -80,7 +82,7 @@ public class HytaleHungerMod extends JavaPlugin {
     }
 
     @Override
-    protected void start () {
+    protected void start() {
         super.start();
 
         // single player worlds get extra permissions to manage config
@@ -89,8 +91,7 @@ public class HytaleHungerMod extends JavaPlugin {
                     HungryCommand.requiredPermission,
                     HungryHideCommand.requiredPermission,
                     HungryShowCommand.requiredPermission,
-                    HungryPositionCommand.requiredPermission
-            );
+                    HungryPositionCommand.requiredPermission);
             PermissionsModule.get().addGroupPermission("Adventure", singleplayerPermissions);
             PermissionsModule.get().addGroupPermission("Creative", singleplayerPermissions);
             logInfo("Singleplayer module detected, added permissions to Adventure and Creative groups.");
@@ -104,9 +105,11 @@ public class HytaleHungerMod extends JavaPlugin {
     public HHMHungerConfig getHungerConfig() {
         return this.hungerConfig.get();
     }
+
     public void saveHungerConfig() {
         this.hungerConfig.save();
     }
+
     public HHMFoodValuesConfig getFoodValuesConfig() {
         return this.foodValuesConfig.get();
     }

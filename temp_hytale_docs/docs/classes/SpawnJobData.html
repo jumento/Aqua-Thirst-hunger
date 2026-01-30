@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpawnJobData - Hytale Plugin API</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Prism.js for syntax highlighting (dark theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="../assets/css/javadoc-style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-breadcrumb">
+                <a href="index.html">com</a>
+<span class="separator">›</span>
+<a href="index.html">hypixel</a>
+<span class="separator">›</span>
+<a href="index.html">hytale</a>
+<span class="separator">›</span>
+<a href="index.html">server</a>
+<span class="separator">›</span>
+<a href="index.html">spawning</a>
+<span class="separator">›</span>
+<a href="index.html">world</a>
+<span class="separator">›</span>
+<a href="index.html">component</a>
+<span class="separator">›</span>
+<span class="current">SpawnJobData</span>
+            </div>
+            <a href="https://github.com/Henry-Bonikowsky/hytale-plugin-docs" class="navbar-github" target="_blank" title="View on GitHub">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- API Navigation Sidebar -->
+            <div class="col-auto">
+                <div class="sidebar">
+                    <!-- Search -->
+                    <div class="sidebar-search">
+                        <input type="text" class="form-control form-control-sm" placeholder="Search classes...">
+                    </div>
+
+                    <!-- Package Tree -->
+                    <nav class="sidebar-nav">
+                        <div class="package-group">
+                            <div class="package-title">com.hypixel.hytale.server.core</div>
+
+                            <div class="package-section">
+                                <div class="package-name" data-toggle="collapse">
+                                    <span class="chevron">▼</span> plugin
+                                </div>
+                                <div class="package-classes">
+                                    <a href="JavaPlugin.html" class="class-link">JavaPlugin</a>
+                                    <a href="PluginBase.html" class="class-link">PluginBase</a>
+                                    <a href="PluginClassLoader.html" class="class-link">PluginClassLoader</a>
+                                    <a href="JavaPluginInit.html" class="class-link">JavaPluginInit</a>
+                                    <a href="PluginType.html" class="class-link">PluginType</a>
+                                </div>
+                            </div>
+
+                            <div class="package-section">
+                                <div class="package-name" data-toggle="collapse">
+                                    <span class="chevron">▼</span> asset
+                                </div>
+                                <div class="package-classes">
+                                    <a href="AssetModule.html" class="class-link">AssetModule</a>
+                                    <a href="AssetPackRegisterEvent.html" class="class-link">AssetPackRegisterEvent</a>
+                                </div>
+                            </div>
+
+                            <div class="package-section">
+                                <div class="package-name" data-toggle="collapse">
+                                    <span class="chevron">▼</span> event
+                                </div>
+                                <div class="package-classes">
+                                    <a href="EventRegistry.html" class="class-link">EventRegistry</a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main content -->
+            <div class="col">
+                <div class="content-wrapper">
+                <!-- Class header -->
+                <div class="class-header" id="overview">
+                    <h1 class="class-name">SpawnJobData</h1>
+
+                    <div class="class-signature">
+<pre><code class="language-java"><span class="modifier public">public</span> class <a href="SpawnJobData.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.world.component.SpawnJobData">SpawnJobData</a> extends <a href="#" class="type-link" data-full-name="java.lang.Object">Object</a> implements <a href="Component.html" class="type-link" data-full-name="com.hypixel.hytale.component.Component">Component</a><<a href="ChunkStore.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.universe.world.storage.ChunkStore">ChunkStore</a>></code></pre>
+                    </div>
+
+                    <p class="mt-3">
+                        <code>SpawnJobData</code> is a class that extends <code>Object</code> and implements <code>Component</code> and <code>ChunkStore</code>.
+                    </p>
+                </div>
+
+                <!-- Visibility toggle -->
+                <div class="visibility-toggle">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show-private">
+                        <label class="form-check-label" for="show-private">
+                            Show private/protected members
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fields section -->
+                <div class="member-section" id="fields">
+                    <h2>Fields</h2>
+                    
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> <span class="modifier static">static</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private static int jobIdCounter</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>jobIdCounter</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> <span class="modifier final">final</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private final int jobId</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>jobId</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int environmentIndex</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>environmentIndex</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int totalColumnsTested</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>totalColumnsTested</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int totalColumnsBlocked</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>totalColumnsBlocked</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int budgetUsed</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>budgetUsed</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int totalBudgetUsed</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>totalBudgetUsed</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private boolean spawnFrozen</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spawnFrozen</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> <span class="modifier final">final</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private final <a href="SpawningContext.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.SpawningContext">SpawningContext</a> spawningContext</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spawningContext</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int roleIndex</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>roleIndex</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private <a href="SpawnWrapper.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.wrappers.SpawnWrapper">SpawnWrapper</a><?> spawnConfig</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spawnConfig</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int spawnConfigIndex</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spawnConfigIndex</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int flockSize</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>flockSize</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private <a href="FlockAsset.html" class="type-link" data-full-name="com.hypixel.hytale.server.flock.config.FlockAsset">FlockAsset</a> flockAsset</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>flockAsset</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> <span class="modifier final">final</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private final <a href="SuppressionSpanHelper.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.suppression.SuppressionSpanHelper">SuppressionSpanHelper</a> suppressionSpanHelper</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>suppressionSpanHelper</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private <a href="Environment.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.asset.type.environment.config.Environment">Environment</a> environment</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>environment</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int spansTried</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spansTried</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private int spansSuccess</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>spansSuccess</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> <span class="modifier final">final</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private final it.unimi.dsi.fastutil.objects.Object2IntMap<<a href="SpawnRejection.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.SpawnRejection">SpawnRejection</a>> rejectionMap</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>rejectionMap</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private boolean ignoreFullyPopulated</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>ignoreFullyPopulated</code> field.</p>
+                    </div>
+
+                    <div class="member-item private-member">
+                        <div class="mb-2">
+                            <span class="modifier private">private</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">private boolean terminated</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>terminated</code> field.</p>
+                    </div>
+
+                </div>
+
+                <!-- Constructors section -->
+                <div class="member-section" id="constructors">
+                    <h2>Constructors</h2>
+                    
+                    <div class="member-item">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span>
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="SpawnJobData.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.world.component.SpawnJobData">SpawnJobData</a>()</code>
+                        </div>
+                        <p class="mt-2 mb-0">Creates a new instance of <code>SpawnJobData</code>.</p>
+                    </div>
+
+                </div>
+
+                <!-- Methods section -->
+                <div class="member-section" id="methods">
+                    <h2>Methods</h2>
+                    
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> <span class="modifier static">static</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public static <a href="ComponentType.html" class="type-link" data-full-name="com.hypixel.hytale.component.ComponentType">ComponentType</a><<a href="ChunkStore.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.universe.world.storage.ChunkStore">ChunkStore</a>, <a href="SpawnJobData.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.world.component.SpawnJobData">SpawnJobData</a>> getComponentType()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getComponentType()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getJobId()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getJobId()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getEnvironmentIndex()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getEnvironmentIndex()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getTotalColumnsTested()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getTotalColumnsTested()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void incrementTotalColumnsTested()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>incrementTotalColumnsTested()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getTotalColumnsBlocked()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getTotalColumnsBlocked()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void incrementTotalColumnsBlocked()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>incrementTotalColumnsBlocked()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getBudgetUsed()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getBudgetUsed()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void setBudgetUsed(int)</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>setBudgetUsed()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void adjustBudgetUsed(int)</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>adjustBudgetUsed()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getTotalBudgetUsed()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getTotalBudgetUsed()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public boolean isSpawnFrozen()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>isSpawnFrozen()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void setSpawnFrozen(boolean)</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>setSpawnFrozen()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="SpawningContext.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.SpawningContext">SpawningContext</a> getSpawningContext()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSpawningContext()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getRoleIndex()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getRoleIndex()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="SpawnWrapper.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.wrappers.SpawnWrapper">SpawnWrapper</a><?> getSpawnConfig()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSpawnConfig()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getSpawnConfigIndex()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSpawnConfigIndex()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getFlockSize()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getFlockSize()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="FlockAsset.html" class="type-link" data-full-name="com.hypixel.hytale.server.flock.config.FlockAsset">FlockAsset</a> getFlockAsset()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getFlockAsset()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="SuppressionSpanHelper.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.suppression.SuppressionSpanHelper">SuppressionSpanHelper</a> getSuppressionSpanHelper()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSuppressionSpanHelper()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="Environment.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.asset.type.environment.config.Environment">Environment</a> getEnvironment()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getEnvironment()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getSpansTried()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSpansTried()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void incrementSpansTried()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>incrementSpansTried()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public int getSpansSuccess()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getSpansSuccess()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void incrementSpansSuccess()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>incrementSpansSuccess()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public it.unimi.dsi.fastutil.objects.Object2IntMap<<a href="SpawnRejection.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.SpawnRejection">SpawnRejection</a>> getRejectionMap()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>getRejectionMap()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public boolean isIgnoreFullyPopulated()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>isIgnoreFullyPopulated()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void setIgnoreFullyPopulated(boolean)</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>setIgnoreFullyPopulated()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public boolean isTerminated()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>isTerminated()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void terminate()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>terminate()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public void init(int, <a href="Environment.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.asset.type.environment.config.Environment">Environment</a>, int, <a href="SpawnWrapper.html" class="type-link" data-full-name="com.hypixel.hytale.server.spawning.wrappers.SpawnWrapper">SpawnWrapper</a><?>, <a href="FlockAsset.html" class="type-link" data-full-name="com.hypixel.hytale.server.flock.config.FlockAsset">FlockAsset</a>, int)</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>init()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="Component.html" class="type-link" data-full-name="com.hypixel.hytale.component.Component">Component</a><<a href="ChunkStore.html" class="type-link" data-full-name="com.hypixel.hytale.server.core.universe.world.storage.ChunkStore">ChunkStore</a>> clone()</code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>clone()</code> method.</p>
+                    </div>
+
+                    <div class="member-item ">
+                        <div class="mb-2">
+                            <span class="modifier public">public</span> 
+                        </div>
+                        <div class="member-signature">
+<code class="language-java">public <a href="#" class="type-link" data-full-name="java.lang.Object">Object</a> clone() throws <a href="#" class="type-link" data-full-name="java.lang.CloneNotSupportedException">CloneNotSupportedException</a></code>
+                        </div>
+                        <p class="mt-2 mb-0">The <code>clone()</code> method.</p>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="docs-footer">
+                    Generated from <code>hytale-server-2026.01.15.jar</code> using javap.<br>
+                    Not affiliated with Hypixel Studios.
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="../assets/js/javadoc-ui.js"></script>
+</body>
+</html>
