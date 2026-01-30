@@ -68,3 +68,19 @@ This prevents repeated trial-and-error and supports deterministic iteration.
 ---
 
 # ENTRIES (Append-Only)
+
+- Timestamp (America/Monterrey): 2026-01-30 16:55
+- Title: Solving Folder Path Conflicts via Manual Config Management
+- Goal: Ensure configuration files are saved in `mods/Aqua-Thirst-hunger/` without being prefixed by the mod's Group name (e.g., `mx.jume...`).
+- Context: Hytale's built-in `withConfig` method automatically sandboxes configuration files into a directory named `{Group}_{Name}`. Relative path escaping (`../`) worked but felt fragile or like a workaround.
+- Preconditions: Project must include `com.google.code.gson:gson` dependency.
+- Steps:
+  1. Create a `ConfigManager` class that uses standard Java `File` IO and Gson (instead of Hytale's Codec system for file handling).
+  2. Define the target directory explicitly (e.g., `new File("mods/Aqua-Thirst-hunger")`).
+  3. Retain the use of Hytale Codec classes (like `HHMHungerConfig`) as simple data containers (POJOs).
+  4. Initialize this manager in the main plugin's `setup()` method.
+- Result: Configuration files appear exactly where intended, and the project retains a proper Group ID in `manifest.json` for server stability.
+- Replication Steps: Copy the `ConfigManager` pattern from this project and add the Gson compileOnly dependency.
+- Verification: Server boot log confirms manual loading; files exist in `mods/Aqua-Thirst-hunger/`.
+- Related BOT Log Reference (date/summary): 2026-01-30 (Entry 26)
+- Status: active

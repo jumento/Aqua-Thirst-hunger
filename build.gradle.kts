@@ -16,9 +16,8 @@ repositories {
 }
 
 dependencies {
-    // Standard practice for local jar dependencies in Hytale mods
     compileOnly(fileTree("libs") { include("*.jar") })
-    
+    compileOnly("com.google.code.gson:gson:2.10.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -27,10 +26,7 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-/**
- * Task to generate the Hytale manifest.json metadata file.
- * Following Gradle best practices for task inputs/outputs and lazy properties.
- */
+// Minimal Hytale manifest generation
 val generateManifest by tasks.registering {
     val outputDir = layout.buildDirectory.dir("generated/resources")
     outputs.dir(outputDir)
@@ -50,15 +46,15 @@ val generateManifest by tasks.registering {
             }
         """.trimIndent()
         
-        val manifestFile = outputDir.get().file("manifest.json").asFile
-        manifestFile.parentFile.mkdirs()
-        manifestFile.writeText(json)
+        outputDir.get().file("manifest.json").asFile.apply {
+            parentFile.mkdirs()
+            writeText(json)
+        }
     }
 }
 
 sourceSets {
     main {
-        // Automatically wires generateManifest as a dependency of processResources
         resources.srcDir(generateManifest)
     }
 }

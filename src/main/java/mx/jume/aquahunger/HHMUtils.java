@@ -28,7 +28,7 @@ public class HHMUtils {
 
     public static final String starvingEntityEffectId = "Starving";
     public static final String hungryEntityEffectId = "Hungry";
-
+    public static final String poisonEntityEffectId = "Poison_T1";
 
     @NonNullDecl
     public static EntityEffect getStarvingEntityEffect() {
@@ -37,10 +37,12 @@ public class HHMUtils {
             assert starvingEntityEffect != null;
             HHMHungerConfig conf = AquaThirstHunger.get().getHungerConfig();
             try {
-                // patch damageCalculator cooldown so that audio syncs properly with starvation tick rate (user configured)
+                // patch damageCalculator cooldown so that audio syncs properly with starvation
+                // tick rate (user configured)
                 Field f = EntityEffect.class.getDeclaredField("damageCalculatorCooldown");
                 f.setAccessible(true);
-                // this only affect sfx. Users with low hunger tick rates may notice bugged sfx timings otherwise.
+                // this only affect sfx. Users with low hunger tick rates may notice bugged sfx
+                // timings otherwise.
                 float cooldown = Math.max(conf.getStarvationTickRate(), 1.0f);
                 f.setFloat(starvingEntityEffect, cooldown);
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -57,6 +59,20 @@ public class HHMUtils {
             assert hungryEntityEffect != null;
         }
         return hungryEntityEffect;
+    }
+
+    private static EntityEffect poisonEntityEffect;
+    private static boolean poisonEffectChecked = false;
+
+    public static EntityEffect getPoisonT1EntityEffect() {
+        if (!poisonEffectChecked) {
+            poisonEntityEffect = EntityEffect.getAssetMap().getAsset(poisonEntityEffectId);
+            if (poisonEntityEffect == null) {
+                AquaThirstHunger.logInfo("Poison_T1 effect asset not found.");
+            }
+            poisonEffectChecked = true;
+        }
+        return poisonEntityEffect;
     }
 
     public static boolean activeEntityEffectIs(ActiveEntityEffect effect, String entityEffectId) {
@@ -86,8 +102,7 @@ public class HHMUtils {
             Ref<EntityStore> ref,
             ComponentAccessor<EntityStore> componentAccessor,
             @NonNullDecl EffectControllerComponent effectController,
-            Predicate<ActiveEntityEffect> shouldRemoveEffect
-    ) {
+            Predicate<ActiveEntityEffect> shouldRemoveEffect) {
         final ActiveEntityEffect[] activeEffects = effectController.getAllActiveEntityEffects();
         if (activeEffects != null && activeEffects.length > 0) {
             Arrays.stream(activeEffects).filter(shouldRemoveEffect).forEach(effect -> {
@@ -99,21 +114,22 @@ public class HHMUtils {
     public static void removeActiveEffects(
             Ref<EntityStore> ref,
             ComponentAccessor<EntityStore> componentAccessor,
-            Predicate<ActiveEntityEffect> shouldRemoveEffect
-    ) {
-        final EffectControllerComponent effectController = componentAccessor.getComponent(ref, EffectControllerComponent.getComponentType());
-        if (effectController == null) return;
+            Predicate<ActiveEntityEffect> shouldRemoveEffect) {
+        final EffectControllerComponent effectController = componentAccessor.getComponent(ref,
+                EffectControllerComponent.getComponentType());
+        if (effectController == null)
+            return;
         removeActiveEffects(ref, componentAccessor, effectController, shouldRemoveEffect);
     }
 
     public static void setPlayerHungerLevel(
             @NonNullDecl Ref<EntityStore> ref,
             @NonNullDecl ComponentAccessor<EntityStore> componentAccessor,
-            float hungerLevel
-    ) {
+            float hungerLevel) {
         HungerComponent hungerComponent = componentAccessor.getComponent(ref, HungerComponent.getComponentType());
         PlayerRef playerRef = componentAccessor.getComponent(ref, PlayerRef.getComponentType());
-        if (hungerComponent == null || playerRef == null) return;
+        if (hungerComponent == null || playerRef == null)
+            return;
 
         hungerComponent.setHungerLevel(hungerLevel);
         HHMHud.updatePlayerHungerLevel(playerRef, hungerLevel);
@@ -123,16 +139,16 @@ public class HHMUtils {
 
     @NonNullDecl
     public static DamageCause getStarvationDamageCause() {
-        if (starvationDamageCause != null) return starvationDamageCause;
+        if (starvationDamageCause != null)
+            return starvationDamageCause;
         starvationDamageCause = new DamageCause("Starvation", "Starvation", false, true, true);
         return starvationDamageCause;
     }
 
     @NonNullDecl
-    public static ItemTier getItemTier (Item item) {
+    public static ItemTier getItemTier(Item item) {
         ItemQuality itemQuality = ItemQuality.getAssetMap().getAsset(item.getQualityIndex());
         assert itemQuality != null;
         return ItemTier.valueOf(itemQuality.getId());
     }
 }
-

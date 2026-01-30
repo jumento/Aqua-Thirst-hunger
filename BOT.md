@@ -425,6 +425,21 @@ All entries below are immutable. Add new entries at the end only.
 - Verification (build/compile): SUCCESS (Gradle build passing)
 - Status: active
 
+## 2026-01-30 (Entry 24)
+
+- Timestamp (America/Monterrey): 2026-01-30 16:45
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Implemented raw meat poison effect.
+- Details:
+  - Modified `FeedInteraction.java` to check for raw meat item IDs on successful consumption.
+  - Updated `HHMUtils.java` to provide safe access to the `Poison_T1` entity effect asset.
+  - Implemented application via `EffectControllerComponent.addEffect` as per Hytale engine standards.
+  - Added fallback logging if the asset is missing.
+- Affected artifacts: FeeInteraction.java, HHMUtils.java, BOT.md
+- Verification (build/compile): SUCCESS (Gradle compileJava passing)
+- Status: active
+
 ## 2026-01-30 (Entry 22)
 
 - Timestamp (America/Monterrey): 2026-01-30 16:35
@@ -436,4 +451,48 @@ All entries below are immutable. Add new entries at the end only.
   - Updated `features.md` to include confirmed features: Namespace Refactor, Clean Build Logic, and Simplified Config Path.
 - Affected artifacts: features.md, BOT.md
 - Verification (build/compile): N/A (Confirmed by USER)
+- Status: active
+
+## 2026-01-30 (Entry 25)
+
+- Timestamp (America/Monterrey): 2026-01-30 16:50
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Corrected config folder naming via relative pathing in Java.
+- Details:
+  - Cleaned `build.gradle.kts` to use a single, minimal `manifest.json`.
+  - Re-introduced `Group: mx.jume.aquahunger` to prevent server boot NPE.
+  - Implemented a path escape in `AquaThirstHunger.java` using `../Aqua-Thirst-hunger/` in `withConfig`.
+  - This ensures Hytale creates/uses the `mods/Aqua-Thirst-hunger` folder for configuration, even if the internal data directory uses the group prefix.
+- Affected artifacts: build.gradle.kts, AquaThirstHunger.java, BOT.md
+- Verification (build/compile): SUCCESS (Gradle build passing)
+- Status: active
+
+## 2026-01-30 (Entry 23)
+
+- Timestamp (America/Monterrey): 2026-01-30 16:40
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Created save point 'aqua2'.
+- Details:
+  - Committed all changes related to the package refactor, build script cleaning, and metadata fixes.
+  - Tagged the current commit as `aqua2`.
+- Affected artifacts: Repository state
+- Verification (build/compile): Tagged successfully
+- Status: active
+
+## 2026-01-30 (Entry 26)
+
+- Timestamp (America/Monterrey): 2026-01-30 16:55
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Migrated to manual ConfigManager (Gson) to fix directory issues.
+- Details:
+  - Replaced Hytale's built-in `withConfig` system with a custom `ConfigManager.java`.
+  - Added `com.google.code.gson:gson:2.10.1` dependency to `build.gradle.kts`.
+  - Restored `Group: mx.jume.aquahunger` in `build.gradle.kts` properly.
+  - The new manager writes configuration files directly to `mods/Aqua-Thirst-hunger/`, bypassing Hytale's internal data directory sandbox/prefixing behavior entirely.
+  - Updated `AquaThirstHunger.java` to initialize this manager in `setup()`.
+- Affected artifacts: ConfigManager.java, AquaThirstHunger.java, build.gradle.kts
+- Verification (build/compile): SUCCESS (Gradle build passing)
 - Status: active

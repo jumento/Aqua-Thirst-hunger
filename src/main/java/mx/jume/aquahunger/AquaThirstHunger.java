@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.permissions.PermissionsModule;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.core.util.Config;
 import mx.jume.aquahunger.assets.FoodValue;
 import mx.jume.aquahunger.assets.HungryAssetRegistryLoader;
 import mx.jume.aquahunger.commands.*;
@@ -34,24 +33,23 @@ public class AquaThirstHunger extends JavaPlugin {
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static AquaThirstHunger instance;
 
-    private final Config<HHMHungerConfig> hungerConfig;
-    private final Config<HHMFoodValuesConfig> foodValuesConfig;
+    private mx.jume.aquahunger.config.ConfigManager configManager;
     private ComponentType<EntityStore, HungerComponent> hungerComponentType;
 
     public AquaThirstHunger(@NonNullDecl JavaPluginInit init) {
         super(init);
         instance = this;
-        this.hungerConfig = this.withConfig("HungerConfig", HHMHungerConfig.CODEC);
-        this.foodValuesConfig = this.withConfig("FoodValuesConfig", HHMFoodValuesConfig.CODEC);
+        // Config Loading moved to setup() to ensure proper folder structure
     }
 
     @Override
     protected void setup() {
         super.setup();
 
-        this.hungerConfig.save();
-        this.foodValuesConfig.save();
-        logInfo("Hunger and FoodValues configurations saved.");
+        // Load configurations manually
+        this.configManager = new mx.jume.aquahunger.config.ConfigManager();
+        this.configManager.load();
+        logInfo("Hunger and FoodValues configurations loaded successfully from manual path.");
 
         // register hunger component
         this.hungerComponentType = this.getEntityStoreRegistry()
@@ -104,15 +102,15 @@ public class AquaThirstHunger extends JavaPlugin {
     }
 
     public HHMHungerConfig getHungerConfig() {
-        return this.hungerConfig.get();
+        return this.configManager.getHungerConfig();
     }
 
     public void saveHungerConfig() {
-        this.hungerConfig.save();
+        this.configManager.save();
     }
 
     public HHMFoodValuesConfig getFoodValuesConfig() {
-        return this.foodValuesConfig.get();
+        return this.configManager.getFoodValuesConfig();
     }
 
     public static AquaThirstHunger get() {
@@ -127,4 +125,3 @@ public class AquaThirstHunger extends JavaPlugin {
         HungryAssetRegistryLoader.registerAssets();
     }
 }
-
