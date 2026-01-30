@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import es.xcm.hunger.HHMUtils;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.assets.FoodValue;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMFoodValuesConfig;
@@ -37,7 +37,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
     private Float maxHungerSaturation;
 
     public static float getHungerRestoration (Item item, Float interactionValue) {
-        HHMFoodValuesConfig config = HytaleHungerMod.get().getFoodValuesConfig();
+        HHMFoodValuesConfig config = AquaThirstHunger.get().getFoodValuesConfig();
         // first prefer user config
         Float configValue = config.getItemHungerRestoration(item.getId());
         if (configValue != null) return configValue;
@@ -57,7 +57,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
         return config.getTierHungerRestoration(HHMUtils.getItemTier(item));
     }
     public static float getMaxHungerSaturation (Item item, Float interactionValue) {
-        HHMFoodValuesConfig config = HytaleHungerMod.get().getFoodValuesConfig();
+        HHMFoodValuesConfig config = AquaThirstHunger.get().getFoodValuesConfig();
         // first prefer user config
         Float configValue = config.getItemMaxHungerSaturation(item.getId());
         if (configValue != null) return configValue;

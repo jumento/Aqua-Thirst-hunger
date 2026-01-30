@@ -8,7 +8,7 @@ import com.hypixel.hytale.assetstore.map.DefaultAssetMap;
 import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.config.HHMFoodValuesConfig;
 
 import java.util.HashMap;

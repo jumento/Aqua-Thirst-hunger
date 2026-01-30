@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import es.xcm.hunger.config.HHMHungerConfig;
 import es.xcm.hunger.HHMUtils;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.ui.HHMHud;
 import es.xcm.hunger.components.HungerComponent;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -32,7 +32,7 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
     }
 
     public static StarveSystem create () {
-        HHMHungerConfig config = HytaleHungerMod.get().getHungerConfig();
+        HHMHungerConfig config = AquaThirstHunger.get().getHungerConfig();
         return new StarveSystem(config);
     }
 

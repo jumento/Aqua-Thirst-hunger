@@ -45,8 +45,8 @@ val generateManifest by tasks.registering {
               "Group": "${project.group}",
               "Name": "${rootProject.name}",
               "Version": "${project.version}",
-              "Website": "https://www.curseforge.com/hytale/mods/hungry",
-              "Main": "es.xcm.hunger.HytaleHungerMod",
+              "Website": "https://github.com/jumento/Aqua-Thirst-hunger",
+              "Main": "es.xcm.hunger.AquaThirstHunger",
               "IncludesAssetPack": true
             }
         """.trimIndent() + "\n"

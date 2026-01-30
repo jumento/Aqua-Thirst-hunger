@@ -30,15 +30,15 @@ import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class HytaleHungerMod extends JavaPlugin {
+public class AquaThirstHunger extends JavaPlugin {
     public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static HytaleHungerMod instance;
+    private static AquaThirstHunger instance;
 
     private final Config<HHMHungerConfig> hungerConfig;
     private final Config<HHMFoodValuesConfig> foodValuesConfig;
     private ComponentType<EntityStore, HungerComponent> hungerComponentType;
 
-    public HytaleHungerMod(@NonNullDecl JavaPluginInit init) {
+    public AquaThirstHunger(@NonNullDecl JavaPluginInit init) {
         super(init);
         instance = this;
         this.hungerConfig = this.withConfig("HungerConfig", HHMHungerConfig.CODEC);
@@ -114,7 +114,7 @@ public class HytaleHungerMod extends JavaPlugin {
         return this.foodValuesConfig.get();
     }
 
-    public static HytaleHungerMod get() {
+    public static AquaThirstHunger get() {
         return instance;
     }
 

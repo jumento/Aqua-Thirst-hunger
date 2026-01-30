@@ -35,7 +35,7 @@ public class HHMUtils {
         if (starvingEntityEffect == null) {
             starvingEntityEffect = EntityEffect.getAssetMap().getAsset(starvingEntityEffectId);
             assert starvingEntityEffect != null;
-            HHMHungerConfig conf = HytaleHungerMod.get().getHungerConfig();
+            HHMHungerConfig conf = AquaThirstHunger.get().getHungerConfig();
             try {
                 // patch damageCalculator cooldown so that audio syncs properly with starvation tick rate (user configured)
                 Field f = EntityEffect.class.getDeclaredField("damageCalculatorCooldown");

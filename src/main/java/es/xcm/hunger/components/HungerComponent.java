@@ -6,7 +6,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ public class HungerComponent implements Component<EntityStore> {
     private float hungerLevel;
 
     public HungerComponent() {
-        this.hungerLevel = HytaleHungerMod.get().getHungerConfig().getInitialHungerLevel();
+        this.hungerLevel = AquaThirstHunger.get().getHungerConfig().getInitialHungerLevel();
     }
 
     public HungerComponent (float hungerLevel) {
@@ -88,6 +88,6 @@ public class HungerComponent implements Component<EntityStore> {
     }
 
     public static ComponentType<EntityStore, HungerComponent> getComponentType() {
-        return HytaleHungerMod.get().getHungerComponentType();
+        return AquaThirstHunger.get().getHungerComponentType();
     }
 }

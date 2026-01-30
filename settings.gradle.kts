@@ -1,1 +1,1 @@
-rootProject.name = "HytaleHungerMod"
+rootProject.name = "Aqua-Thirst-hunger"

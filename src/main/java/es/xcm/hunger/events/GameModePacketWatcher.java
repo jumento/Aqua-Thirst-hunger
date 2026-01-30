@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import es.xcm.hunger.HHMUtils;
 import es.xcm.hunger.components.HungerComponent;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.ui.HHMHud;
 
 public class GameModePacketWatcher implements PlayerPacketWatcher {
@@ -29,7 +29,7 @@ public class GameModePacketWatcher implements PlayerPacketWatcher {
             HHMHud.updatePlayerGameMode(playerRef, gameMode);
             HungerComponent hunger = store.getComponent(ref, HungerComponent.getComponentType());
             if (hunger == null) return;
-            float initialHunger = HytaleHungerMod.get().getHungerConfig().getInitialHungerLevel();
+            float initialHunger = AquaThirstHunger.get().getHungerConfig().getInitialHungerLevel();
             if (gameMode == GameMode.Creative && hunger.getHungerLevel() < initialHunger) {
                 HHMUtils.setPlayerHungerLevel(ref, store, initialHunger);
             }

@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import es.xcm.hunger.HHMUtils;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMHungerConfig;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -37,7 +37,7 @@ public class OnDeathSystem extends DeathSystems.OnDeathSystem {
 
     @Override
     public void onComponentRemoved(@NonNullDecl Ref<EntityStore> ref, @NonNullDecl DeathComponent component, @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
-        HHMHungerConfig config = HytaleHungerMod.get().getHungerConfig();
+        HHMHungerConfig config = AquaThirstHunger.get().getHungerConfig();
 
         if (config.isResetHungerOnDeath()) {
             HHMUtils.setPlayerHungerLevel(ref, store, config.getInitialHungerLevel());

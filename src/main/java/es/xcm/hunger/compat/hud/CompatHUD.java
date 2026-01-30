@@ -6,7 +6,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.plugin.PluginBase;
 import com.hypixel.hytale.server.core.plugin.PluginManager;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class CompatHUD implements HUDAdapter {
@@ -17,7 +17,7 @@ public class CompatHUD implements HUDAdapter {
         PluginBase multiplehud = PluginManager.get().getPlugin(PluginIdentifier.fromString("Buuz135:MultipleHUD"));
         if (multiplehud == null || !multiplehud.isEnabled()) {
             hudAdapter = new VanillaHUDAdapter();
-            HytaleHungerMod.logInfo("MultipleHUD plugin not found or not enabled. Mod won't be compatible with other HUD mods.");
+            AquaThirstHunger.logInfo("MultipleHUD plugin not found or not enabled. Mod won't be compatible with other HUD mods.");
         } else {
             hudAdapter = new MultipleHUDAdapter();
         }

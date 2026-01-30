@@ -211,3 +211,19 @@ All entries below are immutable. Add new entries at the end only.
 - Affected artifacts: settings.gradle.kts, build.gradle.kts, src/main/java/**/*
 - Verification (build/compile): SUCCESS (Gradle build passing)
 - Status: active
+
+## 2026-01-30 (Entry 8)
+
+- Timestamp (America/Monterrey): 2026-01-30 15:20
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Created 'forkok' save point and reapplied Aqua-Thirst-hunger renaming.
+- Details:
+  - Created Git tag `forkok` as a stable recovery point.
+  - Re-implemented renaming from `HytaleHungerMod` to `Aqua-Thirst-hunger`.
+  - Process: (1) Bulk string replacement across all files, (2) Renamed main class file, (3) Updated build scripts.
+  - Refactored all internal references to use `AquaThirstHunger`.
+  - Updated `build.gradle.kts` manifest website and main class.
+- Affected artifacts: Global source, settings.gradle.kts, build.gradle.kts
+- Verification (build/compile): SUCCESS (Gradle build passing cleanly)
+- Status: active

@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.compat.hud.CompatHUD;
 import es.xcm.hunger.components.HungerComponent;
 import es.xcm.hunger.config.HHMHungerConfig;
@@ -36,7 +36,7 @@ public class HHMHud extends CustomUIHud {
         super(playerRef);
         this.gameMode = gameMode;
         this.hungerLevel = hungerLevel;
-        HHMHungerConfig config = HytaleHungerMod.get().getHungerConfig();
+        HHMHungerConfig config = AquaThirstHunger.get().getHungerConfig();
         this.hudPosition = config.getHudPosition();
         hudMap.put(playerRef, this);
     }

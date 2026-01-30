@@ -7,7 +7,7 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import es.xcm.hunger.HytaleHungerMod;
+import es.xcm.hunger.AquaThirstHunger;
 import es.xcm.hunger.config.HudPosition;
 import es.xcm.hunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -59,7 +59,7 @@ public class HungryPositionCommand extends CommandBase {
                 context.sendMessage(invalidPositionMessage);
                 return;
             }
-            HytaleHungerMod mod = HytaleHungerMod.get();
+            AquaThirstHunger mod = AquaThirstHunger.get();
             mod.getHungerConfig().setHudPosition(hudPosition);
             mod.saveHungerConfig();
             for (World world : Universe.get().getWorlds().values()) {
