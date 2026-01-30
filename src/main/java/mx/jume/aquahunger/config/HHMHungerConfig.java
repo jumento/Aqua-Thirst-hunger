@@ -58,7 +58,7 @@ public class HHMHungerConfig {
             .add()
             .build();
 
-    private float initialHungerLevel = 50.0f;
+    private float initialHungerLevel = 200.0f;
     private float respawnHungerLevel = 50.0f;
     private boolean resetHungerOnDeath = true;
     private float starvationTickRate = 2f;
@@ -118,4 +118,3 @@ public class HHMHungerConfig {
         return this.singlePlayer;
     }
 }
-
