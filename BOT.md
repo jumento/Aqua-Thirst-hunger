@@ -238,7 +238,50 @@ All entries below are immutable. Add new entries at the end only.
   - Refactored all internal references to use `AquaThirstHunger`.
   - Updated `build.gradle.kts` manifest website and main class.
 - Affected artifacts: Global source, settings.gradle.kts, build.gradle.kts
-- Verification (build/compile): SUCCESS (Gradle build passing cleanly)
+- Verification (build/compile): SUCCESS (Gradle build passing), manual log analysis confirmed the root cause.
+- Status: active
+
+## 2026-01-30 (Entry 31)
+
+- Timestamp (America/Monterrey): 2026-01-30 18:15
+- Actor: AI (Antigravity)
+- Type: bugfix
+- Summary: Fixed missing Thirst HUD initialization.
+- Details:
+  - **Issue**: User reported no Thirst HUD visible.
+  - **Cause**: `HHMPlayerReady.handle` was only initializing `HHMHud` (Hunger), not `HHMThirstHud`.
+  - **Fix**: Added `mx.jume.aquahunger.ui.HHMThirstHud.createPlayerHud(store, ref, playerRef, player);` to `HHMPlayerReady.java`.
+- Affected artifacts: HHMPlayerReady.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-30 (Entry 32)
+
+- Timestamp (America/Monterrey): 2026-01-30 18:25
+- Actor: AI (Antigravity)
+- Type: bugfix
+- Summary: Changed default Thirst HUD position to avoid overlap.
+- Details:
+  - **Issue**: User reported Thirst HUD overlapping with Hunger HUD.
+  - **Cause**: Default position `AboveHotbarCentered` (0, 140) was used for both, causing overlap at X=0.
+  - **Fix**: Updated `HHMThirstConfig.java` default to `new HudPosition.Custom(366, 140)`, explicitly offsetting it to the right.
+- Affected artifacts: HHMThirstConfig.java
+- Verification (build/compile): SUCCESS (Gradle build passing). Note: User must regenerate config or manually update it if file already exists.
+- Status: active
+
+## 2026-01-30 (Entry 33)
+
+- Timestamp (America/Monterrey): 2026-01-30 18:30
+- Actor: AI (Antigravity)
+- Type: bugfix
+- Summary: Added BottomRight and Right-side HUD Presets.
+- Details:
+  - **Issue**: User requested "BottomRight" preset and verified "toda la zona right".
+  - **Fix**:
+    - Added `BottomRight` (366, 12), `AboveHotbarRight` (366, 140), `BelowHotbarRight` (366, 8) to `HudPosition` enum.
+    - Updated `HHMThirstConfig.java` to default to `HudPosition.Preset.AboveHotbarRight`.
+- Affected artifacts: HudPosition.java, HHMThirstConfig.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
 - Status: active
 
 ## 2026-01-30 (Entry 9)
@@ -531,3 +574,85 @@ All entries below are immutable. Add new entries at the end only.
 - Affected artifacts: HHMExternalFoodsConfig.java, ConfigManager.java, FeedInteraction.java, AquaThirstHunger.java
 - Verification (build/compile): SUCCESS (Gradle build passing)
 - Status: active
+
+## 2026-01-30 (Entry 29)
+
+- Timestamp (America/Monterrey): 2026-01-30 17:55
+- Actor: AI (Antigravity)
+- Type: implementation
+- Summary: Implemented Thirst System (Component, System, Config, HUD).
+- Details:
+  - **ECS**: Created `ThirstComponent` (0-100 logic) and `ThirstSystem` (time-based depletion, dehydration damage).
+  - **Config**: Created `HHMThirstConfig` with `ThirstConfig.json` support. Default position set to avoid overlap (Left: 366).
+  - **HUD**: Cloned Hunger HUD to `Thirst.ui` via PowerShell, implemented `HHMThirstHud.java` stripped of saturation, side-by-side layout.
+  - **Consumption**: Updated `FeedInteraction` to check `ExternalFoodsConfig` for `thirstRestoration` and apply it.
+  - **Assets**: Duplicated hunger assets to `Thirst*` variants.
+  - Documented in `features.md` (Section 7).
+- Affected artifacts: ThirstComponent, ThirstSystem, HHMThirstConfig, HHMThirstHud, FeedInteraction, ExternalFoodsConfig, resources/Common/UI/Custom/Hungry/HUD/*
+- Verification (build/compile): SUCCESS (Gradle build passing)
+- Status: active
+
+## 2026-01-30 (Entry 34)
+
+- Timestamp (America/Monterrey): 2026-01-30 18:48
+- Actor: USER
+- Type: manual_edit
+- Summary: User refined HUD Position Presets.
+- Details:
+  - **Change**: Manually updated `HudPosition.java`.
+  - **New Values**:
+    - `AboveHotbarRight`: (1020, 140)
+    - `BelowHotbarRight`: (966, 8)
+- Affected artifacts: HudPosition.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-30 (Entry 35)
+
+- Timestamp (America/Monterrey): 2026-01-30 19:40
+- Actor: AI (Antigravity)
+- Type: feature_implementation
+- Summary: Implemented Thirst Management Commands.
+- Details:
+  - **Commands**:
+    - `/thirst` (Base command)
+    - `/thirst set <value>` (Set own thirst)
+    - `/thirst set <player> <value>` (Set other player's thirst)
+  - **Permissions**:
+    - `hungry.thirst.base`
+    - `hungry.thirst.set.self`
+    - `hungry.thirst.set.other`
+  - **Integration**: Added `HHMUtils.setPlayerThirstLevel` to handle logic and HUD updates.
+  - **Registration**: Registered command in `AquaThirstHunger.java` and added permissions to Singleplayer debug set.
+- Affected artifacts: HHMUtils.java, SetThirstCommand.java, ThirstyCommand.java, AquaThirstHunger.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-30 (Entry 36)
+
+- Timestamp (America/Monterrey): 2026-01-30 19:48
+- Actor: AI (Antigravity)
+- Type: bugfix
+- Summary: Fixed Thirst HUD GameMode switching and Creative restoration.
+- Details:
+  - **Issue**: Thirst HUD images/state did not update when switching between Adventure and Creative modes.
+  - **Fix**:
+    - Added `HHMThirstHud.updatePlayerGameMode` static method.
+    - Updated `GameModePacketWatcher` to call `HHMThirstHud.updatePlayerGameMode`.
+    - Added logic to `GameModePacketWatcher` to restore Thirst to max when switching to Creative (matching Hunger behavior).
+- Affected artifacts: HHMThirstHud.java, GameModePacketWatcher.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-30 (Entry 37)
+
+- Timestamp (America/Monterrey): 2026-01-30 22:05
+- Actor: USER
+- Type: save_point
+- Summary: Save Point aqua6 - Testing Successful.
+- Details:
+  - **Protocol Verified**: User confirmed testing is successful for Thirst system features (Commands, HUD, Gamemode interactions).
+  - **Action**: Created git tag `aqua6`.
+- Affected artifacts: All
+- Verification (manual): User Approved.
+- Status: sealed

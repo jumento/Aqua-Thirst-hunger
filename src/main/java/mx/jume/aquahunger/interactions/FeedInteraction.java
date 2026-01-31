@@ -124,6 +124,19 @@ public class FeedInteraction extends SimpleInstantInteraction {
                 100.0f + maxHungerSaturation);
     }
 
+    public static float getThirstRestoration(Item item) {
+        // 0. External Config Override (Highest Priority)
+        mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
+                .getExternalFoodsConfig();
+        if (externalConfig != null) {
+            var entry = externalConfig.resolve(item.getId());
+            if (entry != null) {
+                return entry.thirstRestoration;
+            }
+        }
+        return 0f;
+    }
+
     public float getHungerRestoration(Item item) {
         return getHungerRestoration(item, this.hungerRestoration);
     }
@@ -139,31 +152,54 @@ public class FeedInteraction extends SimpleInstantInteraction {
             @NonNullDecl CooldownHandler cooldownHandler) {
         final Ref<EntityStore> ref = context.getEntity();
         final Store<EntityStore> store = ref.getStore();
-
-        final HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
-        final Item item = context.getOriginalItemType();
-        if (hungerComponent == null || item == null)
-            return;
-
-        float currentHungerLevel = hungerComponent.getHungerLevel();
-        float hungerRestoration = getHungerRestoration(item);
-        float maxHungerSaturation = getMaxHungerSaturation(item);
-
-        float targetHungerLevel = getExpectedHungerLevel(currentHungerLevel, hungerRestoration, maxHungerSaturation);
-
-        // Avoid unnecessary updates
-        if (currentHungerLevel >= targetHungerLevel)
-            return;
-        hungerComponent.setHungerLevel(targetHungerLevel);
-
         final CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
-        final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-        if (commandBuffer == null || playerRef == null)
+
+        final Item item = context.getOriginalItemType();
+        if (item == null || commandBuffer == null)
             return;
 
-        HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
-        HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
-        HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);
+        // --- Hunger Logic ---
+        final HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
+        if (hungerComponent != null) {
+            float currentHungerLevel = hungerComponent.getHungerLevel();
+            float hungerRestoration = getHungerRestoration(item);
+            float maxHungerSaturation = getMaxHungerSaturation(item);
+
+            float targetHungerLevel = getExpectedHungerLevel(currentHungerLevel, hungerRestoration,
+                    maxHungerSaturation);
+
+            if (currentHungerLevel < targetHungerLevel) {
+                hungerComponent.setHungerLevel(targetHungerLevel);
+
+                final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                if (playerRef != null) {
+                    HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
+                    HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
+                }
+                HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);
+            }
+        }
+
+        // --- Thirst Logic ---
+        final mx.jume.aquahunger.components.ThirstComponent thirstComponent = store.getComponent(ref,
+                mx.jume.aquahunger.components.ThirstComponent.getComponentType());
+        if (thirstComponent != null) {
+            float thirstRestoration = getThirstRestoration(item);
+            if (thirstRestoration != 0) {
+                // Check if it's dehydrating vs hydrating
+                if (thirstRestoration > 0) {
+                    thirstComponent.drink(thirstRestoration);
+                } else {
+                    thirstComponent.dehydrate(-thirstRestoration);
+                }
+                final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                if (playerRef != null) {
+                    // We will implement updatePlayerThirstLevel in HHMThirstHud later
+                    mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef,
+                            thirstComponent.getThirstLevel());
+                }
+            }
+        }
 
         // Apply poison if raw meat
         if (RAW_MEATS.contains(item.getId())) {

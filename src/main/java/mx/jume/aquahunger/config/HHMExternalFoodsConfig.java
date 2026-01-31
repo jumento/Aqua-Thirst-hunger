@@ -26,13 +26,15 @@ public class HHMExternalFoodsConfig {
     public static class ExternalFoodEntry {
         public float hungerRestoration;
         public float maxHungerSaturation;
+        public float thirstRestoration; // New field
 
         public ExternalFoodEntry() {
         } // Gson
 
-        public ExternalFoodEntry(float hungerRestoration, float maxHungerSaturation) {
+        public ExternalFoodEntry(float hungerRestoration, float maxHungerSaturation, float thirstRestoration) {
             this.hungerRestoration = hungerRestoration;
             this.maxHungerSaturation = maxHungerSaturation;
+            this.thirstRestoration = thirstRestoration;
         }
     }
 
@@ -62,21 +64,24 @@ public class HHMExternalFoodsConfig {
 
     private void createDefault() {
         entries.clear();
-        // Add defaults requested by user
-        addDefault("Andiechef_Food_Item_Soya", 5f, 120f);
-        addDefault("Andiechef_Food_Nigiri", 8f, 145f);
-        addDefault("Andiechef_Food_Onigiri", 10f, 155f);
-        addDefault("Andiechef_Food_Rollo", 13f, 175f);
-        addDefault("Andiechef_Food_Sake", 2f, 105f);
-        addDefault("Andiechef_Ingredient_SalsaSoya", 2f, 110f);
-        addDefault("Andiechef_Ingredient_Wasabi", 1f, 100f);
-        addDefault("Andiechef_Item_Soya_Fermentada", 11f, 165f);
+        // Add defaults requested by user with Thirst values
+        // Soya Sauce context implies salty or liquid? Assume liquid-ish but minimal
+        // thirst interaction for food.
+        // Sake is a drink -> Higher thirst restoration
+        addDefault("Andiechef_Food_Item_Soya", 5f, 120f, 0f);
+        addDefault("Andiechef_Food_Nigiri", 8f, 145f, 0f);
+        addDefault("Andiechef_Food_Onigiri", 10f, 155f, 0f);
+        addDefault("Andiechef_Food_Rollo", 13f, 175f, 0f);
+        addDefault("Andiechef_Food_Sake", 2f, 105f, 25f); // DRINK
+        addDefault("Andiechef_Ingredient_SalsaSoya", 2f, 110f, 0f);
+        addDefault("Andiechef_Ingredient_Wasabi", 1f, 100f, -5f); // Spicy -> Dehydrates
+        addDefault("Andiechef_Item_Soya_Fermentada", 11f, 165f, 0f);
 
         save();
     }
 
-    private void addDefault(String id, float restoration, float saturation) {
-        entries.put(id, new ExternalFoodEntry(restoration, saturation));
+    private void addDefault(String id, float restoration, float saturation, float thirst) {
+        entries.put(id, new ExternalFoodEntry(restoration, saturation, thirst));
     }
 
     public void save() {

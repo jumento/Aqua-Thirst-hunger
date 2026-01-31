@@ -137,6 +137,20 @@ public class HHMUtils {
         removeActiveEffects(ref, componentAccessor, HHMUtils::activeEntityEffectIsHungerRelated);
     }
 
+    public static void setPlayerThirstLevel(
+            @NonNullDecl Ref<EntityStore> ref,
+            @NonNullDecl ComponentAccessor<EntityStore> componentAccessor,
+            float thirstLevel) {
+        mx.jume.aquahunger.components.ThirstComponent thirstComponent = componentAccessor.getComponent(ref,
+                mx.jume.aquahunger.components.ThirstComponent.getComponentType());
+        PlayerRef playerRef = componentAccessor.getComponent(ref, PlayerRef.getComponentType());
+        if (thirstComponent == null || playerRef == null)
+            return;
+
+        thirstComponent.setThirstLevel(thirstLevel);
+        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, thirstLevel);
+    }
+
     @NonNullDecl
     public static DamageCause getStarvationDamageCause() {
         if (starvationDamageCause != null)

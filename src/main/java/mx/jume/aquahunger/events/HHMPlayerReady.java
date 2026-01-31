@@ -20,9 +20,10 @@ public class HHMPlayerReady {
 
         world.execute(() -> {
             PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-            if (playerRef == null) return;
+            if (playerRef == null)
+                return;
             HHMHud.createPlayerHud(store, ref, playerRef, player);
+            mx.jume.aquahunger.ui.HHMThirstHud.createPlayerHud(store, ref, playerRef, player);
         });
     }
 }
-

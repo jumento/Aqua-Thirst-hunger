@@ -4,15 +4,21 @@ public sealed interface HudPosition
         permits HudPosition.Preset, HudPosition.Custom {
 
     int left();
+
     int bottom();
+
     String name();
 
     enum Preset implements HudPosition {
-        BottomLeft(12, 12),
+
         AboveHotbarCentered(0, 140),
-        AboveHotbarLeft(662, 140),
         BelowHotbarCentered(0, 12),
-        BelowHotbarLeft(662, 8);
+        AboveHotbarLeft(662, 140),
+        AboveHotbarRight(1060, 140),
+        BelowHotbarLeft(662, 8),
+        BelowHotbarRight(1060, 8),
+        BottomLeft(32, 12),
+        BottomRight(1700, 12);
 
         private final int left;
         private final int bottom;
@@ -22,8 +28,15 @@ public sealed interface HudPosition
             this.bottom = bottom;
         }
 
-        @Override public int left()   { return left; }
-        @Override public int bottom() { return bottom; }
+        @Override
+        public int left() {
+            return left;
+        }
+
+        @Override
+        public int bottom() {
+            return bottom;
+        }
     }
 
     record Custom(int left, int bottom) implements HudPosition {
@@ -37,8 +50,9 @@ public sealed interface HudPosition
         return Preset.AboveHotbarCentered;
     }
 
-    static HudPosition valueOf (String name) {
-        if (name == null || name.isEmpty()) return null;
+    static HudPosition valueOf(String name) {
+        if (name == null || name.isEmpty())
+            return null;
 
         String[] parts = name.split(":");
         if (parts.length == 1) {
@@ -56,4 +70,3 @@ public sealed interface HudPosition
         }
     }
 }
-

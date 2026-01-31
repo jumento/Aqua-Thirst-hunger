@@ -35,6 +35,7 @@ public class AquaThirstHunger extends JavaPlugin {
 
     private mx.jume.aquahunger.config.ConfigManager configManager;
     private ComponentType<EntityStore, HungerComponent> hungerComponentType;
+    private ComponentType<EntityStore, mx.jume.aquahunger.components.ThirstComponent> thirstComponentType;
 
     public AquaThirstHunger(@NonNullDecl JavaPluginInit init) {
         super(init);
@@ -54,10 +55,14 @@ public class AquaThirstHunger extends JavaPlugin {
         // register hunger component
         this.hungerComponentType = this.getEntityStoreRegistry()
                 .registerComponent(HungerComponent.class, "HungerComponent", HungerComponent.CODEC);
+        this.thirstComponentType = this.getEntityStoreRegistry()
+                .registerComponent(mx.jume.aquahunger.components.ThirstComponent.class, "ThirstComponent",
+                        mx.jume.aquahunger.components.ThirstComponent.CODEC);
 
         // register starve system
         final var entityStoreRegistry = this.getEntityStoreRegistry();
         entityStoreRegistry.registerSystem(StarveSystem.create());
+        entityStoreRegistry.registerSystem(mx.jume.aquahunger.systems.ThirstSystem.create());
         entityStoreRegistry.registerSystem(new OnBlockHitSystem());
         entityStoreRegistry.registerSystem(new OnDeathSystem());
 
@@ -78,6 +83,7 @@ public class AquaThirstHunger extends JavaPlugin {
 
         // register admin commands
         this.getCommandRegistry().registerCommand(new HungryCommand());
+        this.getCommandRegistry().registerCommand(new ThirstyCommand());
     }
 
     @Override
@@ -90,7 +96,10 @@ public class AquaThirstHunger extends JavaPlugin {
                     HungryCommand.requiredPermission,
                     HungryHideCommand.requiredPermission,
                     HungryShowCommand.requiredPermission,
-                    HungryPositionCommand.requiredPermission);
+                    HungryPositionCommand.requiredPermission,
+                    ThirstyCommand.requiredPermission,
+                    SetThirstCommand.requiredPermission,
+                    SetThirstCommand.SetThirstOtherCommand.requiredPermission);
             PermissionsModule.get().addGroupPermission("Adventure", singleplayerPermissions);
             PermissionsModule.get().addGroupPermission("Creative", singleplayerPermissions);
             logInfo("Singleplayer module detected, added permissions to Adventure and Creative groups.");
@@ -101,8 +110,16 @@ public class AquaThirstHunger extends JavaPlugin {
         return this.hungerComponentType;
     }
 
+    public ComponentType<EntityStore, mx.jume.aquahunger.components.ThirstComponent> getThirstComponentType() {
+        return this.thirstComponentType;
+    }
+
     public HHMHungerConfig getHungerConfig() {
         return this.configManager.getHungerConfig();
+    }
+
+    public mx.jume.aquahunger.config.HHMThirstConfig getThirstConfig() {
+        return this.configManager.getThirstConfig();
     }
 
     public void saveHungerConfig() {

@@ -11,11 +11,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ConfigManager {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(HudPosition.class, new HudPositionTypeAdapter())
+            .setPrettyPrinting()
+            .create();
     private static final String CONFIG_DIR = "mods/Aqua-Thirst-hunger";
 
     private HHMHungerConfig hungerConfig;
     private HHMFoodValuesConfig foodValuesConfig;
+    private HHMThirstConfig thirstConfig;
     private HHMExternalFoodsConfig externalFoodsConfig;
 
     public void load() {
@@ -25,6 +29,7 @@ public class ConfigManager {
         }
 
         this.hungerConfig = loadConfig("HungerConfig.json", HHMHungerConfig.class, new HHMHungerConfig());
+        this.thirstConfig = loadConfig("ThirstConfig.json", HHMThirstConfig.class, new HHMThirstConfig());
         this.foodValuesConfig = loadConfig("FoodValuesConfig.json", HHMFoodValuesConfig.class,
                 new HHMFoodValuesConfig());
         this.externalFoodsConfig = new HHMExternalFoodsConfig(dir);
@@ -50,6 +55,7 @@ public class ConfigManager {
 
     public void save() {
         saveConfig("HungerConfig.json", hungerConfig);
+        saveConfig("ThirstConfig.json", thirstConfig);
         saveConfig("FoodValuesConfig.json", foodValuesConfig);
         if (externalFoodsConfig != null) {
             externalFoodsConfig.save();
@@ -67,6 +73,10 @@ public class ConfigManager {
 
     public HHMHungerConfig getHungerConfig() {
         return hungerConfig;
+    }
+
+    public HHMThirstConfig getThirstConfig() {
+        return thirstConfig;
     }
 
     public HHMFoodValuesConfig getFoodValuesConfig() {
