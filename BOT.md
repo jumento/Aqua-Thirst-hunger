@@ -656,3 +656,15 @@ All entries below are immutable. Add new entries at the end only.
 - Affected artifacts: All
 - Verification (manual): User Approved.
 - Status: sealed
+
+## 2026-01-30 (Entry 38)
+
+- Timestamp (America/Monterrey): 2026-01-30 22:08
+- Actor: AI (Antigravity)
+- Type: documentation_update
+- Summary: Updated features.md with Thirst Commands and GameMode behavior.
+- Details:
+  - **features.md**: Added mention of `/thirst` commands and GameMode switching logic to Section 7.
+- Affected artifacts: features.md
+- Verification (manual): Verified content.
+- Status: sealed
