@@ -668,3 +668,87 @@ All entries below are immutable. Add new entries at the end only.
 - Affected artifacts: features.md
 - Verification (manual): Verified content.
 - Status: sealed
+
+## 2026-01-30 (Entry 39)
+
+- Timestamp (America/Monterrey): 2026-01-30 22:45
+- Actor: AI (Antigravity)
+- Type: feature_implementation
+- Summary: Implemented Thirst Respawn Logic.
+- Details:
+  - **Config Update**: Added `ResetThirstOnDeath` (boolean, default true) and `RespawnThirstLevel` (float, default 50.0) to `HHMThirstConfig.java`.
+  - **System Update**: Updated `OnDeathSystem.java` to handle thirst restoration logic on respawn, mirroring hunger behavior.
+- Affected artifacts: HHMThirstConfig.java, OnDeathSystem.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-30 (Entry 40)
+
+- Timestamp (America/Monterrey): 2026-01-30 22:58
+- Actor: AI (Antigravity)
+- Type: feature_implementation
+- Summary: Implemented Thirst Restore Configuration.
+- Details:
+  - **Config Update**: Created `HHMThirstFoodValuesConfig.java` to handle thirst restoration values for items.
+  - **Integration**: Integrated `HHMThirstFoodValuesConfig` into `ConfigManager`.
+  - **Logic Update**: Updated `FeedInteraction.java` to implement `getThirstRestoration` logic, including tier-based values, item overrides, and fruit multiplier.
+  - **Fix**: Resolved compilation error using `toString()` for `ItemResourceType` check.
+- Affected artifacts: HHMThirstFoodValuesConfig.java, ConfigManager.java, FeedInteraction.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-31 (Entry 41)
+
+- Timestamp (America/Monterrey): 2026-01-31 01:29
+- Actor: AI (Antigravity)
+- Type: save_point
+- Summary: Save Point 'aqua7'. Verified Thirst Restoration mechanics and Updated Features.
+- Details:
+  - **Save Point**: `aqua7` established.
+  - **Features**: Updated `features.md` to include Section 8: Thirst Restoration Mechanics.
+  - **Verification**: Compilation verified (`BUILD SUCCESSFUL`).
+- Affected artifacts: features.md
+- Verification (manual): Verified content.
+- Status: sealed
+
+## 2026-01-31 (Entry 42)
+
+- Timestamp (America/Monterrey): 2026-01-31 01:40
+- Actor: AI (Antigravity)
+- Type: modification
+- Summary: Renamed main command to /aquahunger and disabled subcommands.
+- Details:
+  - **Command**: Renamed `HungryCommand` registration from `/hunger` to `/aquahunger` in `HungryCommand.java`.
+  - **Cleanup**: Disabled `hide`, `show`, and `position` subcommands by commenting out their registration logic to simplify the user experience during testing. Kept code for future potential re-enablement.
+- Affected artifacts: HungryCommand.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-31 (Entry 43)
+
+- Timestamp (America/Monterrey): 2026-01-31 01:50
+- Actor: AI (Antigravity)
+- Type: feature_implementation
+- Summary: Implemented Atomic Config Reload Command.
+- Details:
+  - **Logic**: Implemented `ConfigManager.reload()` which attempts to load all configuration files into memory first (atomic check). If successful, it applies them; if any file fails JSON validation/IO, it aborts without changing state.
+  - **Command**: Created `/aquahunger reload` (`HungryReloadCommand`) tied to `aquahunger.command.reload` permission.
+  - **API**: Exposed `AquaThirstHunger.reloadConfig()` to bridge the command and the manager.
+  - **Feedback**: Command sends success/failure messages to the executor and logs full stack traces to the server console.
+- Affected artifacts: HungryCommand.java, HungryReloadCommand.java, ConfigManager.java, AquaThirstHunger.java
+- Verification (build/compile): SUCCESS (Gradle build passing).
+- Status: active
+
+## 2026-01-31 (Entry 44)
+
+- Timestamp (America/Monterrey): 2026-01-31 01:55
+- Actor: USER
+- Type: save_point
+- Summary: Save Point 'aqua8' - Commands & Reload System.
+- Details:
+  - **Save Point**: `aqua8` formalized.
+  - **Contents**: Rename to `/aquahunger`, disabled unused subcommands, and atomic configuration reload implementation.
+  - **Verification**: User verified functionality.
+- Affected artifacts: All
+- Verification (manual): User Approved.
+- Status: sealed

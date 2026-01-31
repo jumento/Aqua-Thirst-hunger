@@ -19,6 +19,7 @@ public class ConfigManager {
 
     private HHMHungerConfig hungerConfig;
     private HHMFoodValuesConfig foodValuesConfig;
+    private HHMThirstFoodValuesConfig thirstFoodValuesConfig;
     private HHMThirstConfig thirstConfig;
     private HHMExternalFoodsConfig externalFoodsConfig;
 
@@ -32,6 +33,9 @@ public class ConfigManager {
         this.thirstConfig = loadConfig("ThirstConfig.json", HHMThirstConfig.class, new HHMThirstConfig());
         this.foodValuesConfig = loadConfig("FoodValuesConfig.json", HHMFoodValuesConfig.class,
                 new HHMFoodValuesConfig());
+        this.thirstFoodValuesConfig = loadConfig("ThirstFoodValuesConfig.json", HHMThirstFoodValuesConfig.class,
+                new HHMThirstFoodValuesConfig());
+        this.thirstFoodValuesConfig.ensureDefaults();
         this.externalFoodsConfig = new HHMExternalFoodsConfig(dir);
 
         // Save back to ensure all fields are present in the file
@@ -53,10 +57,80 @@ public class ConfigManager {
         }
     }
 
+    public void reload() throws Exception {
+        File dir = new File(CONFIG_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // 1. Dry run / Attempt load all
+        HHMHungerConfig newHungerConfig = loadConfigStrict("HungerConfig.json", HHMHungerConfig.class);
+        HHMThirstConfig newThirstConfig = loadConfigStrict("ThirstConfig.json", HHMThirstConfig.class);
+        HHMFoodValuesConfig newFoodValuesConfig = loadConfigStrict("FoodValuesConfig.json", HHMFoodValuesConfig.class);
+        HHMThirstFoodValuesConfig newThirstFoodValuesConfig = loadConfigStrict("ThirstFoodValuesConfig.json",
+                HHMThirstFoodValuesConfig.class);
+
+        // External config is special, it handles its own loading.
+        // We will try to instantiate a new one. If it fails it usually logs but doesn't
+        // throw.
+        // We might accept that external config is less strict or we can improve it
+        // later.
+        // For now, let's assume if it instantiates it's "okay" enough (it might be
+        // empty on error).
+        HHMExternalFoodsConfig newExternalFoodsConfig = new HHMExternalFoodsConfig(dir);
+
+        // 2. Commit
+        this.hungerConfig = newHungerConfig;
+        this.thirstConfig = newThirstConfig;
+        this.foodValuesConfig = newFoodValuesConfig;
+        this.thirstFoodValuesConfig = newThirstFoodValuesConfig;
+        this.externalFoodsConfig = newExternalFoodsConfig;
+
+        // 3. Post-load initialization
+        this.thirstFoodValuesConfig.ensureDefaults();
+
+        // 4. Save to ensure consistency
+        save();
+
+        AquaThirstHunger.logInfo("Configuration reloaded successfully.");
+    }
+
+    private <T> T loadConfigStrict(String fileName, Class<T> clazz) throws Exception {
+        File file = new File(CONFIG_DIR, fileName);
+        if (!file.exists()) {
+            // If file doesn't exist, we can't strict load it?
+            // Or maybe we treat missing as "use default"?
+            // The user said "If any fails, keep current configs".
+            // If a file is missing, maybe we should return a default instance?
+            // "Load + parse + validate". Use default instance if missing seems safe for
+            // reload.
+            try {
+                return clazz.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException("Could not create default instance for " + clazz.getSimpleName(), e);
+            }
+        }
+
+        try (FileReader reader = new FileReader(file)) {
+            try {
+                T config = GSON.fromJson(reader, clazz);
+                if (config == null) {
+                    throw new IOException("Empty or null JSON in " + fileName);
+                }
+                return config;
+            } catch (com.google.gson.JsonSyntaxException e) {
+                throw new Exception("JSON Syntax Error in " + fileName + ": " + e.getMessage(), e);
+            }
+        } catch (IOException e) {
+            throw new Exception("IO Error reading " + fileName + ": " + e.getMessage(), e);
+        }
+    }
+
     public void save() {
         saveConfig("HungerConfig.json", hungerConfig);
         saveConfig("ThirstConfig.json", thirstConfig);
         saveConfig("FoodValuesConfig.json", foodValuesConfig);
+        saveConfig("ThirstFoodValuesConfig.json", thirstFoodValuesConfig);
         if (externalFoodsConfig != null) {
             externalFoodsConfig.save();
         }
@@ -85,5 +159,9 @@ public class ConfigManager {
 
     public HHMExternalFoodsConfig getExternalFoodsConfig() {
         return externalFoodsConfig;
+    }
+
+    public HHMThirstFoodValuesConfig getThirstFoodValuesConfig() {
+        return thirstFoodValuesConfig;
     }
 }

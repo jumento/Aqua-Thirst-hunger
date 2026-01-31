@@ -134,7 +134,38 @@ public class FeedInteraction extends SimpleInstantInteraction {
                 return entry.thirstRestoration;
             }
         }
-        return 0f;
+
+        mx.jume.aquahunger.config.HHMThirstFoodValuesConfig thirstFoodConfig = AquaThirstHunger.get()
+                .getThirstFoodValuesConfig();
+        if (thirstFoodConfig == null) {
+            return 0.0f;
+        }
+
+        // 1. Check for specific Item ID override in ThirstFoodValuesConfig
+        Float itemOverride = thirstFoodConfig.getItemThirstRestoration(item.getId());
+        float baseThirstRestore;
+
+        if (itemOverride != null) {
+            baseThirstRestore = itemOverride;
+        } else {
+            // 2. Resolve Tier and get base value from config
+            baseThirstRestore = thirstFoodConfig.getTierThirstRestoration(HHMUtils.getItemTier(item));
+        }
+
+        // 3. Check for Fruit Resource Type
+        boolean isFruit = false;
+        if (item.getResourceTypes() != null) {
+            String fruitType = thirstFoodConfig.getFruitResourceTypeId();
+            for (var resourceType : item.getResourceTypes()) {
+                if (resourceType != null && resourceType.toString().equalsIgnoreCase(fruitType)) {
+                    isFruit = true;
+                    break;
+                }
+            }
+        }
+
+        // 4. Apply Multiplier
+        return baseThirstRestore * (isFruit ? thirstFoodConfig.getFruitMultiplier() : 1.0f);
     }
 
     public float getHungerRestoration(Item item) {

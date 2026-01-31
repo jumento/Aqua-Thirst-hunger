@@ -1,0 +1,82 @@
+{
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Categories": [
+          "Tools"
+        ],
+        "Id": "Fieldcraft"
+      },
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 15
+      },
+      {
+        "ItemId": "Ingredient_Tree_Sap",
+        "Quantity": 20
+      },
+      {
+        "ItemId": "Ingredient_Charcoal",
+        "Quantity": 3
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteen.png",
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      -3,
+      -9
+    ]
+  },
+  "PlayerAnimationsId": "Item",
+  "Parent": "Template_Crop_Item",
+  "BlockType": {
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Foliage/Plants/Moss_Wall_Textures/Moss _01.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/Potion.blockymodel",
+    "Gathering": {
+      "Soft": {}
+    }
+  },
+  "DropOnDeath": true,
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T1"
+        }
+      ]
+    },
+    "ConsumeSFX": {
+      "Interactions": []
+    }
+  },
+  "TranslationProperties": {
+    "Name": "server.items.AquaThirstHunger_Canteen.name",
+    "Description": "server.items.AquaThirstHunger_Canteen.description"
+  },
+  "Scale": 1.3,
+  "MaxStack": 20,
+  "ItemLevel": 0
+}

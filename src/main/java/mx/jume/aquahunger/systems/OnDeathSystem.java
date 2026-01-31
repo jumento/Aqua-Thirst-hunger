@@ -46,6 +46,16 @@ public class OnDeathSystem extends DeathSystems.OnDeathSystem {
                 HHMUtils.setPlayerHungerLevel(ref, store, config.getRespawnHungerLevel());
             }
         }
+
+        mx.jume.aquahunger.config.HHMThirstConfig thirstConfig = AquaThirstHunger.get().getThirstConfig();
+        if (thirstConfig.isResetThirstOnDeath()) {
+            HHMUtils.setPlayerThirstLevel(ref, store, thirstConfig.getRespawnThirstLevel());
+        } else {
+            mx.jume.aquahunger.components.ThirstComponent thirst = store.getComponent(ref,
+                    mx.jume.aquahunger.components.ThirstComponent.getComponentType());
+            if (thirst != null && thirst.getThirstLevel() < thirstConfig.getRespawnThirstLevel()) {
+                HHMUtils.setPlayerThirstLevel(ref, store, thirstConfig.getRespawnThirstLevel());
+            }
+        }
     }
 }
-

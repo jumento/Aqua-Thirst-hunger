@@ -43,6 +43,14 @@ public class HHMThirstConfig {
                     }),
                     ((config) -> config.getHudPosition().name()))
             .add()
+            .append(new KeyedCodec<>("ResetThirstOnDeath", Codec.BOOLEAN),
+                    ((config, value) -> config.resetThirstOnDeath = value),
+                    HHMThirstConfig::isResetThirstOnDeath)
+            .add()
+            .append(new KeyedCodec<>("RespawnThirstLevel", Codec.FLOAT),
+                    ((config, value) -> config.respawnThirstLevel = value),
+                    HHMThirstConfig::getRespawnThirstLevel)
+            .add()
             .build();
 
     private float maxThirst = 100.0f;
@@ -53,6 +61,8 @@ public class HHMThirstConfig {
     private float dehydrationDamage = 2.0f;
     private float damageIntervalSeconds = 4.0f;
     private HudPosition hudPosition = HudPosition.Preset.AboveHotbarRight;
+    private boolean resetThirstOnDeath = true;
+    private float respawnThirstLevel = 50.0f;
 
     public float getMaxThirst() {
         return maxThirst;
@@ -88,5 +98,13 @@ public class HHMThirstConfig {
 
     public void setHudPosition(HudPosition pos) {
         this.hudPosition = pos;
+    }
+
+    public boolean isResetThirstOnDeath() {
+        return resetThirstOnDeath;
+    }
+
+    public float getRespawnThirstLevel() {
+        return respawnThirstLevel;
     }
 }

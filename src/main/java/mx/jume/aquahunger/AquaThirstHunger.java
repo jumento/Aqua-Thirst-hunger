@@ -134,6 +134,14 @@ public class AquaThirstHunger extends JavaPlugin {
         return this.configManager.getExternalFoodsConfig();
     }
 
+    public mx.jume.aquahunger.config.HHMThirstFoodValuesConfig getThirstFoodValuesConfig() {
+        return this.configManager.getThirstFoodValuesConfig();
+    }
+
+    public void reloadConfig() throws Exception {
+        this.configManager.reload();
+    }
+
     public static AquaThirstHunger get() {
         return instance;
     }

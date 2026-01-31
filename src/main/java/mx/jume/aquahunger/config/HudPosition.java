@@ -15,8 +15,8 @@ public sealed interface HudPosition
         BelowHotbarCentered(0, 12),
         AboveHotbarLeft(662, 140),
         AboveHotbarRight(1060, 140),
-        BelowHotbarLeft(662, 8),
-        BelowHotbarRight(1060, 8),
+        BelowHotbarLeft(670, 8),
+        BelowHotbarRight(1040, 8),
         BottomLeft(32, 12),
         BottomRight(1700, 12);
 

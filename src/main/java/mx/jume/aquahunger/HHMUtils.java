@@ -160,9 +160,25 @@ public class HHMUtils {
     }
 
     @NonNullDecl
+    private static final java.util.Set<String> LOGGED_UNKNOWN_TIERS = new java.util.HashSet<>();
+
+    @NonNullDecl
     public static ItemTier getItemTier(Item item) {
         ItemQuality itemQuality = ItemQuality.getAssetMap().getAsset(item.getQualityIndex());
-        assert itemQuality != null;
-        return ItemTier.valueOf(itemQuality.getId());
+        if (itemQuality == null) {
+            return ItemTier.Common;
+        }
+        String id = itemQuality.getId();
+        if ("Default".equals(id) || id == null) {
+            return ItemTier.Common;
+        }
+        try {
+            return ItemTier.valueOf(id);
+        } catch (IllegalArgumentException e) {
+            if (LOGGED_UNKNOWN_TIERS.add(id)) {
+                AquaThirstHunger.logInfo("Unknown ItemQuality/Tier: '" + id + "'. Defaulting to Common.");
+            }
+            return ItemTier.Common;
+        }
     }
 }
