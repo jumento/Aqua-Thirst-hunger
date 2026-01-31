@@ -6,10 +6,7 @@ build/
 .kotlin
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -45,3 +42,12 @@ bin/
 ### Hytale Libs ###
 /libs/*.jar
 features.md
+BOT.md
+GUIA.md
+
+### Logs and Build Artifacts ###
+*.log
+build_log*.txt
+
+### Temporary Research ###
+temp_hytale_docs/

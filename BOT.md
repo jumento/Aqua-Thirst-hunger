@@ -112,6 +112,10 @@ It defines the operating rules, constraints, and protocols for Hytale mod develo
 - Maintain a clean and idiomatic `build.gradle.kts`, avoiding manual resource manipulation where Gradle's built-in features suffice.
 - Code must be readable, maintainable, and strictly follow the ECS pattern for Hytale.
 
+## 17) README Synchronization
+
+- `README.md` and `README_ES.md` must be identical bilingual clones. Every time one is modified, the other must be updated to match perfectly. Both files must contain the full content in both English and Spanish.
+
 ---
 
 # LOG (Append-Only)
@@ -1030,4 +1034,75 @@ All entries below are immutable. Add new entries at the end only.
   - **Configuración**: `ExternalFoodsConfig.json` sincronizado con todos los items de Andiechef.
 - Affected artifacts: HungerLifeSystem.java, ThirstyCommand.java, build.gradle.kts, ThirstSystem.java, HHMUtils.java, Dehydration.json, ExternalFoodsConfig.json, HHMExternalFoodsConfig.java
 - Verification (build/compile): SUCCESS (Confirmado por el usuario).
+- Status: sealed
+
+## 2026-01-31 (Entry 64)
+
+- Timestamp (America/Monterrey): 2026-01-31 05:35
+- Actor: AI (Antigravity)
+- Type: save_point
+- Summary: Save Point 'aqua10' - Consolidación Final de Features.
+- Details:
+  - **Git**: Se ha realizado el commit y creado el tag `aqua10`.
+  - **Features**: Marcado el hito de estabilidad para:
+    - Regeneración balanceada (2.0 Hunger, 0.5 Thirst).
+    - Deshidratación con icono visual funcional.
+    - Comando `/aquathirst` y limpieza de logs.
+    - Sincronización total de `ExternalFoodsConfig.json`.
+    - Manifiesto corregido con autores en formato objeto.
+- Affected artifacts: Todos los archivos modificados en la sesión.
+- Verification (build/compile): SUCCESS (Git tag aqua10 creado).
+- Status: active
+
+## 2026-01-31 (Entry 55)
+
+- Timestamp (America/Monterrey): 2026-01-31 05:55
+- Actor: AI (Antigravity)
+- Type: rule-change
+- Summary: Created README_ES.md and established Rule 17 for synchronization.
+- Details:
+  - Created `README_ES.md` as a standalone Spanish version of the documentation.
+  - Added Rule 17 to BOT.md: Mandatory synchronization between `README.md` and `README_ES.md` upon any modification.
+- Affected artifacts: README_ES.md, BOT.md
+- Verification (build/compile): N/A (Documentation-only)
+- Status: active
+
+## 2026-01-31 (Entry 56)
+
+- Timestamp (America/Monterrey): 2026-01-31 05:58
+- Actor: AI (Antigravity)
+- Type: rule-change
+- Summary: Refined README synchronization to full bilingual clones.
+- Details:
+  - Updated Rule 17: Both `README.md` and `README_ES.md` must now be identical bilingual clones (containing both English and Spanish).
+  - Synchronized both files with the new bilinguial structure and clarified dependencies and credits.
+- Affected artifacts: README.md, README_ES.md, BOT.md
+- Verification (build/compile): N/A (Documentation-only)
+- Status: active
+
+## 2026-01-31 (Entry 57)
+
+- Timestamp (America/Monterrey): 2026-01-31 06:01
+- Actor: AI (Antigravity)
+- Type: rule-change
+- Summary: Separated language documentation into English (README.md) and Spanish (README_ES.md).
+- Details:
+  - Updated Rule 17: Removed requirement for identical bilingual clones.
+  - Set `README.md` as the English-only source and `README_ES.md` as the Spanish-only source.
+- Affected artifacts: README.md, README_ES.md, BOT.md
+- Verification (build/compile): N/A (Documentation-only)
+- Status: sealed
+
+## 2026-01-31 (Entry 58)
+
+- Timestamp (America/Monterrey): 2026-01-31 06:06
+- Actor: AI (Antigravity)
+- Type: documentation_update
+- Summary: Added Native Canteen and Universal Compatibility to READMEs.
+- Details:
+  - Documented the craftable Canteen feature (inventory/kitchen workbench).
+  - Clarified universal compatibility with other food mods based on rarity tiers.
+  - Fixed heading hierarchy (H3 to H2) in both READMEs to resolve lint errors (MD001).
+- Affected artifacts: README.md, README_ES.md, BOT.md
+- Verification (build/compile): N/A (Documentation-only)
 - Status: active
