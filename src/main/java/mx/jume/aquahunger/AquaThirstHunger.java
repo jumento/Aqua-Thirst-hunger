@@ -85,6 +85,7 @@ public class AquaThirstHunger extends JavaPlugin {
         // register admin commands
         this.getCommandRegistry().registerCommand(new HungryCommand());
         this.getCommandRegistry().registerCommand(new ThirstyCommand());
+        this.getCommandRegistry().registerCommand(new AquaCheffCommand());
     }
 
     @Override
@@ -137,6 +138,10 @@ public class AquaThirstHunger extends JavaPlugin {
 
     public mx.jume.aquahunger.config.HHMThirstFoodValuesConfig getThirstFoodValuesConfig() {
         return this.configManager.getThirstFoodValuesConfig();
+    }
+
+    public mx.jume.aquahunger.config.ConfigManager getConfigManager() {
+        return this.configManager;
     }
 
     public void reloadConfig() throws Exception {

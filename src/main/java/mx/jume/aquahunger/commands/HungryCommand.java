@@ -21,7 +21,6 @@ public class HungryCommand extends AbstractPlayerCommand {
         // this.addSubCommand(new HungryHideCommand());
         // this.addSubCommand(new HungryShowCommand());
         // this.addSubCommand(new HungryPositionCommand());
-        this.addSubCommand(new HungryReloadCommand());
         this.requirePermission(requiredPermission);
     }
 

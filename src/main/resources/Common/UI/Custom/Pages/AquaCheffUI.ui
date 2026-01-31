@@ -1,0 +1,154 @@
+$C = "../Common.ui";
+
+@PrimaryButtonStyle = TextButtonStyle(
+  Default: (Background: #4CAF50, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Hovered: (Background: #66BB6A, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Pressed: (Background: #388E3C, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))
+);
+
+@CancelButtonStyle = TextButtonStyle(
+  Default: (Background: #F44336, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Hovered: (Background: #EF5350, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Pressed: (Background: #C62828, LabelStyle: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))
+);
+
+Group {
+  Anchor: (Width: 550, Height: 480);
+  Background: #141c26(0.98);
+  LayoutMode: Top;
+  Padding: (Full: 25);
+
+  Label {
+    Text: "Aqua Cheff - External Foods Editor";
+    Anchor: (Height: 45);
+    Style: (
+      FontSize: 24,
+      TextColor: #00BFFF,
+      HorizontalAlignment: Center,
+      RenderBold: true
+    );
+  }
+
+  Label {
+    Text: "Edit nutrition values for items in ExternalFoodsConfig.json";
+    Anchor: (Height: 25);
+    Style: (
+      FontSize: 13,
+      TextColor: #96a9be,
+      HorizontalAlignment: Center
+    );
+  }
+
+  Group {
+    Anchor: (Height: 1);
+    Background: #2b3542;
+  }
+
+  Group { Anchor: (Height: 20); }
+
+  Group {
+    LayoutMode: Left;
+    Anchor: (Height: 44);
+
+    Label {
+      Text: "Item ID";
+      Anchor: (Width: 150);
+      Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center);
+    }
+
+    $C.@TextField #ItemIdInput {
+      FlexWeight: 1;
+      PlaceholderText: "e.g., Andiechef_Food_Nigiri";
+    }
+  }
+
+  Group { Anchor: (Height: 12); }
+
+  Group {
+    LayoutMode: Left;
+    Anchor: (Height: 44);
+
+    Label {
+      Text: "Hunger Restoration";
+      Anchor: (Width: 150);
+      Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center);
+    }
+
+    $C.@TextField #HungerInput {
+      FlexWeight: 1;
+      PlaceholderText: "10.0";
+    }
+  }
+
+  Group { Anchor: (Height: 12); }
+
+  Group {
+    LayoutMode: Left;
+    Anchor: (Height: 44);
+
+    Label {
+      Text: "Max Saturation";
+      Anchor: (Width: 150);
+      Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center);
+    }
+
+    $C.@TextField #SaturationInput {
+      FlexWeight: 1;
+      PlaceholderText: "150.0";
+    }
+  }
+
+  Group { Anchor: (Height: 12); }
+
+  Group {
+    LayoutMode: Left;
+    Anchor: (Height: 44);
+
+    Label {
+      Text: "Thirst Restoration";
+      Anchor: (Width: 150);
+      Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center);
+    }
+
+    $C.@TextField #ThirstInput {
+      FlexWeight: 1;
+      PlaceholderText: "5.0";
+    }
+  }
+
+  Group { Anchor: (Height: 20); }
+
+  Group {
+    Anchor: (Height: 1);
+    Background: #2b3542(0.5);
+  }
+
+  Group { Anchor: (Height: 16); }
+
+  Label {
+    Text: "Note: Use '*' at the end of Item ID for prefix matching (e.g., mod_id:*).";
+    Anchor: (Height: 18);
+    Style: (FontSize: 11, TextColor: #4a5568, LetterSpacing: 0.5, HorizontalAlignment: Center);
+  }
+
+  Group { FlexWeight: 1; }
+
+  Group {
+    LayoutMode: Center;
+    Anchor: (Height: 44);
+
+    TextButton #SaveButton {
+      Text: "SAVE CONFIG";
+      Anchor: (Width: 140, Height: 40);
+      Style: @PrimaryButtonStyle;
+    }
+
+    Group { Anchor: (Width: 20); }
+
+    TextButton #CancelButton {
+      Text: "CANCEL";
+      Anchor: (Width: 110, Height: 40);
+      Style: @CancelButtonStyle;
+    }
+  }
+}

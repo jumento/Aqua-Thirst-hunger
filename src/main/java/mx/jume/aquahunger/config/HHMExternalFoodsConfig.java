@@ -3,8 +3,6 @@ package mx.jume.aquahunger.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import mx.jume.aquahunger.AquaThirstHunger;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -82,6 +80,7 @@ public class HHMExternalFoodsConfig {
         addDefault("Andiechef_YakimeshiChicken", 11f, 150f, 10f);
         addDefault("Andiechef_YakimeshiFish", 12f, 150f, 10f);
         addDefault("Andiechef_YakimeshiPork", 9f, 150f, 10f);
+        addDefault("Andiechef_New_Food_Template", 0.0f, 0.0f, 0.0f);
 
         save();
     }
@@ -133,5 +132,9 @@ public class HHMExternalFoodsConfig {
         }
 
         return null;
+    }
+
+    public void updateItem(String id, float hunger, float saturation, float thirst) {
+        entries.put(id, new ExternalFoodEntry(hunger, saturation, thirst));
     }
 }
