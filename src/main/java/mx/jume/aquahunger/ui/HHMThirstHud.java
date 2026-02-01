@@ -130,6 +130,15 @@ public class HHMThirstHud extends CustomUIHud {
         hud.update(false, uiCommandBuilder);
     }
 
+    static public void updatePlayerHudPosition(@NonNullDecl PlayerRef playerRef, HudPosition hudPosition) {
+        HHMThirstHud hud = hudMap.get(playerRef);
+        if (hud == null)
+            return;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        hud.updateHudPosition(uiCommandBuilder, hudPosition);
+        hud.update(false, uiCommandBuilder);
+    }
+
     static public void createPlayerHud(
             @NonNullDecl Store<EntityStore> store,
             @NonNullDecl Ref<EntityStore> ref,

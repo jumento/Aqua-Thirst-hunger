@@ -1,0 +1,131 @@
+$C = "../Common.ui";
+
+@NormalButtonStyle = TextButtonStyle(
+  Default: (Background: #2d3542(0.8), LabelStyle: (FontSize: 13, TextColor: #96a9be, RenderBold: false, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Hovered: (Background: #3d4552, LabelStyle: (FontSize: 13, TextColor: #ffffff, RenderBold: false, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Pressed: (Background: #141c26, LabelStyle: (FontSize: 13, TextColor: #ffffff, RenderBold: false, HorizontalAlignment: Center, VerticalAlignment: Center))
+);
+
+@ActiveButtonStyle = TextButtonStyle(
+  Default: (Background: #00BFFF, LabelStyle: (FontSize: 13, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Hovered: (Background: #33CCFF, LabelStyle: (FontSize: 13, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+  Pressed: (Background: #0099CC, LabelStyle: (FontSize: 13, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))
+);
+
+Group {
+  Anchor: (Width: 650, Height: 520);
+  Background: #141c26(0.98);
+  LayoutMode: Top;
+  Padding: (Full: 25);
+
+  Label {
+    Text: "Aqua Cheff - HUD Bars Editor";
+    Anchor: (Height: 45);
+    Style: (FontSize: 24, TextColor: #00BFFF, HorizontalAlignment: Center, RenderBold: true);
+  }
+
+  Label {
+    Text: "Pick a preset for each bar. The active selection is highlighted.";
+    Anchor: (Height: 25);
+    Style: (FontSize: 13, TextColor: #96a9be, HorizontalAlignment: Center);
+  }
+
+  Group { Anchor: (Height: 1); Background: #2b3542; }
+  Group { Anchor: (Height: 20); }
+
+  Group {
+    LayoutMode: Left;
+    FlexWeight: 1;
+
+    Group {
+      FlexWeight: 1;
+      LayoutMode: Top;
+      Padding: (Full: 10);
+
+      Label {
+        Text: "HUNGER BAR";
+        Anchor: (Height: 30);
+        Style: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+      }
+
+      Group { Anchor: (Height: 1); Background: #2b3542(0.5); }
+      Group { Anchor: (Height: 15); }
+
+      Group {
+          LayoutMode: Top;
+          FlexWeight: 1;
+
+          TextButton #H_AboveHotbarCentered { Text: "Above Center"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_BelowHotbarCentered { Text: "Below Center"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_AboveHotbarLeft { Text: "Above Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_AboveHotbarRight { Text: "Above Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_BelowHotbarLeft { Text: "Below Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_BelowHotbarRight { Text: "Below Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_BottomLeft { Text: "Bottom Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #H_BottomRight { Text: "Bottom Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+      }
+    }
+
+    Group { Anchor: (Width: 1); Background: #2b3542; }
+
+    Group {
+      FlexWeight: 1;
+      LayoutMode: Top;
+      Padding: (Full: 10);
+
+      Label {
+        Text: "THIRST BAR";
+        Anchor: (Height: 30);
+        Style: (FontSize: 16, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center);
+      }
+
+      Group { Anchor: (Height: 1); Background: #2b3542(0.5); }
+      Group { Anchor: (Height: 15); }
+
+      Group {
+          LayoutMode: Top;
+          FlexWeight: 1;
+
+          TextButton #T_AboveHotbarCentered { Text: "Above Center"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_BelowHotbarCentered { Text: "Below Center"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_AboveHotbarLeft { Text: "Above Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_AboveHotbarRight { Text: "Above Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_BelowHotbarLeft { Text: "Below Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_BelowHotbarRight { Text: "Below Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_BottomLeft { Text: "Bottom Left"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+          Group { Anchor: (Height: 5); }
+          TextButton #T_BottomRight { Text: "Bottom Right"; Anchor: (Height: 35); Style: @NormalButtonStyle; }
+      }
+    }
+  }
+
+  Group { Anchor: (Height: 20); }
+
+  Group {
+    LayoutMode: Center;
+    Anchor: (Height: 44);
+
+    TextButton #CancelButton {
+      Text: "CLOSE EDITOR";
+      Anchor: (Width: 150, Height: 40);
+      Style: (
+        Default: (Background: #F44336, LabelStyle: (FontSize: 14, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+        Hovered: (Background: #EF5350, LabelStyle: (FontSize: 14, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center)),
+        Pressed: (Background: #C62828, LabelStyle: (FontSize: 14, TextColor: #ffffff, RenderBold: true, HorizontalAlignment: Center, VerticalAlignment: Center))
+      );
+    }
+  }
+}

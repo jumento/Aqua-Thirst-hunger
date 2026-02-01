@@ -86,6 +86,7 @@ public class AquaThirstHunger extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new HungryCommand());
         this.getCommandRegistry().registerCommand(new ThirstyCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffCommand());
+        this.getCommandRegistry().registerCommand(new AquaCheffBarsCommand());
     }
 
     @Override
@@ -98,7 +99,6 @@ public class AquaThirstHunger extends JavaPlugin {
                     HungryCommand.requiredPermission,
                     HungryHideCommand.requiredPermission,
                     HungryShowCommand.requiredPermission,
-                    HungryPositionCommand.requiredPermission,
                     ThirstyCommand.requiredPermission,
                     SetThirstCommand.requiredPermission,
                     SetThirstCommand.SetThirstOtherCommand.requiredPermission);
