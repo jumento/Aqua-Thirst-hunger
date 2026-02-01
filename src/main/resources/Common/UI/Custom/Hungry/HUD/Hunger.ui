@@ -4,56 +4,58 @@
 @HHMSaturationBarFillTranslucent = "HungerBarSaturationTranslucent.png";
 @HHMCreativeBarFill = "CreativeHungerBarFill.png";
 
-Group #HHMHUD {
+Group {
     LayoutMode: Bottom;
 
     Group #HHMContainer {
-        LayoutMode: Left;
-        Anchor: (Bottom: 12, Left: 12);
-
-        Group #HHMIcon {
-            Anchor: (Left: 0, Width: 20, Height: 20, Right: 4);
-            Background: "HungerIcon.png";
-        }
-
         Group {
-            Anchor: (Left: 0, Width: 318, Height: 12);
-            Background: "HungerBackground.png";
+            Anchor: (Width: 351, Left: -5);
+            LayoutMode: Right;
 
-            ProgressBar #HHMHungerRestorePreviewBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMHungerBarFillTranslucent;
-                Value: 0;
-                Visible: true;
+            Group #HHMIcon {
+                Anchor: (Width: 20, Height: 20, Right: 10);
+                Background: "HungerIcon.png";
             }
-            ProgressBar #HHMHungerBar {
+
+            Group {
                 Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMAdventureBarFill;
-                Value: 1.0;
-                Visible: true;
-            }
-            ProgressBar #HHMHungerSaturationRestorePreviewBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMSaturationBarFillTranslucent;
-                Value: 0;
-                Visible: true;
-            }
-            ProgressBar #HHMHungerSaturationBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMSaturationBarFill;
-                Value: 0;
-                Visible: true;
-            }
-            ProgressBar #HHMCreativeHungerBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMCreativeBarFill;
-                Value: 1.0;
-                Visible: false;
-            }
-            ProgressBar #HHMHungerBarEffect {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: "HungerBarEffect.png";
-                Value: 1.0;
+                Background: "HungerBackground.png";
+
+                ProgressBar #HHMHungerRestorePreviewBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMHungerBarFillTranslucent;
+                    Value: 0;
+                    Visible: true;
+                }
+                ProgressBar #HHMHungerBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMAdventureBarFill;
+                    Value: 1.0;
+                    Visible: true;
+                }
+                ProgressBar #HHMHungerSaturationRestorePreviewBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMSaturationBarFillTranslucent;
+                    Value: 0;
+                    Visible: true;
+                }
+                ProgressBar #HHMHungerSaturationBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMSaturationBarFill;
+                    Value: 0;
+                    Visible: true;
+                }
+                ProgressBar #HHMCreativeHungerBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMCreativeBarFill;
+                    Value: 1.0;
+                    Visible: false;
+                }
+                ProgressBar #HHMHungerBarEffect {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: "HungerBarEffect.png";
+                    Value: 1.0;
+                }
             }
         }
     }

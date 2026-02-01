@@ -2,49 +2,47 @@
 @HHMThirstBarFillTranslucent = "ThirstBarFillTranslucent.png";
 @HHMCreativeThirstBarFill = "CreativeThirstBarFill.png";
 
-Group #HHMThirstHUD {
+Group {
     LayoutMode: Bottom;
 
     Group #HHMThirstContainer {
-        LayoutMode: Right;
-        Anchor: (Bottom: 12, Left: 366);
-
-
-
         Group {
-            Anchor: (Right: 0, Width: 318, Height: 12);
-            Background: "ThirstBackground.png";
+            Anchor: (Width: 351, Right: -5);
+            LayoutMode: Left;
 
-            ProgressBar #HHMThirstRestorePreviewBar {
+            Group {
                 Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMThirstBarFillTranslucent;
-                Value: 0;
-                Visible: true;
+                Background: "ThirstBackground.png";
+
+                ProgressBar #HHMThirstRestorePreviewBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMThirstBarFillTranslucent;
+                    Value: 0;
+                    Visible: true;
+                }
+                ProgressBar #HHMThirstBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMThirstBarFill;
+                    Value: 1.0;
+                    Visible: true;
+                }
+                ProgressBar #HHMCreativeThirstBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMCreativeThirstBarFill;
+                    Value: 1.0;
+                    Visible: false;
+                }
+                ProgressBar #HHMThirstBarEffect {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: "ThirstBarEffect.png";
+                    Value: 1.0;
+                }
             }
-            ProgressBar #HHMThirstBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMThirstBarFill;
-                Value: 1.0;
-                Visible: true;
-            }
-            ProgressBar #HHMCreativeThirstBar {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: @HHMCreativeThirstBarFill;
-                Value: 1.0;
-                Visible: false;
-            }
-            ProgressBar #HHMThirstBarEffect {
-                Anchor: (Width: 318, Height: 12);
-                BarTexturePath: "ThirstBarEffect.png";
-                Value: 1.0;
+
+            Group #HHMThirstIcon {
+                Anchor: (Width: 20, Height: 20, Left: 8);
+                Background: "ThirstIcon.png";
             }
         }
-
-        Group #HHMThirstIcon {
-            Anchor: (Left: 4, Width: 20, Height: 20, Right: 0);
-            Background: "ThirstIcon.png";
-        }
-
-
     }
 }

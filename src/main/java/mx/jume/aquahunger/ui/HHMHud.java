@@ -53,12 +53,16 @@ public class HHMHud extends CustomUIHud {
     protected void updateHudPosition(UICommandBuilder uiCommandBuilder, HudPosition hudPosition) {
         this.hudPosition = hudPosition;
         Anchor anchor = new Anchor();
-        anchor.setWidth(Value.of(332));
         anchor.setHeight(Value.of(20));
 
         if (hudPosition.left() != 0) {
+            anchor.setWidth(Value.of(332));
             anchor.setLeft(Value.of(hudPosition.left()));
+        } else {
+            // Centered position - use Hotbar Width (702) for consistent alignment
+            anchor.setWidth(Value.of(702));
         }
+
         if (hudPosition.bottom() != 0) {
             anchor.setBottom(Value.of(hudPosition.bottom()));
         }

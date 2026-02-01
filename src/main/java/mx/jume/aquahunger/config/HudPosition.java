@@ -13,12 +13,12 @@ public sealed interface HudPosition
 
         AboveHotbarCentered(0, 140),
         BelowHotbarCentered(0, 12),
-        AboveHotbarLeft(662, 140),
-        AboveHotbarRight(1060, 140),
-        BelowHotbarLeft(670, 8),
-        BelowHotbarRight(1040, 8),
-        BottomLeft(32, 12),
-        BottomRight(1700, 12);
+        AboveHotbarLeft(0, 140),
+        AboveHotbarRight(0, 140),
+        BelowHotbarLeft(0, 8),
+        BelowHotbarRight(0, 8),
+        BottomLeft(-1, 12),
+        BottomRight(-1, 12);
 
         private final int left;
         private final int bottom;
