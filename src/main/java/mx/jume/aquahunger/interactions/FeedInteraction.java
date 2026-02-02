@@ -50,6 +50,13 @@ public class FeedInteraction extends SimpleInstantInteraction {
             "Food_Wildmeat_Raw");
 
     public static float getHungerRestoration(Item item, Float interactionValue) {
+        // Hardcoded safety for canteens
+        String id = item.getId();
+        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
+            AquaThirstHunger.logInfo("Force-zeroing hunger for canteen item: " + id);
+            return 0.0f;
+        }
+
         // 0. External Config Override (Highest Priority)
         mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
                 .getExternalFoodsConfig();
@@ -84,6 +91,12 @@ public class FeedInteraction extends SimpleInstantInteraction {
     }
 
     public static float getMaxHungerSaturation(Item item, Float interactionValue) {
+        // Hardcoded safety for canteens
+        String id = item.getId();
+        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
+            return 0.0f;
+        }
+
         // 0. External Config Override (Highest Priority)
         mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
                 .getExternalFoodsConfig();
@@ -157,15 +170,23 @@ public class FeedInteraction extends SimpleInstantInteraction {
         if (item.getResourceTypes() != null) {
             String fruitType = thirstFoodConfig.getFruitResourceTypeId();
             for (var resourceType : item.getResourceTypes()) {
-                if (resourceType != null && resourceType.toString().equalsIgnoreCase(fruitType)) {
+                if (resourceType != null && resourceType.id != null
+                        && resourceType.id.equalsIgnoreCase(fruitType)) {
                     isFruit = true;
+                    AquaThirstHunger
+                            .logInfo("Detected fruit: " + item.getId() + " with ResourceType: " + resourceType.id);
                     break;
                 }
             }
         }
 
         // 4. Apply Multiplier
-        return baseThirstRestore * (isFruit ? thirstFoodConfig.getFruitMultiplier() : 1.0f);
+        float finalValue = baseThirstRestore * (isFruit ? thirstFoodConfig.getFruitMultiplier() : 1.0f);
+        if (isFruit) {
+            AquaThirstHunger.logInfo("Applied fruit multiplier (" + thirstFoodConfig.getFruitMultiplier()
+                    + "x) to " + item.getId() + ": " + baseThirstRestore + " -> " + finalValue);
+        }
+        return finalValue;
     }
 
     public float getHungerRestoration(Item item) {
@@ -206,6 +227,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
                     final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
                     if (playerRef != null) {
                         HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
+                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, 0.0f);
                         HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
                     }
                     HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);

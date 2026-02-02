@@ -1,11 +1,17 @@
 {
-    "InitialHungerLevel": 70.0,
+    "InitialHungerLevel": 200.0,
+    "MaxHungerLevel": 100.0,
     "RespawnHungerLevel": 50.0,
+    "ResetHungerOnDeath": true,
+    "StarvationTickRate": 2.0,
+    "StarvationPerTick": 0.125,
+    "StarvationPerBlockHit": 0.02,
     "StarvationStaminaModifier": 0.175,
     "HungryThreshold": 20.0,
     "StarvationDamage": 5.0,
     "HudPosition": "BelowHotbarLeft",
     "SinglePlayer": true,
     "EnableHunger": true,
-    "LifePerHunger": true
+    "LifePerHunger": true,
+    "ConfigVersion": "1.5.0"
 }

@@ -1,12 +1,12 @@
 package mx.jume.aquahunger.config;
 
+import com.google.gson.annotations.SerializedName;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
-
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,23 +31,33 @@ public class HHMThirstFoodValuesConfig {
                     ((config, value) -> config.itemThirstRestoration = value),
                     (c) -> c.itemThirstRestoration)
             .add()
+            .append(new KeyedCodec<>("ConfigVersion", Codec.STRING),
+                    ((config, value) -> config.configVersion = value),
+                    (c) -> c.configVersion)
+            .add()
             .build();
 
-    private String fruitResourceTypeId = "Fruit";
-    private float fruitMultiplier = 2.0f;
+    @SerializedName("ResultResourceTypeId")
+    private String fruitResourceTypeId = "Fruits";
+    @SerializedName("FruitMultiplier")
+    private float fruitMultiplier = 3.5f;
+    @SerializedName("ConfigVersion")
+    private String configVersion = "1.5.0";
+    @SerializedName("TierThirstRestoration")
     private final Map<ItemTier, Float> tierThirstRestoration = new EnumMap<>(ItemTier.class);
+    @SerializedName("ItemThirstRestoration")
     private Map<String, Float> itemThirstRestoration = new HashMap<>();
 
     public HHMThirstFoodValuesConfig() {
-        tierThirstRestoration.put(ItemTier.Common, 0.5f);
-        tierThirstRestoration.put(ItemTier.Uncommon, 1.0f);
-        tierThirstRestoration.put(ItemTier.Rare, 1.5f);
-        tierThirstRestoration.put(ItemTier.Epic, 2.0f);
-        tierThirstRestoration.put(ItemTier.Legendary, 2.5f);
-        tierThirstRestoration.put(ItemTier.Mythic, 3.0f);
-        tierThirstRestoration.put(ItemTier.Unique, 4.0f);
-        itemThirstRestoration.put("AquaThirstHunger_Canteen", 10.0f);
-        itemThirstRestoration.put("AquaThirstHunger_Canteenpro_Empty", 10.0f);
+        tierThirstRestoration.put(ItemTier.Common, 2.5f);
+        tierThirstRestoration.put(ItemTier.Uncommon, 3.0f);
+        tierThirstRestoration.put(ItemTier.Rare, 3.5f);
+        tierThirstRestoration.put(ItemTier.Epic, 4.0f);
+        tierThirstRestoration.put(ItemTier.Legendary, 4.5f);
+        tierThirstRestoration.put(ItemTier.Mythic, 5.0f);
+        tierThirstRestoration.put(ItemTier.Unique, 5.5f);
+        itemThirstRestoration.put("AquaThirstHunger_Canteen", 16.0f);
+        itemThirstRestoration.put("AquaThirstHunger_Canteenpro_Empty", 13.0f);
     }
 
     public String getFruitResourceTypeId() {
@@ -66,8 +76,23 @@ public class HHMThirstFoodValuesConfig {
         return tierThirstRestoration.getOrDefault(tier, 0.0f);
     }
 
+    public String getConfigVersion() {
+        return configVersion;
+    }
+
+    public void setConfigVersion(String val) {
+        this.configVersion = val;
+    }
+
+    public void setFruitMultiplier(float val) {
+        this.fruitMultiplier = val;
+    }
+
+    public Map<ItemTier, Float> getTierThirstRestoration() {
+        return tierThirstRestoration;
+    }
+
     public void ensureDefaults() {
-        itemThirstRestoration.putIfAbsent("AquaThirstHunger_Canteen", 10.0f);
-        itemThirstRestoration.putIfAbsent("AquaThirstHunger_Canteenpro_Empty", 10.0f);
+        ConfigMigrationManager.migrate(this);
     }
 }

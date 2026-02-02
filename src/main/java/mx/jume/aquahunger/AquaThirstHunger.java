@@ -87,6 +87,7 @@ public class AquaThirstHunger extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new ThirstyCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffBarsCommand());
+        this.getCommandRegistry().registerCommand(new HungryReloadCommand());
     }
 
     @Override
@@ -101,7 +102,8 @@ public class AquaThirstHunger extends JavaPlugin {
                     HungryShowCommand.requiredPermission,
                     ThirstyCommand.requiredPermission,
                     SetThirstCommand.requiredPermission,
-                    SetThirstCommand.SetThirstOtherCommand.requiredPermission);
+                    SetThirstCommand.SetThirstOtherCommand.requiredPermission,
+                    HungryReloadCommand.requiredPermission);
             PermissionsModule.get().addGroupPermission("Adventure", singleplayerPermissions);
             PermissionsModule.get().addGroupPermission("Creative", singleplayerPermissions);
             logInfo("Singleplayer module detected, added permissions to Adventure and Creative groups.");

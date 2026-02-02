@@ -30,9 +30,12 @@ public class ConfigManager {
         }
 
         this.hungerConfig = loadConfig("HungerConfig.json", HHMHungerConfig.class, new HHMHungerConfig());
+        this.hungerConfig.ensureDefaults();
         this.thirstConfig = loadConfig("ThirstConfig.json", HHMThirstConfig.class, new HHMThirstConfig());
+        this.thirstConfig.ensureDefaults();
         this.foodValuesConfig = loadConfig("FoodValuesConfig.json", HHMFoodValuesConfig.class,
                 new HHMFoodValuesConfig());
+        this.foodValuesConfig.ensureDefaults();
         this.thirstFoodValuesConfig = loadConfig("ThirstFoodValuesConfig.json", HHMThirstFoodValuesConfig.class,
                 new HHMThirstFoodValuesConfig());
         this.thirstFoodValuesConfig.ensureDefaults();
@@ -81,12 +84,15 @@ public class ConfigManager {
 
         // 2. Commit
         this.hungerConfig = newHungerConfig;
+        this.hungerConfig.ensureDefaults();
         AquaThirstHunger.logInfo("Reloaded HungerConfig. LifePerHunger=" + this.hungerConfig.isLifePerHunger());
 
         this.thirstConfig = newThirstConfig;
+        this.thirstConfig.ensureDefaults();
         AquaThirstHunger.logInfo("Reloaded ThirstConfig.");
 
         this.foodValuesConfig = newFoodValuesConfig;
+        this.foodValuesConfig.ensureDefaults();
         AquaThirstHunger.logInfo("Reloaded FoodValuesConfig.");
 
         this.thirstFoodValuesConfig = newThirstFoodValuesConfig;
@@ -139,7 +145,7 @@ public class ConfigManager {
         saveConfig("FoodValuesConfig.json", foodValuesConfig);
         saveConfig("ThirstFoodValuesConfig.json", thirstFoodValuesConfig);
         if (externalFoodsConfig != null) {
-            externalFoodsConfig.save();
+            externalFoodsConfig.saveUser();
         }
     }
 

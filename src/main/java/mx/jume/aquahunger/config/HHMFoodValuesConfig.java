@@ -1,12 +1,12 @@
 package mx.jume.aquahunger.config;
 
+import com.google.gson.annotations.SerializedName;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
-
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,42 +14,6 @@ import java.util.Map;
 public class HHMFoodValuesConfig {
         public static final BuilderCodec<HHMFoodValuesConfig> CODEC = BuilderCodec
                         .builder(HHMFoodValuesConfig.class, HHMFoodValuesConfig::new)
-                        // migrated values
-                        .append(new KeyedCodec<>("T1HungerRestoration", Codec.FLOAT),
-                                        ((config, value) -> config.tierHungerRestoration.put(ItemTier.Common, value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("T2HungerRestoration", Codec.FLOAT),
-                                        ((config, value) -> config.tierHungerRestoration.put(ItemTier.Uncommon, value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("T3HungerRestoration", Codec.FLOAT),
-                                        ((config, value) -> config.tierHungerRestoration.put(ItemTier.Rare, value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("T1MaxHungerSaturation", Codec.FLOAT),
-                                        ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Common, value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("T2MaxHungerSaturation", Codec.FLOAT),
-                                        ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Uncommon,
-                                                        value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("T3MaxHungerSaturation", Codec.FLOAT),
-                                        ((config, value) -> config.tierMaxHungerSaturation.put(ItemTier.Rare, value)),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("HungerRestoration", new MapCodec<>(Codec.FLOAT, HashMap::new)),
-                                        ((config, value) -> config.itemHungerRestoration = value),
-                                        (c) -> null)
-                        .add()
-                        .append(new KeyedCodec<>("MaxHungerSaturation", new MapCodec<>(Codec.FLOAT, HashMap::new)),
-                                        ((config, value) -> config.itemMaxHungerSaturation = value),
-                                        (c) -> null)
-                        .add()
-
-                        // current values
                         .append(new KeyedCodec<>("IgnoreInteractionValues", Codec.BOOLEAN),
                                         ((config, value) -> config.ignoreInteractionValues = value),
                                         (c) -> c.ignoreInteractionValues)
@@ -57,6 +21,10 @@ public class HHMFoodValuesConfig {
                         .append(new KeyedCodec<>("IgnoreCustomAssetValues", Codec.BOOLEAN),
                                         ((config, value) -> config.ignoreCustomAssetValues = value),
                                         (c) -> c.ignoreCustomAssetValues)
+                        .add()
+                        .append(new KeyedCodec<>("ConfigVersion", Codec.STRING),
+                                        ((config, value) -> config.configVersion = value),
+                                        (c) -> c.configVersion)
                         .add()
                         .append(new KeyedCodec<>("TierHungerRestoration",
                                         new EnumMapCodec<>(ItemTier.class, Codec.FLOAT)),
@@ -78,11 +46,19 @@ public class HHMFoodValuesConfig {
                         .add()
                         .build();
 
+        @SerializedName("IgnoreInteractionValues")
         private boolean ignoreInteractionValues = false;
+        @SerializedName("IgnoreCustomAssetValues")
         private boolean ignoreCustomAssetValues = false;
+        @SerializedName("ConfigVersion")
+        private String configVersion = "1.5.0";
+        @SerializedName("TierHungerRestoration")
         private final Map<ItemTier, Float> tierHungerRestoration = new EnumMap<>(ItemTier.class);
+        @SerializedName("TierMaxHungerSaturation")
         private final Map<ItemTier, Float> tierMaxHungerSaturation = new EnumMap<>(ItemTier.class);
+        @SerializedName("ItemHungerRestoration")
         private Map<String, Float> itemHungerRestoration = new HashMap<>();
+        @SerializedName("ItemMaxHungerSaturation")
         private Map<String, Float> itemMaxHungerSaturation = new HashMap<>();
 
         public HHMFoodValuesConfig() {
@@ -102,7 +78,6 @@ public class HHMFoodValuesConfig {
                 tierMaxHungerSaturation.put(ItemTier.Mythic, 20.0f);
                 tierMaxHungerSaturation.put(ItemTier.Unique, 25.0f);
 
-                // Prevent Canteen / Potion containers from restoring hunger
                 itemHungerRestoration.put("AquaThirstHunger_Canteenpro_Empty", 0.0f);
                 itemHungerRestoration.put("AquaThirstHunger_Canteen", 0.0f);
                 itemHungerRestoration.put("Potion_Empty", 0.0f);
@@ -130,5 +105,25 @@ public class HHMFoodValuesConfig {
 
         public boolean isIgnoreCustomAssetValues() {
                 return ignoreCustomAssetValues;
+        }
+
+        public String getConfigVersion() {
+                return configVersion;
+        }
+
+        public void setConfigVersion(String configVersion) {
+                this.configVersion = configVersion;
+        }
+
+        public Map<ItemTier, Float> getTierHungerRestoration() {
+                return tierHungerRestoration;
+        }
+
+        public Map<ItemTier, Float> getTierMaxHungerSaturation() {
+                return tierMaxHungerSaturation;
+        }
+
+        public void ensureDefaults() {
+                ConfigMigrationManager.migrate(this);
         }
 }

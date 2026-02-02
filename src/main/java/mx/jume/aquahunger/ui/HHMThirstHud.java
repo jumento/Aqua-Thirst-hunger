@@ -134,6 +134,16 @@ public class HHMThirstHud extends CustomUIHud {
         hud.update(false, uiCommandBuilder);
     }
 
+    static public void updatePlayerThirstRestorationPreview(@NonNullDecl PlayerRef playerRef,
+            float thirstRestoration) {
+        HHMThirstHud hud = hudMap.get(playerRef);
+        if (hud == null)
+            return;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        hud.updateThirstRestorationPreview(uiCommandBuilder, thirstRestoration);
+        hud.update(false, uiCommandBuilder);
+    }
+
     static public void updatePlayerGameMode(@NonNullDecl PlayerRef playerRef, GameMode gameMode) {
         HHMThirstHud hud = hudMap.get(playerRef);
         if (hud == null)

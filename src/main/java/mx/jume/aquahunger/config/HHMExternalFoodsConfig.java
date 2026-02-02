@@ -13,115 +13,172 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * HHMExternalFoodsConfig - Manages external food items with two-tier system:
+ * - ExternalFoodsDefaultConfig.json: Mod defaults (always overwritten on
+ * update)
+ * - ExternalFoodsConfig.json: User overrides (never touched, highest priority)
+ */
 public class HHMExternalFoodsConfig {
     private static final Logger LOGGER = Logger.getLogger("AquaThirstHunger");
-    private final File configFile;
+    private final File defaultConfigFile;
+    private final File userConfigFile;
     private final Gson gson;
 
-    // Map of ItemID -> Values
-    private Map<String, ExternalFoodEntry> entries = new HashMap<>();
+    private String configVersion = "1.5.0";
+    private Map<String, ExternalFoodEntry> defaultEntries = new HashMap<>();
+    private Map<String, ExternalFoodEntry> userEntries = new HashMap<>();
+    private Map<String, ExternalFoodEntry> mergedEntries = new HashMap<>();
 
     public static class ExternalFoodEntry {
         public float hungerRestoration;
         public float maxHungerSaturation;
-        public float thirstRestoration; // New field
+        public float thirstRestoration;
 
         public ExternalFoodEntry() {
-        } // Gson
+        }
 
         public ExternalFoodEntry(float hungerRestoration, float maxHungerSaturation, float thirstRestoration) {
             this.hungerRestoration = hungerRestoration;
             this.maxHungerSaturation = maxHungerSaturation;
             this.thirstRestoration = thirstRestoration;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+            ExternalFoodEntry that = (ExternalFoodEntry) o;
+            return Float.compare(that.hungerRestoration, hungerRestoration) == 0 &&
+                    Float.compare(that.maxHungerSaturation, maxHungerSaturation) == 0 &&
+                    Float.compare(that.thirstRestoration, thirstRestoration) == 0;
+        }
     }
 
     public HHMExternalFoodsConfig(File configDir) {
-        this.configFile = new File(configDir, "ExternalFoodsConfig.json");
+        this.defaultConfigFile = new File(configDir, "ExternalFoodsDefaultConfig.json");
+        this.userConfigFile = new File(configDir, "ExternalFoodsConfig.json");
         this.gson = new GsonBuilder().setPrettyPrinting().create();
         load();
     }
 
     private void load() {
-        if (!configFile.exists()) {
-            createDefault();
+        // Always overwrite defaults file from bundled resource (only affects
+        // ExternalFoodsDefaultConfig.json)
+        overwriteDefaultsFromResource();
+
+        defaultEntries.clear();
+        userEntries.clear();
+
+        // Load defaults first
+        loadFile(defaultConfigFile, defaultEntries, "default");
+        // Load user overrides second
+        loadFile(userConfigFile, userEntries, "user");
+        // Merge: defaults + user (user wins on conflicts)
+        rebuildMerged();
+    }
+
+    private void loadFile(File file, Map<String, ExternalFoodEntry> targetMap, String type) {
+        if (!file.exists()) {
+            LOGGER.info("ExternalFoods " + type + " config not found: " + file.getName());
             return;
         }
 
-        try (FileReader reader = new FileReader(configFile)) {
-            Type type = new TypeToken<Map<String, ExternalFoodEntry>>() {
+        try (FileReader reader = new FileReader(file)) {
+            Type mapType = new TypeToken<Map<String, Object>>() {
             }.getType();
-            Map<String, ExternalFoodEntry> loaded = gson.fromJson(reader, type);
-            if (loaded != null) {
-                this.entries = loaded;
+            Map<String, Object> raw = gson.fromJson(reader, mapType);
+            if (raw != null) {
+                int count = 0;
+                for (Map.Entry<String, Object> entry : raw.entrySet()) {
+                    String key = entry.getKey();
+                    if (key.equals("__ConfigVersion") || key.equals("ConfigVersion")) {
+                        if (type.equals("default")) {
+                            this.configVersion = String.valueOf(entry.getValue());
+                        }
+                        continue;
+                    }
+                    if (key.startsWith("__"))
+                        continue;
+
+                    try {
+                        String json = gson.toJson(entry.getValue());
+                        ExternalFoodEntry food = gson.fromJson(json, ExternalFoodEntry.class);
+                        if (food != null) {
+                            targetMap.put(key, food);
+                            count++;
+                        }
+                    } catch (Exception e) {
+                        LOGGER.warning("Skipping invalid food entry in " + type + " config: " + key);
+                    }
+                }
+                LOGGER.info("Loaded " + count + " items from " + file.getName()
+                        + (type.equals("default") ? " (Version: " + configVersion + ")" : " (User overrides)"));
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to load ExternalFoodsConfig.json", e);
+            LOGGER.log(Level.SEVERE, "Failed to load " + file.getName(), e);
         }
     }
 
-    private void createDefault() {
-        entries.clear();
-        // Add defaults requested by user with Thirst values
-        // Soya Sauce context implies salty or liquid? Assume liquid-ish but minimal
-        // thirst interaction for food.
-        // Sake is a drink -> Higher thirst restoration
-        addDefault("Andiechef_Food_Item_Soya", 5f, 100f, -2f);
-        addDefault("Andiechef_Food_Nigiri", 25f, 165f, 0f); // CORRECTED from user list (previous was 8)
-        addDefault("Andiechef_Food_Onigiri", 15f, 155f, 0f); // CORRECTED from user list (previous was 10)
-        addDefault("Andiechef_Food_Rollo", 13f, 125f, 0f); // CORRECTED saturation (previous was 175)
-        addDefault("Andiechef_Food_Sake", 2f, 105f, 25f);
-        addDefault("Andiechef_Ingredient_SalsaSoya", 8f, 110f, 10f); // CORRECTED: User said thirst 10, hunger 8
-        addDefault("Andiechef_Ingredient_Wasabi", 5f, 100f, -15f); // CORRECTED: User said thirst -15, hunger 5
-        addDefault("Andiechef_Item_Soya_Fermentada", 11f, 165f, 2f); // CORRECTED: Thirst 2
-
-        // ADDED MISSING ITEMS from User's ExternalFoodsConfig.json content
-        addDefault("Andiechef_YakimeshiBeef", 10f, 150f, 10f);
-        addDefault("Andiechef_YakimeshiChicken", 11f, 150f, 10f);
-        addDefault("Andiechef_YakimeshiFish", 12f, 150f, 10f);
-        addDefault("Andiechef_YakimeshiPork", 9f, 150f, 10f);
-        addDefault("Andiechef_New_Food_Template", 0.0f, 0.0f, 0.0f);
-
-        save();
+    private void rebuildMerged() {
+        mergedEntries.clear();
+        // Start with defaults
+        mergedEntries.putAll(defaultEntries);
+        // User entries override defaults
+        mergedEntries.putAll(userEntries);
+        LOGGER.info("Merged configuration: " + mergedEntries.size() + " total items ("
+                + defaultEntries.size() + " defaults + " + userEntries.size() + " user overrides)");
     }
 
-    private void addDefault(String id, float restoration, float saturation, float thirst) {
-        entries.put(id, new ExternalFoodEntry(restoration, saturation, thirst));
+    public void saveDefaults() {
+        // Defaults are now always copied from resources and should not be saved from
+        // memory
+        // to avoid losing ordering or comments if we ever add them.
+        // saveFile(defaultConfigFile, defaultEntries, true);
     }
 
-    public void save() {
+    public void saveUser() {
+        saveFile(userConfigFile, userEntries, false);
+    }
+
+    private void saveFile(File file, Map<String, ExternalFoodEntry> entries, boolean includeVersion) {
         try {
-            // Ensure directory exists
-            if (configFile.getParentFile() != null) {
-                configFile.getParentFile().mkdirs();
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
             }
-            try (FileWriter writer = new FileWriter(configFile)) {
-                gson.toJson(entries, writer);
+
+            Map<String, Object> out = new HashMap<>();
+            if (includeVersion) {
+                out.put("__ConfigVersion", configVersion);
             }
-            LOGGER.info("Saved ExternalFoodsConfig.json to " + configFile.getAbsolutePath());
+            out.putAll(entries);
+
+            try (FileWriter writer = new FileWriter(file)) {
+                gson.toJson(out, writer);
+            }
+            LOGGER.info("Saved " + entries.size() + " items to " + file.getName());
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to save ExternalFoodsConfig.json", e);
+            LOGGER.log(Level.SEVERE, "Failed to save " + file.getName(), e);
         }
     }
 
-    /**
-     * Resolves food values for a given item ID.
-     * Priority: Exact match -> Glob match (*)
-     * 
-     * @return Entry if found, null otherwise.
-     */
+    public void ensureDefaults() {
+        // Passing outside migration system as requested
+        // ConfigMigrationManager.migrate(this);
+    }
+
     public ExternalFoodEntry resolve(String itemId) {
         if (itemId == null)
             return null;
 
-        // 1. Exact Match
-        if (entries.containsKey(itemId)) {
-            return entries.get(itemId);
-        }
+        // Check exact match in merged entries
+        if (mergedEntries.containsKey(itemId))
+            return mergedEntries.get(itemId);
 
-        // 2. Glob Match (Simple '*' suffix support as per request)
-        // Optimization: Iterating map is linear, but config shouldn't be huge.
-        for (Map.Entry<String, ExternalFoodEntry> entry : entries.entrySet()) {
+        // Check wildcard matches
+        for (Map.Entry<String, ExternalFoodEntry> entry : mergedEntries.entrySet()) {
             String key = entry.getKey();
             if (key.endsWith("*")) {
                 String prefix = key.substring(0, key.length() - 1);
@@ -130,11 +187,68 @@ public class HHMExternalFoodsConfig {
                 }
             }
         }
-
         return null;
     }
 
     public void updateItem(String id, float hunger, float saturation, float thirst) {
-        entries.put(id, new ExternalFoodEntry(hunger, saturation, thirst));
+        // User updates always go to user config
+        userEntries.put(id, new ExternalFoodEntry(hunger, saturation, thirst));
+        rebuildMerged();
     }
+
+    public Map<String, ExternalFoodEntry> getEntries() {
+        return mergedEntries;
+    }
+
+    public Map<String, ExternalFoodEntry> getDefaultEntries() {
+        return defaultEntries;
+    }
+
+    public Map<String, ExternalFoodEntry> getUserEntries() {
+        return userEntries;
+    }
+
+    public void setDefaultEntries(Map<String, ExternalFoodEntry> entries) {
+        this.defaultEntries = entries;
+        rebuildMerged();
+    }
+
+    public String getConfigVersion() {
+        return configVersion;
+    }
+
+    public void setConfigVersion(String configVersion) {
+        this.configVersion = configVersion;
+    }
+
+    private void overwriteDefaultsFromResource() {
+        try {
+            if (defaultConfigFile.getParentFile() != null) {
+                defaultConfigFile.getParentFile().mkdirs();
+            }
+
+            // Resource path inside the jar
+            String resourcePath = "defaults/ExternalFoodsDefaultConfig.json";
+
+            File tmp = new File(defaultConfigFile.getParentFile(), defaultConfigFile.getName() + ".tmp");
+
+            try (var in = HHMExternalFoodsConfig.class.getClassLoader().getResourceAsStream(resourcePath)) {
+                if (in == null) {
+                    LOGGER.severe("Missing bundled defaults resource: " + resourcePath);
+                    return;
+                }
+                java.nio.file.Files.copy(in, tmp.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            java.nio.file.Files.move(
+                    tmp.toPath(),
+                    defaultConfigFile.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                    java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to overwrite ExternalFoodsDefaultConfig.json from bundled defaults", e);
+        }
+    }
+
 }

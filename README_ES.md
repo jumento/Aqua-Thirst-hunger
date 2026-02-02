@@ -19,6 +19,7 @@
 * **Cantimplora Nativa**: Incluye una Cantimplora crafteable (desde el inventario o mesa de cocina) para restaurar la hidratación, esencial cuando no hay otros mods de comida.
 * **Compatibilidad Universal**: Soporte para cualquier mod de comida; los objetos restauran sed automáticamente según su tier de rareza, a menos que se personalicen en la configuración.
 * **Posicionamiento de HUD Mejorado**: Preajustes para barras de Hambre/Sed una al lado de la otra (BelowHotbarLeft/Right).
+* **Versiones de Configuración y Migración Inteligente**: Sistema robusto (v1.5.0) que actualiza automáticamente tus archivos de configuración preservando tus personalizaciones y creando copias de seguridad.
 
 ## 🛠️ Dependencias
 

@@ -1,17 +1,18 @@
 {
-    "ResultResourceTypeId": "Fruit",
-    "FruitMultiplier": 2.0,
+    "ResultResourceTypeId": "Fruits",
+    "FruitMultiplier": 3.5,
     "TierThirstRestoration": {
-        "Common": 0.5,
-        "Uncommon": 1.0,
-        "Rare": 1.5,
-        "Epic": 2.0,
-        "Legendary": 2.5,
-        "Mythic": 3.0,
-        "Unique": 4.0
+        "Common": 2.5,
+        "Uncommon": 3.0,
+        "Rare": 3.5,
+        "Epic": 4.0,
+        "Legendary": 4.5,
+        "Mythic": 5.0,
+        "Unique": 5.5
     },
     "ItemThirstRestoration": {
         "AquaThirstHunger_Canteen": 10.0,
         "AquaThirstHunger_Canteenpro_Empty": 10.0
-    }
+    },
+    "ConfigVersion": "1.5.0"
 }

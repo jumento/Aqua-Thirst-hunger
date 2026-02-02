@@ -15,7 +15,7 @@ public class HungryReloadCommand extends AbstractPlayerCommand {
     public static final String requiredPermission = "aquahunger.command.reload";
 
     public HungryReloadCommand() {
-        super("reload", "Reload configurations", true);
+        super("aquahungerreload", "Reload configurations", true);
         this.requirePermission(requiredPermission);
     }
 

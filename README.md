@@ -19,6 +19,7 @@
 * **Native Canteen**: Includes a craftable Canteen (from inventory or cooking workbench) to restore hydration, essential when no other food mods are present.
 * **Universal Compatibility**: Support for any food mod; items automatically restore thirst based on their rarity tier unless customized in the config.
 * **Enhanced HUD Positioning**: Presets for side-by-side Hunger/Thirst bars (BelowHotbarLeft/Right).
+* **Configuration Versioning & Smart Migration**: Robust system (v1.5.0) that automatically updates your config files while preserving your personal customizations and creating backups.
 
 ## 🛠️ Dependencies
 

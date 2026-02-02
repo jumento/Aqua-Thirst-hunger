@@ -16,24 +16,27 @@ import mx.jume.aquahunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class StartFeedingInteraction extends SimpleInstantInteraction {
-    public static final BuilderCodec<StartFeedingInteraction> CODEC = BuilderCodec.builder(StartFeedingInteraction.class, StartFeedingInteraction::new, SimpleInstantInteraction.CODEC)
+    public static final BuilderCodec<StartFeedingInteraction> CODEC = BuilderCodec
+            .builder(StartFeedingInteraction.class, StartFeedingInteraction::new, SimpleInstantInteraction.CODEC)
             .appendInherited(new KeyedCodec<>("HungerRestoration", Codec.FLOAT),
                     ((foodValue, value) -> foodValue.hungerRestoration = value),
                     (foodValue) -> foodValue.hungerRestoration,
-                    (foodValue, parent) -> foodValue.hungerRestoration = parent.hungerRestoration).add()
+                    (foodValue, parent) -> foodValue.hungerRestoration = parent.hungerRestoration)
+            .add()
             .appendInherited(new KeyedCodec<>("MaxHungerSaturation", Codec.FLOAT),
                     ((foodValue, value) -> foodValue.maxHungerSaturation = value),
                     (foodValue) -> foodValue.maxHungerSaturation,
-                    (foodValue, parent) -> foodValue.maxHungerSaturation = parent.maxHungerSaturation).add()
+                    (foodValue, parent) -> foodValue.maxHungerSaturation = parent.maxHungerSaturation)
+            .add()
             .build();
 
     private Float hungerRestoration;
     private Float maxHungerSaturation;
 
-
     public float getHungerRestoration(Item item) {
         return FeedInteraction.getHungerRestoration(item, this.hungerRestoration);
     }
+
     public float getMaxHungerSaturation(Item item) {
         return FeedInteraction.getMaxHungerSaturation(item, this.maxHungerSaturation);
     }
@@ -42,17 +45,20 @@ public class StartFeedingInteraction extends SimpleInstantInteraction {
     protected void firstRun(
             @NonNullDecl InteractionType interactionType,
             @NonNullDecl InteractionContext context,
-            @NonNullDecl CooldownHandler cooldownHandler
-    ) {
+            @NonNullDecl CooldownHandler cooldownHandler) {
         final Ref<EntityStore> ref = context.getEntity();
         final Store<EntityStore> store = ref.getStore();
         final Item item = context.getOriginalItemType();
         final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-        if (item == null || playerRef == null) return;
+        if (item == null || playerRef == null)
+            return;
 
         float hungerRestoration = getHungerRestoration(item);
         float maxHungerSaturation = getMaxHungerSaturation(item);
         HHMHud.updatePlayerHungerRestorationPreview(playerRef, hungerRestoration, maxHungerSaturation);
+
+        // Also update thirst preview
+        float thirstRestoration = FeedInteraction.getThirstRestoration(item);
+        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, thirstRestoration);
     }
 }
-

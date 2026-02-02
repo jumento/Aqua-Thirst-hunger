@@ -1,0 +1,1168 @@
+{
+    "Andiechef_Food_Item_Soya": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": -2.0
+    },
+    "Andiechef_Food_Rollo": {
+        "hungerRestoration": 13.0,
+        "maxHungerSaturation": 125.0,
+        "thirstRestoration": 0.0
+    },
+    "Andiechef_Food_Nigiri": {
+        "hungerRestoration": 25.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": 0.0
+    },
+    "Andiechef_Item_Soya_Fermentada": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 2.0
+    },
+    "Andiechef_Food_Onigiri": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 155.0,
+        "thirstRestoration": 0.0
+    },
+    "Andiechef_Ingredient_SalsaSoya": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 10.0
+    },
+    "Andiechef_Food_Sake": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 25.0
+    },
+    "Andiechef_Ingredient_Wasabi": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": -15.0
+    },
+    "Andiechef_YakimeshiBeef": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 10.0
+    },
+    "Andiechef_YakimeshiChicken": {
+        "hungerRestoration": 11.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 10.0
+    },
+    "Andiechef_YakimeshiFish": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 10.0
+    },
+    "Andiechef_YakimeshiPork": {
+        "hungerRestoration": 9.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 10.0
+    },
+    "Andiechef_Food_BubbleTea": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Bibimbap": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Cheese_Burger": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Cheese_Cake": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Chicken_Burger": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Chicken_Nuggets": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Chicken_Tenders": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Completo": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 180.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Dumpling_Gyoza": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Dumpling_Samosa": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Falafel_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "Food_Fish_Chip": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Fried_Egg": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Fried_Potato": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Gyudon": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Ham_Burger": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Hot_Dog": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Jam_Berry": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Juice_Apple": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_Azure": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_Berry": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_Carrot": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_Mango": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_Pinkberry": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_PoisonTree": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_SpiralTree": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Juice_WindWillow": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Kebab_Bread": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Mud_Cake": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Oat_Porridge": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Oat_Porridge_Berry": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Omelette": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Pasta": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Pasta_Bologonese": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Pasta_Carbonara": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Pasta_Mushroom": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Pasta_Tomato": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Pizza_Cheese": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Pizza_Kebab": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Pizza_Mushroom": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Pizza_Pepperoni": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Ramen_Pork": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 15.0
+    },
+    "Food_Red_Velvet_Cake": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Roasted_Cauliflower": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Sandwich_Fried_Egg": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Sandwich_Steak_Cheese": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Sauce_Dog": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Soup_Meat": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Soup_Mushroom": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Special_Cake": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Sushi_Egg": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Sushi_Roll": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Sushi_Salmon": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Sushi_Tuna": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Taco": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Food_Takoyaki": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 0.0
+    },
+    "Ingredient_Raw_Fries_Potato": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -4.0
+    },
+    "Ingredient_Raw_Pasta": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": 5.0
+    },
+    "NoCube_Drink_Aged_Wine": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Ale": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Apple_Cider": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Beer": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Chicha": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Apple": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Azure": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Lemon": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "NoCube_Drink_Fruit_Juice_Mandarin": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Multifruit": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Persimmon": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Fruit_Juice_Pomegranate": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Apricot": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Berries_Red": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Mango": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Orange": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Peach": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Pear": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Pinkberry": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Juice_Fruit_Plum": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Kvass": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Pale_Ale": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Peasant_Beer": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Rough_Wine": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Drink_Sake": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Stout": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "NoCube_Drink_Wine": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "NoCube_Food_Baguette": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Berry_Croissant": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Brioche": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Bun": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Carrot_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Coconut_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Corn_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Croissant": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Damper": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Eclair": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "NoCube_Food_Fruitloaf": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Herb_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Onion_Baguette": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Peasant_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Potato_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Pumpkin_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Rice_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Rustic_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Food_Wholegrain_Bread": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -2.0
+    },
+    "NoCube_Plant_Fruit_Apricot": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Lemon": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 5.0
+    },
+    "NoCube_Plant_Fruit_Mandarin": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Orange": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Peach": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Pear": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Persimmon": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Plum": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Plant_Fruit_Pomegranate": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 10.0
+    },
+    "NoCube_Template_Drink": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Avacado_Toast": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": 0.0
+    },
+    "Beef_Well_Don": {
+        "hungerRestoration": 25.0,
+        "maxHungerSaturation": 180.0,
+        "thirstRestoration": -5.0
+    },
+    "Berry_Glazed_Cod": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 2.0
+    },
+    "Birthday_Cake": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -4.0
+    },
+    "Bowl_Soup_Borsch": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Bowl_Soup_Cheese": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 15.0
+    },
+    "Bowl_Soup_Chicken": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Bowl_Soup_Fish": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Bowl_Soup_Mushroom": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Bowl_Soup_Pumpkin": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Brewery_Ale_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "Brewery_Beer_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "Brewery_Berry_Cider_Mug": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Brewery_Caramel_Beer_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": 12.0
+    },
+    "Brewery_Chili_Beer_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "Brewery_Cider_Mug": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Brewery_Kvas_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 18.0
+    },
+    "Brewery_Pumpkin_Beer_Mug": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "Brewery_Vodka_Mug": {
+        "hungerRestoration": 1.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 5.0
+    },
+    "Brewery_Wine_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 12.0
+    },
+    "Burger": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Burger_Fries": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 175.0,
+        "thirstRestoration": -8.0
+    },
+    "Charcuterie_Board": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": -5.0
+    },
+    "Cheese_Steak": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 175.0,
+        "thirstRestoration": -6.0
+    },
+    "Chicken_Buttered": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": -2.0
+    },
+    "Chicken_Dumplings": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": 2.0
+    },
+    "Chocolate_Swissroll": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": -5.0
+    },
+    "CoffeeCup": {
+        "hungerRestoration": 1.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 18.0
+    },
+    "Completo_Plate": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 180.0,
+        "thirstRestoration": -4.0
+    },
+    "Cup": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "EggToast": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": -1.0
+    },
+    "Egg_Benny_Toast": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -2.0
+    },
+    "Egg_Toast": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": -1.0
+    },
+    "Fajita_Skillet": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Fish_Tacos": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 2.0
+    },
+    "Fish_Tacos_Corn": {
+        "hungerRestoration": 16.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": 1.0
+    },
+    "FoodOrb": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Bread_Slices": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 125.0,
+        "thirstRestoration": -2.0
+    },
+    "Food_Butter": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": -1.0
+    },
+    "Food_Drink_Apple": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Drink_Berry": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Drink_Berry_Shake": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 15.0
+    },
+    "Food_Drink_Coconut_Milk": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 22.0
+    },
+    "Food_Drink_Mango": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 20.0
+    },
+    "Food_Drink_Milk": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 18.0
+    },
+    "Food_Mango_Pie": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Pie_Azure": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Pie_Berry": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Pie_Pink_Berry": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -3.0
+    },
+    "Food_Plate_Egg": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 125.0,
+        "thirstRestoration": 0.0
+    },
+    "Food_Plate_Sausages": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -2.0
+    },
+    "Food_Salad_Corn": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 5.0
+    },
+    "Food_Sandwich": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -2.0
+    },
+    "FriedEgg": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 0.0
+    },
+    "Fried_Chicken_Dinner": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 170.0,
+        "thirstRestoration": -5.0
+    },
+    "General_Whos_Chicken": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": -3.0
+    },
+    "GoldenApple": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 250.0,
+        "thirstRestoration": 10.0
+    },
+    "GoldenCarrot": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 200.0,
+        "thirstRestoration": 5.0
+    },
+    "Hamburger_Steak": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 170.0,
+        "thirstRestoration": -4.0
+    },
+    "HiddenIsme_Pico": {
+        "hungerRestoration": 5.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 8.0
+    },
+    "Hot_Dogs": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": -2.0
+    },
+    "IceCream": {
+        "hungerRestoration": 6.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 5.0
+    },
+    "Ingredient_Butter": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 105.0,
+        "thirstRestoration": -1.0
+    },
+    "Ingredient_Sugar": {
+        "hungerRestoration": 1.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": -2.0
+    },
+    "Junk_Cake": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 120.0,
+        "thirstRestoration": -4.0
+    },
+    "Kebab_Beef": {
+        "hungerRestoration": 16.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": -3.0
+    },
+    "Mac_Cheese": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 155.0,
+        "thirstRestoration": -2.0
+    },
+    "Mango_Juice": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 25.0
+    },
+    "Meat_Toast": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -3.0
+    },
+    "MilkBox": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 110.0,
+        "thirstRestoration": 12.0
+    },
+    "Minced_Meat_Cutlet": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -3.0
+    },
+    "Omelet": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 125.0,
+        "thirstRestoration": 0.0
+    },
+    "Omelette_Fried_Rice": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 155.0,
+        "thirstRestoration": 2.0
+    },
+    "Onigiri": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": 0.0
+    },
+    "Pizza": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -4.0
+    },
+    "Pizza_Flatbread": {
+        "hungerRestoration": 16.0,
+        "maxHungerSaturation": 155.0,
+        "thirstRestoration": -3.0
+    },
+    "Plate": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 0.0
+    },
+    "Pork_Cutlet_Sandwhich": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 160.0,
+        "thirstRestoration": -4.0
+    },
+    "Potato_Nachos": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -3.0
+    },
+    "Pudding": {
+        "hungerRestoration": 8.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 2.0
+    },
+    "Regular_Cheesecake": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": -3.0
+    },
+    "Sandwich": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": -2.0
+    },
+    "Saucy_Katsudon": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": 2.0
+    },
+    "Shepps_Pie": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 170.0,
+        "thirstRestoration": -2.0
+    },
+    "Spaghetti": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -3.0
+    },
+    "SpeedCup": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "SprinkleIceCream": {
+        "hungerRestoration": 7.0,
+        "maxHungerSaturation": 115.0,
+        "thirstRestoration": 4.0
+    },
+    "Steak_Dinner": {
+        "hungerRestoration": 25.0,
+        "maxHungerSaturation": 185.0,
+        "thirstRestoration": -6.0
+    },
+    "Steak_Tower": {
+        "hungerRestoration": 30.0,
+        "maxHungerSaturation": 200.0,
+        "thirstRestoration": -10.0
+    },
+    "Sushi": {
+        "hungerRestoration": 12.0,
+        "maxHungerSaturation": 130.0,
+        "thirstRestoration": 2.0
+    },
+    "Sushi_Platter": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 5.0
+    },
+    "Template_Drink_Mug": {
+        "hungerRestoration": 2.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 15.0
+    },
+    "Template_Food_Plate": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 0.0
+    },
+    "Template_Soup_Bowl": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 140.0,
+        "thirstRestoration": 18.0
+    },
+    "Three_Elote": {
+        "hungerRestoration": 18.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 5.0
+    },
+    "Toast": {
+        "hungerRestoration": 10.0,
+        "maxHungerSaturation": 125.0,
+        "thirstRestoration": -1.0
+    },
+    "Torta_Milanesa": {
+        "hungerRestoration": 20.0,
+        "maxHungerSaturation": 170.0,
+        "thirstRestoration": -5.0
+    },
+    "Tostada_Homemade": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 145.0,
+        "thirstRestoration": -1.0
+    },
+    "Tuna_Rice": {
+        "hungerRestoration": 14.0,
+        "maxHungerSaturation": 135.0,
+        "thirstRestoration": 2.0
+    },
+    "Twice_Baked_Potato": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": -2.0
+    },
+    "Veggie_Pizza_Flatbread": {
+        "hungerRestoration": 15.0,
+        "maxHungerSaturation": 150.0,
+        "thirstRestoration": 0.0
+    },
+    "Wings_And_Fries": {
+        "hungerRestoration": 22.0,
+        "maxHungerSaturation": 165.0,
+        "thirstRestoration": -7.0
+    },
+    "AquaThirstHunger_Canteen": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "AquaThirstHunger_Canteenpro_Empty": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "AquaThirstHunger_Canteen*": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "AquaThirstHunger_Canteenpro_Empty*": {
+        "hungerRestoration": 0.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 10.0
+    },
+    "__ConfigVersion": "1.5.0"
+}

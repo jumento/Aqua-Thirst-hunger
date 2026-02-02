@@ -13,20 +13,22 @@ import mx.jume.aquahunger.ui.HHMHud;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class FailedFeedingInteraction extends SimpleInstantInteraction {
-    public static final BuilderCodec<FailedFeedingInteraction> CODEC = BuilderCodec.builder(FailedFeedingInteraction.class, FailedFeedingInteraction::new, SimpleInstantInteraction.CODEC).build();
+    public static final BuilderCodec<FailedFeedingInteraction> CODEC = BuilderCodec
+            .builder(FailedFeedingInteraction.class, FailedFeedingInteraction::new, SimpleInstantInteraction.CODEC)
+            .build();
 
     @Override
     protected void firstRun(
             @NonNullDecl InteractionType interactionType,
             @NonNullDecl InteractionContext context,
-            @NonNullDecl CooldownHandler cooldownHandler
-    ) {
+            @NonNullDecl CooldownHandler cooldownHandler) {
         final Ref<EntityStore> ref = context.getEntity();
         final Store<EntityStore> store = ref.getStore();
         final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
-        if (playerRef == null) return;
+        if (playerRef == null)
+            return;
 
         HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
+        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, 0.0f);
     }
 }
-

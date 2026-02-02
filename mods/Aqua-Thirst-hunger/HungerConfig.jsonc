@@ -1,7 +1,7 @@
 {
     // The amount of hunger a player starts with when joining for the first time.
     // Range: 0.0 - 100.0
-    "InitialHungerLevel": 70.0,
+    "InitialHungerLevel": 200.0,
     // The amount of hunger a player has after respawning.
     // Range: 0.0 - 100.0
     "RespawnHungerLevel": 50.0,
