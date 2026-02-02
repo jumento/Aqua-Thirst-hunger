@@ -47,6 +47,7 @@ public class HHMThirstFoodValuesConfig {
         tierThirstRestoration.put(ItemTier.Mythic, 9.5f);
         tierThirstRestoration.put(ItemTier.Unique, 10.0f);
         itemThirstRestoration.put("AquaThirstHunger_Canteen", 10.0f);
+        itemThirstRestoration.put("*AquaThirstHunger_Canteenpro_Empty_State_Filled_Water", 10.0f);
     }
 
     public String getFruitResourceTypeId() {
@@ -67,5 +68,6 @@ public class HHMThirstFoodValuesConfig {
 
     public void ensureDefaults() {
         itemThirstRestoration.putIfAbsent("AquaThirstHunger_Canteen", 10.0f);
+        itemThirstRestoration.putIfAbsent("*AquaThirstHunger_Canteenpro_Empty_State_Filled_Water", 10.0f);
     }
 }

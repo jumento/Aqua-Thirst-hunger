@@ -1,2 +1,8 @@
 items.AquaThirstHunger_Canteen.name = Canteen
 items.AquaThirstHunger_Canteen.description = Not the best option, but the most accessible way to get water
+
+items.AquaThirstHunger_Canteen_Pro_Empty.name = Empty Pro Canteen
+items.AquaThirstHunger_Canteen_Pro_Empty.description = Find a water source to fill it
+
+items.AquaThirstHunger_Canteen_Pro.name = Pro Canteen (Filled)
+items.AquaThirstHunger_Canteen_Pro.description = Filled with water, ready to drink

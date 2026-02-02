@@ -58,5 +58,10 @@
         "hungerRestoration": 9.0,
         "maxHungerSaturation": 150.0,
         "thirstRestoration": 10.0
+    },
+    "Andiechef_Food_BubbleTea": {
+        "hungerRestoration": 3.0,
+        "maxHungerSaturation": 100.0,
+        "thirstRestoration": 18.0
     }
 }

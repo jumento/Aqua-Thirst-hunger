@@ -11,6 +11,7 @@
         "Unique": 10.0
     },
     "ItemThirstRestoration": {
-        "AquaThirstHunger_Canteen": 10.0
+        "AquaThirstHunger_Canteen": 10.0,
+        "*AquaThirstHunger_Canteenpro_Empty_State_Filled_Water": 10.0
     }
 }

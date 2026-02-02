@@ -4,10 +4,10 @@
     "MaxThirst": 100.0,
     // The base amount of thirst lost per tick (or update interval).
     // A higher value means thirst drains faster while standing/walking.
-    "BaseThirstDepletion": 0.05,
+    "BaseThirstDepletion": 0.01,
     // Additional thirst depletion multiplier applied when the player is sprinting.
     // Added to BaseThirstDepletion.
-    "SprintDepletionModifier": 0.1,
+    "SprintDepletionModifier": 0.2,
     // The amount of damage taken when thirst reaches 0.
     // Units: Health points.
     "DehydrationDamage": 2.0,

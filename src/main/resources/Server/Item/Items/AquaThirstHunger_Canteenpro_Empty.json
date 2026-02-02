@@ -1,0 +1,163 @@
+{
+  "Parent": "Potion_Empty",
+  "TranslationProperties": {
+    "Name": "server.items.AquaThirstHunger_Canteen_Pro_Empty.name",
+    "Description": "server.items.AquaThirstHunger_Canteen_Pro_Empty.description"
+  },
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/AquaThirstHunger_Canteenpro_Empty.blockymodel",
+    "CustomModelScale": 0.5,
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/AquaThirstHunger_Canteenpro_Empty.png",
+        "Weight": 1
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteenpro_Empty.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      342,
+      203,
+      354
+    ],
+    "Translation": [
+      4,
+      -11
+    ]
+  },
+  "HeldScale": 1.0,
+  "MaxStack": 10,
+  "Categories": [
+    "Items.Survival"
+  ],
+  "Recipe": {
+    "TimeSeconds": 2.0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 3
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Container_Bucket"
+      },
+      {
+        "ItemId": "Ingredient_Charcoal",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Categories": [
+          "Prepared"
+        ],
+        "Id": "Cookingbench"
+      }
+    ],
+    "OutputQuantity": 1
+  },
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "RefillContainer",
+          "Effects": {
+            "ClearSoundEventOnFinish": true,
+            "LocalSoundEventId": "SFX_Water_MoveIn"
+          },
+          "States": {
+            "Filled_Water": {
+              "AllowedFluids": [
+                "Water_Source",
+                "Water"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "State": {
+    "Filled_Water": {
+      "Variant": true,
+      "TranslationProperties": {
+        "Name": "server.items.AquaThirstHunger_Canteen_Pro.name",
+        "Description": "server.items.AquaThirstHunger_Canteen_Pro.description"
+      },
+      "BlockType": {
+        "Material": "Empty",
+        "DrawType": "Model",
+        "CustomModel": "Items/AquaThirstHunger_Canteenpro_Empty.blockymodel",
+        "CustomModelTexture": [
+          {
+            "Texture": "Items/AquaThirstHunger_Canteenpro.png",
+            "Weight": 1
+          }
+        ]
+      },
+      "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteenpro.png",
+      "Consumable": true,
+      "MaxDurability": 5,
+      "MaxStack": 3,
+      "Scale": 2,
+      "PlayerAnimationsId": {
+        "Parent": "Item",
+        "Animations": {
+          "Consume": {
+            "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink_FPS.blockyanim",
+            "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink.blockyanim",
+            "Speed": 1,
+            "Looping": true
+          }
+        }
+      },
+      "Interactions": {
+        "Primary": "Block_Primary",
+        "Secondary": {
+          "Interactions": [
+            {
+              "Type": "Charging",
+              "FailOnDamage": true,
+              "Effects": {
+                "ItemAnimationId": "Consume",
+                "ClearAnimationOnFinish": true,
+                "LocalSoundEventId": "SFX_Health_Potion_Low_Drink",
+                "ClearSoundEventOnFinish": true
+              },
+              "HorizontalSpeedMultiplier": 0.5,
+              "Next": {
+                "1.5": {
+                  "Type": "Serial",
+                  "Interactions": [
+                    {
+                      "Type": "Hungry_Feed"
+                    },
+                    {
+                      "Type": "ModifyInventory",
+                      "AdjustHeldItemDurability": -1,
+                      "BrokenItem": "AquaThirstHunger_Canteenpro_Empty"
+                    }
+                  ]
+                }
+              },
+              "Failed": {
+                "Type": "Simple"
+              }
+            }
+          ]
+        }
+      },
+      "Quality": "Rare"
+    }
+  },
+  "Quality": "Uncommon"
+}

@@ -1,2 +1,7 @@
 items.AquaThirstHunger_Canteen.name = Cantimplora
 items.AquaThirstHunger_Canteen.description = No es la mejor forma, pero la mas accesible para conseguir agua
+
+items.AquaThirstHunger_Canteen_Pro_Empty.name = Cantimplora Pro vacia
+items.AquaThirstHunger_Canteen_Pro_Empty.description = Busca una fuente de agua para llenarla
+items.AquaThirstHunger_Canteen_Pro.name = Cantimplora Pro con agua
+items.AquaThirstHunger_Canteen_Pro.description = Llena de agua, lista para tomarse
