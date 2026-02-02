@@ -1,0 +1,113 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Regular_Cheesecake.name",
+    "Description": "server.items.Regular_Cheesecake.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Regular_Cheesecake.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Regular_Cheesecake.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Regular_Cheesecake_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Regular_Cheesecake_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E7CF8E",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "FruitVeggie_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Regular_Cheesecake.blockymodel",
+  "Texture": "Items/Consumables/Food/Regular_Cheesecake_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      29
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 5,
+    "Output": [
+      {
+        "ItemId": "Regular_Cheesecake",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Ingredient_Dough"
+      },
+      {
+        "Quantity": 4,
+        "ItemId": "Food_Cheese"
+      },
+      {
+        "ItemId": "Ingredient_Spices"
+      },
+      {
+        "ResourceTypeId": "Fruits"
+      },
+      {
+        "ResourceTypeId": "Fuel"
+      }
+    ]
+  }
+}

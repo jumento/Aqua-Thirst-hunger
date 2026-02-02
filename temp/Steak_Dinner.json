@@ -1,0 +1,112 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Steak_Dinner.name",
+    "Description": "server.items.Steak_Dinner.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Unique",
+  "Icon": "Icons/ItemsGenerated/Steak_Dinner.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Steak_Dinner.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Steak_Dinner_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Steak_Dinner_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#926349",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T7"
+        },
+        "HealthRegen_TierCheck_T7",
+        "Meat_TierCheck_T7",
+        "FruitVeggie_TierCheck_T7"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 8,
+    "Output": [
+      {
+        "ItemId": "Steak_Dinner"
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Beef_Raw",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Three_Elote",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Plant_Crop_Lettuce_Item",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Twice_Baked_Potato"
+      }
+    ]
+  },
+  "Model": "Items/Consumables/Food/Steak_Dinner.blockymodel",
+  "Texture": "Items/Consumables/Food/Steak_Dinner_Texture.png"
+}

@@ -1,0 +1,109 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Wings_And_Fries.name",
+    "Description": "server.items.Wings_And_Fries.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Wings_And_Fries.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Wings_And_Fries.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Wings_And_Fries_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#926349",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Wings_And_Fries_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#926349",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Wings_And_Fries.blockymodel",
+  "Texture": "Items/Consumables/Food/Wings_And_Fries_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      323,
+      200,
+      345
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 4,
+    "Output": [
+      {
+        "ItemId": "Wings_And_Fries",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Chicken_Raw",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item",
+        "Quantity": 4
+      }
+    ]
+  }
+}

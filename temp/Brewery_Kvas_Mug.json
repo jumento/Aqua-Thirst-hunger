@@ -1,0 +1,78 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Brewery_Kvas_Mug.name",
+    "Description": "server.items.Brewery_Kvas_Mug.description"
+  },
+  "Parent": "Template_Drink_Mug",
+  "Icon": "Icons/ItemsGenerated/Brewery_Kvas_Mug.png",
+  "Categories": [
+    "Items.Foods"
+  ],
+  "Quality": "Uncommon",
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ItemId": "*Deco_Mug_State_Filled_Water",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Food_Bread",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Sugar",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Yeasts",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Bench_Brewing_Keg",
+        "Categories": [
+          "Bench_Brewing_Keg_Brewing"
+        ]
+      }
+    ]
+  },
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Drink"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Health_Restore_Small"
+        }
+      ]
+    }
+  },
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Drink/Brewery_Drink_Mug.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Drink/Brewery_Kvas_Mug.png",
+        "Weight": 1
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      22.5,
+      278,
+      328
+    ],
+    "Translation": [
+      0,
+      -9
+    ]
+  }
+}

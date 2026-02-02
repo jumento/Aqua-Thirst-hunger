@@ -1,0 +1,97 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Completo_Plate.name",
+    "Description": "server.items.Completo_Plate.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Completo_Plate.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Completos_Tray.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Completos_Tray.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Completos_Tray.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Completos_Tray.blockymodel",
+  "Texture": "Items/Consumables/Food/Completos_Tray.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      150,
+      162,
+      179
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2,
+    "Output": [
+      {
+        "ItemId": "Completo_Plate",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Vegetables",
+        "Quantity": 5
+      }
+    ],
+    "OutputQuantity": 2
+  }
+}

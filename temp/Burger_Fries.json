@@ -1,0 +1,108 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Burger_Fries.name",
+    "Description": "server.items.Burger_Fries.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Epic",
+  "Icon": "Icons/ItemsGenerated/Burger_Fries.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Burger_Fries.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Burger_Fries_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#E5A744",
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E5A744",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T4"
+        },
+        "HealthRegen_TierCheck_T4",
+        "Meat_TierCheck_T4"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      321,
+      211,
+      345
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 4,
+    "Output": [
+      {
+        "ItemId": "Burger_Fries"
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Beef_Raw",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Food_Cheese"
+      },
+      {
+        "ResourceTypeId": "Vegetables"
+      },
+      {
+        "Quantity": 2,
+        "ItemId": "Food_Bread"
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item"
+      }
+    ]
+  },
+  "Model": "Items/Consumables/Food/Burger_Fries.blockymodel",
+  "Texture": "Items/Consumables/Food/Burger_Fries_Texture.png"
+}

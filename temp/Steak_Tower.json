@@ -1,0 +1,107 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Steak_Tower.name",
+    "Description": "server.items.Steak_Tower.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Steak_Tower.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Steak_Tower.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Steak_Tower_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Steak_Tower_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#926349",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T2"
+        },
+        "HealthRegen_TierCheck_T2",
+        "Meat_TierCheck_T2"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Steak_Tower.blockymodel",
+  "Texture": "Items/Consumables/Food/Steak_Tower_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 8,
+    "Output": [
+      {
+        "ItemId": "Steak_Tower",
+        "ResourceTypeId": ""
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 6,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Ingredient_Spices"
+      },
+      {
+        "ItemId": "Plant_Crop_Lettuce_Item"
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Torta_Milanesa.name",
+    "Description": "server.items.Torta_Milanesa.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Torta_Milanesa.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Torta_Milanese.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Torta_Milanese.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Torta_Milanese.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      323,
+      200,
+      345
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2,
+    "Output": [
+      {
+        "ItemId": "Torta_Milanesa",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Food_Bread",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Vegetables",
+        "Quantity": 5
+      }
+    ],
+    "OutputQuantity": 2
+  }
+}

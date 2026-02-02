@@ -1,0 +1,72 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Ingredient_Butter.name"
+  },
+  "Parent": "Template_Food",
+  "Icon": "Icons/ItemsGenerated/Ingredient_Butter.png",
+  "ResourceTypes": [
+    {
+      "Id": "Foods"
+    }
+  ],
+  "Quality": "Common",
+  "Consumable": false,
+  "Interactions": {},
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Ingredient/Butter.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Ingredient/Butter_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Food_Medium",
+    "ParticleColor": "#b7c0d3",
+    "CustomModelScale": 0.6
+  },
+  "Scale": 1,
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      18,
+      40,
+      22.5
+    ],
+    "Translation": [
+      -1,
+      -5
+    ]
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "Quantity": 1,
+        "ResourceTypeId": "Milk_Bucket"
+      }
+    ],
+    "TimeSeconds": 5,
+    "Output": [
+      {
+        "ItemId": "Ingredient_Butter",
+        "Quantity": 10
+      },
+      {
+        "ItemId": "Container_Bucket"
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Ingredients"
+        ]
+      }
+    ],
+    "OutputQuantity": 10
+  },
+  "MaxStack": 32,
+  "DropOnDeath": true
+}

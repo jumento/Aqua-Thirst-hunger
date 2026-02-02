@@ -1,0 +1,112 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Fried_Chicken_Dinner.name",
+    "Description": "server.items.Fried_Chicken_Dinner.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Fried_Chicken_Dinner.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Chicken_Dinner.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Chicken_Dinner_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Chicken_Dinner_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#926349",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Chicken_Dinner.blockymodel",
+  "Texture": "Items/Consumables/Food/Chicken_Dinner_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      323,
+      200,
+      345
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 4,
+    "Output": [
+      {
+        "ItemId": "Fried_Chicken_Dinner",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Chicken_Raw",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item",
+        "Quantity": 2
+      },
+      {
+        "ResourceTypeId": "Vegetables"
+      }
+    ]
+  }
+}

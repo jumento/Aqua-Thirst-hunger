@@ -1,0 +1,87 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Food_Pie_Pink_Berry.name",
+    "Description": "server.items.Food_Pie_Pink_Berry.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Legendary",
+  "Icon": "Icons/ItemsGenerated/Food_Pie_Pink_Berry.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Pie.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Resources/Food/pink_berry.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#ca923f"
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Dough",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Plant_Fruit_Pinkberry",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Fuel",
+        "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 5,
+    "KnowledgeRequired": false
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "FruitVeggie_TierCheck_T3",
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Potion_Health_Instant_Greater"
+        }
+      ]
+    }
+  },
+  "ItemLevel": 13,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Texture": "Items/Resources/Food/pink_berry.png",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      321,
+      164,
+      0
+    ],
+    "Translation": [
+      -1,
+      -2
+    ]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Kebab_Beef.name",
+    "Description": "server.items.Kebab_Beef.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Kebab_Beef.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Kebab_Beef.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Kebab_Beef.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Kebab_Beef.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Kebab_Beef.blockymodel",
+  "Texture": "Items/Consumables/Food/Kebab_Beef.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      322,
+      198,
+      347
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2,
+    "Output": [
+      {
+        "ItemId": "Kebab_Beef",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Bread",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Food_Beef_Raw",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 3
+      },
+      {
+        "ResourceTypeId": "Vegetables",
+        "Quantity": 4
+      }
+    ],
+    "OutputQuantity": 2
+  }
+}

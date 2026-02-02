@@ -1,0 +1,119 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Three_Elote.name",
+    "Description": "server.items.Three_Elote.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Legendary",
+  "Icon": "Icons/ItemsGenerated/Three_Elote.png",
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "Consume": {
+        "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Eat_Side/Eat_Side_FPS.blockyanim",
+        "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Eat_Side/Eat_Side.blockyanim",
+        "Speed": 1,
+        "Looping": true
+      }
+    }
+  },
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Three_Elote.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Three_Elote_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#ffe019"
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "Quantity": 8,
+        "ItemId": "Plant_Crop_Corn_Item"
+      },
+      {
+        "ItemId": "Food_Cheese"
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Chilli_Item",
+        "Quantity": 2
+      },
+      {
+        "ResourceTypeId": "Fuel"
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 4,
+    "Output": [
+      {
+        "ItemId": "Three_Elote",
+        "Quantity": 2
+      }
+    ]
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#FFDF49",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T5"
+        },
+        "HealthRegen_TierCheck_T5",
+        "FruitVeggie_TierCheck_T5"
+      ]
+    }
+  },
+  "Scale": 1.5,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Three_Elote.blockymodel",
+  "Texture": "Items/Consumables/Food/Three_Elote_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  }
+}

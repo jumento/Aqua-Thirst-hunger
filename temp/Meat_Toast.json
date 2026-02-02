@@ -1,0 +1,111 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Meat_Toast.name",
+    "Description": "server.items.Meat_Toast.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Epic",
+  "Icon": "Icons/ItemsGenerated/Meat_Toast.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Meat_Toast.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Meat_Toast.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Meat_Toast.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#926349",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T4"
+        },
+        "HealthRegen_TierCheck_T4",
+        "Meat_TierCheck_T4"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 5,
+    "Output": [
+      {
+        "ItemId": "Meat_Toast",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 2,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Food_Bread"
+      },
+      {
+        "ItemId": "Food_Cheese"
+      },
+      {
+        "ItemId": "Ingredient_Butter"
+      },
+      {
+        "ResourceTypeId": "Fuel"
+      }
+    ]
+  }
+}

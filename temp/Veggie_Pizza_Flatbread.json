@@ -1,0 +1,109 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Veggie_Pizza_Flatbread.name",
+    "Description": "server.items.Veggie_Pizza_Flatbread.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Epic",
+  "Icon": "Icons/ItemsGenerated/Veggie_Pizza_Flatbread.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Veggie_Pizza_Flatbread.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Veggie_Pizza_Flatbread_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#7EBB4F",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Veggie_Pizza_Flatbread_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#7EBB4F",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T4"
+        },
+        "HealthRegen_TierCheck_T4",
+        "FruitVeggie_TierCheck_T4"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Veggie_Pizza_Flatbread.blockymodel",
+  "Texture": "Items/Consumables/Food/Veggie_Pizza_Flatbread_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 5,
+    "Output": [
+      {
+        "ItemId": "Veggie_Pizza_Flatbread"
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Ingredient_Dough"
+      },
+      {
+        "ResourceTypeId": "Vegetables",
+        "Quantity": 3
+      },
+      {
+        "ItemId": "Ingredient_Spices"
+      },
+      {
+        "ResourceTypeId": "Fuel"
+      }
+    ]
+  }
+}

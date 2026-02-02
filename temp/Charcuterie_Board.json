@@ -1,0 +1,114 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Charcuterie_Board.name",
+    "Description": "server.items.Charcuterie_Board.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Charcuterie_Board.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Charcuterie_Board.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Charcuterie_Board_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#FFDF49",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Charcuterie_Board_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#FFDF49",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Charcuterie_Board.blockymodel",
+  "Texture": "Items/Consumables/Food/Charcuterie_Board_Texture.png",
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      21,
+      322,
+      337
+    ],
+    "Translation": [
+      0,
+      -5
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 3,
+    "Output": [
+      {
+        "ItemId": "Charcuterie_Board",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Fruits",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Food_Cheese",
+        "Quantity": 3
+      }
+    ],
+    "OutputQuantity": 2
+  }
+}

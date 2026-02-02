@@ -1,0 +1,113 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Pork_Cutlet_Sandwhich.name",
+    "Description": "server.items.Pork_Cutlet_Sandwhich.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Legendary",
+  "Icon": "Icons/ItemsGenerated/Pork_Cutlet_Sandwhich.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Pork_Cutlet_Sandwhich.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Pork_Cutlet_Sandwhich_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Pork_Cutlet_Sandwhich_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E5A744",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T5"
+        },
+        "HealthRegen_TierCheck_T5",
+        "Meat_TierCheck_T5"
+      ]
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 4,
+    "Input": [
+      {
+        "ItemId": "Plant_Crop_Lettuce_Item"
+      },
+      {
+        "Quantity": 4,
+        "ItemId": "Food_Pork_Raw"
+      },
+      {
+        "ItemId": "Food_Bread",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Food_Egg",
+        "Quantity": 1
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Pork_Cutlet_Sandwhich"
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "KnowledgeRequired": false
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Pork_Cutlet_Sandwhich.blockymodel",
+  "Texture": "Items/Consumables/Food/Pork_Cutlet_Sandwhich_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  }
+}

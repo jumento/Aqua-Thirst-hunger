@@ -1,0 +1,65 @@
+{
+  "TranslationProperties": {
+    "Name": "Sprinkle Ice Cream",
+    "Description": "server.sprinkleicecream.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/SprinkleIceCream.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Opacity": "Semitransparent",
+    "CustomModel": "Items/IceCream.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/sprinkle_icecream_texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Food_Medium",
+    "RandomRotation": "YawStep1",
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "CustomModelScale": 0.9,
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#e4cb69"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Health_Restore_Small"
+        }
+      ]
+    }
+  },
+  "Scale": 1.5,
+  "ItemLevel": 7,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Model": "Items/IceCream.blockymodel",
+  "Texture": "Items/sprinkle_icecream_texture.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      169,
+      129,
+      182
+    ],
+    "Translation": [
+      2,
+      -12
+    ]
+  },
+  "Categories": [
+    "FoodGaloreCategory.Foods",
+    ""
+  ]
+}

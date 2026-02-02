@@ -1,0 +1,96 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Hot_Dogs.name",
+    "Description": "server.items.Hot_Dogs.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Hot_Dogs.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Hot_Dogs.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Hot_Dogs_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Hot_Dogs_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3",
+        "Meat_TierCheck_T3"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Hot_Dogs.blockymodel",
+  "Texture": "Items/Consumables/Food/Hot_Dogs_Texture.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      323,
+      200,
+      345
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2,
+    "Output": [
+      {
+        "ItemId": "Hot_Dogs",
+        "Quantity": 2
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Vegetables"
+      }
+    ],
+    "OutputQuantity": 2
+  }
+}

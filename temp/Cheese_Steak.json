@@ -1,0 +1,123 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Cheese_Steak.name",
+    "Description": "server.items.Cheese_Steak.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Epic",
+  "Icon": "Icons/ItemsGenerated/Cheese_Steak.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Cheese_Steak.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Cheese_Steak_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#E5A744",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Cheese_Steak_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E5A744",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T4"
+        },
+        "HealthRegen_TierCheck_T4",
+        "Meat_TierCheck_T4"
+      ]
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 4,
+    "Input": [
+      {
+        "Quantity": 3,
+        "ResourceTypeId": "Meats"
+      },
+      {
+        "ItemId": "Plant_Crop_Potato_Item",
+        "Quantity": 3
+      },
+      {
+        "ItemId": "Plant_Crop_Chilli_Item",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Plant_Crop_Onion_Item",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Food_Cheese"
+      },
+      {
+        "ItemId": "Food_Bread",
+        "Quantity": 4
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Cheese_Steak",
+        "Quantity": 2
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "KnowledgeRequired": false,
+    "OutputQuantity": 2
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Cheese_Steak.blockymodel",
+  "Texture": "Items/Consumables/Food/Cheese_Steak_Texture.png",
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  }
+}

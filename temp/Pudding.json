@@ -1,0 +1,95 @@
+{
+  "TranslationProperties": {
+    "Name": "Pudding",
+    "Description": "server.pudding.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Pudding.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Opacity": "Semitransparent",
+    "CustomModel": "Items/Pudding.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/pudding_texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Food_Small",
+    "RandomRotation": "YawStep1",
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "CustomModelScale": 0.9,
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#e37801"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Health_Regen_Small"
+        }
+      ]
+    }
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Plate",
+        "Quantity": 1
+      },
+      {
+        "Quantity": 1,
+        "ItemId": "Food_Egg"
+      },
+      {
+        "ItemId": "Ingredient_Flour"
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Pudding",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 2
+  },
+  "Scale": 2,
+  "ItemLevel": 7,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Model": "Items/Pudding.blockymodel",
+  "Texture": "Items/pudding_texture.png",
+  "IconProperties": {
+    "Scale": 1.1,
+    "Rotation": [
+      335,
+      128,
+      27
+    ],
+    "Translation": [
+      1,
+      -1
+    ]
+  },
+  "Categories": [
+    "FoodGaloreCategory.Foods"
+  ]
+}

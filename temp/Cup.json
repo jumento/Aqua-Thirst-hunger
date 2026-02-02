@@ -1,0 +1,82 @@
+{
+  "TranslationProperties": {
+    "Name": "Cup"
+  },
+  "MaxStack": 100,
+  "Icon": "Icons/ItemsGenerated/Cup.png",
+  "Categories": [
+    "FoodGaloreCategory.Foods"
+  ],
+  "PlayerAnimationsId": "Block",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Group": "",
+    "Flags": {},
+    "BlockParticleSetId": "Glass",
+    "Textures": [
+      {}
+    ],
+    "ParticleColor": "#f3f3e2",
+    "BlockSoundSetId": "Glass",
+    "Opacity": "Semitransparent",
+    "CustomModel": "Items/Cup.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/cup_texture.png"
+      }
+    ],
+    "RandomRotation": "YawStep1",
+    "HitboxType": "Food_Small",
+    "Gathering": {
+      "Soft": {},
+      "Harvest": {}
+    }
+  },
+  "Model": "Items/Cup.blockymodel",
+  "Texture": "Items/cup_texture.png",
+  "IconProperties": {
+    "Scale": 1.2,
+    "Rotation": [
+      330,
+      150,
+      0
+    ],
+    "Translation": [
+      1,
+      -5
+    ]
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Crystal_Blue",
+        "Quantity": 2
+      },
+      {
+        "ResourceTypeId": "",
+        "Quantity": 1,
+        "ItemId": "Soil_Sand"
+      },
+      {
+        "ResourceTypeId": "Fuel",
+        "Quantity": 3
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Cup"
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Workbench",
+        "Categories": [
+          "Workbench_Survival"
+        ]
+      }
+    ],
+    "TimeSeconds": 2
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Food_Drink_Coconut_Milk.name",
+    "Description": "server.items.Food_Drink_Coconut_Milk.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Food_Drink_Coconut_Milk.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Miscellaneous/Tankard.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Resources/Food/Tankard_Texture_Coconut.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T2"
+        },
+        "HealthRegen_TierCheck_T2",
+        "FruitVeggie_TierCheck_T2",
+        "FruitVeggie_TierCheck_T3"
+      ]
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Deco_Tankard"
+      },
+      {
+        "ItemId": "Plant_Fruit_Coconut",
+        "Quantity": 1
+      },
+      {
+        "Quantity": 1,
+        "ResourceTypeId": "Milk_Bucket"
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Food_Drink_Coconut_Milk",
+        "Quantity": 5
+      }
+    ]
+  },
+  "ItemLevel": 6,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Texture": "Items/Resources/Food/Tankard_Texture_Coconut.png",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  },
+  "ItemEntity": {
+    "ParticleColor": "#9df936"
+  }
+}

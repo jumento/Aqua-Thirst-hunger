@@ -1,0 +1,112 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Mango_Juice.name",
+    "Description": "server.items.Mango_Juice.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/Mango_Juice.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Mango_Juice.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Pie_Textures/Mango_Juice_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Pie_Textures/Mango_Juice_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E5A744",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T2"
+        },
+        "HealthRegen_TierCheck_T2_Uncommon",
+        "Meat_TierCheck_T2_Uncommon"
+      ]
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 1,
+    "Input": [
+      {
+        "Quantity": 4,
+        "ResourceTypeId": "Fruits"
+      },
+      {
+        "Quantity": 3,
+        "ItemId": "Ingredient_Sugar"
+      },
+      {
+        "ItemId": "*Container_Bucket_State_Filled_Water",
+        "Quantity": 1
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "Mango_Juice",
+        "Quantity": 4
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "KnowledgeRequired": false,
+    "OutputQuantity": 4
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Mango_Juice.blockymodel",
+  "Texture": "Items/Consumables/Food/Pie_Textures/Mango_Juice_Texture.png",
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      0,
+      -6
+    ]
+  }
+}

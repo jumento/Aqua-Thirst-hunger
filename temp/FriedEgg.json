@@ -1,0 +1,92 @@
+{
+  "TranslationProperties": {
+    "Name": "Fried Egg",
+    "Description": "server.friedegg.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/FriedEgg.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Opacity": "Semitransparent",
+    "CustomModel": "Items/FriedEgg.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/friedegg_texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Food_Small",
+    "RandomRotation": "YawStep1",
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "CustomModelScale": 0.7,
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#e4cb69"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T1"
+        }
+      ]
+    }
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Food_Egg",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Fuel",
+        "Quantity": 3
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "FriedEgg",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 3
+  },
+  "Scale": 2,
+  "ItemLevel": 7,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Model": "Items/FriedEgg.blockymodel",
+  "Texture": "Items/friedegg_texture.png",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      297,
+      165,
+      15
+    ],
+    "Translation": [
+      3,
+      -2
+    ]
+  },
+  "Categories": [
+    "FoodGaloreCategory.Foods"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Food_Butter.name",
+    "Description": "server.items.Food_Butter.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T1"
+  },
+  "Quality": "Common",
+  "Icon": "Icons/ItemsGenerated/Food_Butter.png",
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "Consume": {
+        "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Eat_Side/Eat_Side_FPS.blockyanim",
+        "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Eat_Side/Eat_Side.blockyanim",
+        "Speed": 1,
+        "Looping": true
+      }
+    }
+  },
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Models/Butter.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Resources/Food/Butter.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#ffe019"
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "Quantity": 1,
+        "ItemId": "Ingredient_Salt"
+      },
+      {
+        "ResourceTypeId": "Milk_Bucket"
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T1"
+        },
+        "HealthRegen_TierCheck_T1",
+        "FruitVeggie_TierCheck_T1"
+      ]
+    }
+  },
+  "Scale": 1.5,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Texture": "Items/Resources/Food/Butter.png",
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      42,
+      6,
+      15
+    ],
+    "Translation": [
+      -1,
+      -3
+    ]
+  }
+}

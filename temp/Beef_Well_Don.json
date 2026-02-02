@@ -1,0 +1,111 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Beef_Well_Don.name",
+    "Description": "server.items.Beef_Well_Don.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Legendary",
+  "Icon": "Icons/ItemsGenerated/Beef_Well_Don.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Beef_Well_Don.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Beef_Well_Don_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#E5A744",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Beef_Well_Don_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E5A744",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T5"
+        },
+        "HealthRegen_TierCheck_T5",
+        "Meat_TierCheck_T5"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Beef_Well_Don.blockymodel",
+  "Texture": "Items/Consumables/Food/Beef_Well_Don_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      32,
+      51,
+      28
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 8,
+    "Output": [
+      {
+        "ItemId": "Beef_Well_Don"
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Beef_Raw"
+      },
+      {
+        "ItemId": "Food_Pork_Raw"
+      },
+      {
+        "ItemId": "Ingredient_Dough"
+      },
+      {
+        "ItemId": "Ingredient_Spices"
+      },
+      {
+        "ResourceTypeId": "Fuel"
+      }
+    ]
+  }
+}

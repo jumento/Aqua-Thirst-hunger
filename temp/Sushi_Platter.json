@@ -1,0 +1,111 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Sushi_Platter.name",
+    "Description": "server.items.Sushi_Platter.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Rare",
+  "Icon": "Icons/ItemsGenerated/Sushi_Platter.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Sushi_Platter.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Sushi_Platter_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#a0784d",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Sushi_Platter_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#E7CF8E",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T3"
+        },
+        "HealthRegen_TierCheck_T3_Rare",
+        "Meat_TierCheck_T3_Rare"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      321,
+      210,
+      339
+    ],
+    "Translation": [
+      -1,
+      -5
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 2,
+    "Output": [
+      {
+        "ItemId": "Sushi_Platter",
+        "Quantity": 4
+      }
+    ],
+    "Input": [
+      {
+        "Quantity": 5,
+        "ItemId": "Food_Fish_Raw"
+      },
+      {
+        "Quantity": 3,
+        "ItemId": "Ingredient_Spices"
+      },
+      {
+        "ResourceTypeId": "Vegetables",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Plant_Crop_Rice_Item",
+        "Quantity": 4
+      }
+    ]
+  }
+}

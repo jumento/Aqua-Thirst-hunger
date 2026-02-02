@@ -1,0 +1,92 @@
+{
+  "TranslationProperties": {
+    "Name": "Egg Toast",
+    "Description": "server.eggtoast.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T2"
+  },
+  "Quality": "Uncommon",
+  "Icon": "Icons/ItemsGenerated/EggToast.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "Opacity": "Semitransparent",
+    "CustomModel": "Items/EggToast.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/egg_toast_texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Food_Small",
+    "RandomRotation": "YawStep1",
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "CustomModelScale": 0.7,
+    "BlockParticleSetId": "Dust",
+    "ParticleColor": "#e4cb69"
+  },
+  "InteractionVars": {
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Health_Regen_Small"
+        }
+      ]
+    }
+  },
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Toast",
+        "Quantity": 1
+      },
+      {
+        "Quantity": 1,
+        "ItemId": "FriedEgg"
+      }
+    ],
+    "Output": [
+      {
+        "ItemId": "EggToast",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Cookingbench",
+        "Categories": [
+          "Baked"
+        ]
+      }
+    ],
+    "TimeSeconds": 3
+  },
+  "Scale": 2,
+  "ItemLevel": 7,
+  "MaxStack": 25,
+  "DropOnDeath": true,
+  "Model": "Items/EggToast.blockymodel",
+  "Texture": "Items/egg_toast_texture.png",
+  "IconProperties": {
+    "Scale": 1.1,
+    "Rotation": [
+      287,
+      117,
+      35
+    ],
+    "Translation": [
+      1,
+      -1
+    ]
+  },
+  "Categories": [
+    "FoodGaloreCategory.Foods"
+  ]
+}

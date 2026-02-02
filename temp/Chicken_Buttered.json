@@ -1,0 +1,119 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Chicken_Buttered.name",
+    "Description": "server.items.Chicken_Buttered.description"
+  },
+  "Parent": "Template_Food",
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Food_T3"
+  },
+  "Quality": "Mythic",
+  "Icon": "Icons/ItemsGenerated/Chicken_Buttered.png",
+  "BlockType": {
+    "Material": "Empty",
+    "DrawType": "Model",
+    "CustomModel": "Items/Consumables/Food/Chicken_Buttered.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Food/Chicken_Buttered_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#FFDF49",
+    "Textures": [
+      {
+        "All": "Items/Consumables/Food/Chicken_Buttered_Texture.png"
+      }
+    ],
+    "PlacementSettings": {
+      "AllowRotationKey": true
+    }
+  },
+  "InteractionVars": {
+    "Consume_Charge": {
+      "Interactions": [
+        {
+          "Parent": "Consume_Charge_Food_T1_Inner",
+          "Effects": {
+            "Particles": [
+              {
+                "SystemId": "Food_Eat",
+                "Color": "#FFDF49",
+                "TargetNodeName": "Mouth",
+                "TargetEntityPart": "Entity"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "ApplyEffect",
+          "EffectId": "Food_Instant_Heal_T6"
+        },
+        "HealthRegen_TierCheck_T6",
+        "Meat_TierCheck_T6"
+      ]
+    }
+  },
+  "ItemLevel": 9,
+  "MaxStack": 32,
+  "DropOnDeath": true,
+  "Model": "Items/Consumables/Food/Chicken_Buttered.blockymodel",
+  "Texture": "Items/Consumables/Food/Chicken_Buttered_Texture.png",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      323,
+      200,
+      345
+    ],
+    "Translation": [
+      -1,
+      -6
+    ]
+  },
+  "Recipe": {
+    "BenchRequirement": [
+      {
+        "Id": "Cookingbench",
+        "Categories": [
+          "Prepared"
+        ]
+      }
+    ],
+    "TimeSeconds": 4,
+    "Output": [
+      {
+        "ItemId": "Chicken_Buttered",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Container_Bucket"
+      }
+    ],
+    "Input": [
+      {
+        "ItemId": "Food_Chicken_Raw",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Spices",
+        "Quantity": 9
+      },
+      {
+        "ItemId": "Plant_Crop_Rice_Item",
+        "Quantity": 2
+      },
+      {
+        "ResourceTypeId": "Milk_Bucket"
+      },
+      {
+        "ItemId": "Ingredient_Butter",
+        "Quantity": 2
+      }
+    ]
+  }
+}
