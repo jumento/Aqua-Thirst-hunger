@@ -101,6 +101,11 @@ public class HHMFoodValuesConfig {
                 tierMaxHungerSaturation.put(ItemTier.Legendary, 16.25f);
                 tierMaxHungerSaturation.put(ItemTier.Mythic, 20.0f);
                 tierMaxHungerSaturation.put(ItemTier.Unique, 25.0f);
+
+                // Prevent Canteen / Potion containers from restoring hunger
+                itemHungerRestoration.put("AquaThirstHunger_Canteenpro_Empty", 0.0f);
+                itemHungerRestoration.put("AquaThirstHunger_Canteen", 0.0f);
+                itemHungerRestoration.put("Potion_Empty", 0.0f);
         }
 
         public Float getItemHungerRestoration(@NonNullDecl String itemId) {

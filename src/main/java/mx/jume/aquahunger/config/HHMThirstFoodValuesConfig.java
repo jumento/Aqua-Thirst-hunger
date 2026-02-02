@@ -34,20 +34,20 @@ public class HHMThirstFoodValuesConfig {
             .build();
 
     private String fruitResourceTypeId = "Fruit";
-    private float fruitMultiplier = 5.0f;
+    private float fruitMultiplier = 2.0f;
     private final Map<ItemTier, Float> tierThirstRestoration = new EnumMap<>(ItemTier.class);
     private Map<String, Float> itemThirstRestoration = new HashMap<>();
 
     public HHMThirstFoodValuesConfig() {
-        tierThirstRestoration.put(ItemTier.Common, 5.5f);
-        tierThirstRestoration.put(ItemTier.Uncommon, 6.5f);
-        tierThirstRestoration.put(ItemTier.Rare, 7.0f);
-        tierThirstRestoration.put(ItemTier.Epic, 7.5f);
-        tierThirstRestoration.put(ItemTier.Legendary, 8.0f);
-        tierThirstRestoration.put(ItemTier.Mythic, 9.5f);
-        tierThirstRestoration.put(ItemTier.Unique, 10.0f);
+        tierThirstRestoration.put(ItemTier.Common, 0.5f);
+        tierThirstRestoration.put(ItemTier.Uncommon, 1.0f);
+        tierThirstRestoration.put(ItemTier.Rare, 1.5f);
+        tierThirstRestoration.put(ItemTier.Epic, 2.0f);
+        tierThirstRestoration.put(ItemTier.Legendary, 2.5f);
+        tierThirstRestoration.put(ItemTier.Mythic, 3.0f);
+        tierThirstRestoration.put(ItemTier.Unique, 4.0f);
         itemThirstRestoration.put("AquaThirstHunger_Canteen", 10.0f);
-        itemThirstRestoration.put("*AquaThirstHunger_Canteenpro_Empty_State_Filled_Water", 10.0f);
+        itemThirstRestoration.put("AquaThirstHunger_Canteenpro_Empty", 10.0f);
     }
 
     public String getFruitResourceTypeId() {
@@ -68,6 +68,6 @@ public class HHMThirstFoodValuesConfig {
 
     public void ensureDefaults() {
         itemThirstRestoration.putIfAbsent("AquaThirstHunger_Canteen", 10.0f);
-        itemThirstRestoration.putIfAbsent("*AquaThirstHunger_Canteenpro_Empty_State_Filled_Water", 10.0f);
+        itemThirstRestoration.putIfAbsent("AquaThirstHunger_Canteenpro_Empty", 10.0f);
     }
 }
