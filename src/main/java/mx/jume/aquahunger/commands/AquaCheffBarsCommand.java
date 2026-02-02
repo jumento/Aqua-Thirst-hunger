@@ -8,7 +8,7 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import mx.jume.aquahunger.ui.AquaCheffBarsPage;
+import mx.jume.aquahunger.ui.AquaBarsPage;
 
 import javax.annotation.Nonnull;
 
@@ -27,7 +27,7 @@ public class AquaCheffBarsCommand extends AbstractPlayerCommand {
             @Nonnull World world) {
 
         Player player = store.getComponent(ref, Player.getComponentType());
-        AquaCheffBarsPage page = new AquaCheffBarsPage(playerRef);
+        AquaBarsPage page = new AquaBarsPage(playerRef);
         player.getPageManager().openCustomPage(ref, store, page);
     }
 }

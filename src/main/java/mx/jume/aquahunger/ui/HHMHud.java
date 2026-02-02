@@ -55,11 +55,24 @@ public class HHMHud extends CustomUIHud {
         Anchor anchor = new Anchor();
         anchor.setHeight(Value.of(20));
 
-        if (hudPosition.left() != 0) {
+        // Special handling for centered presets (AboveHotbarCentered,
+        // BelowHotbarCentered)
+        if (hudPosition.centered()) {
+            anchor.setWidth(Value.of(351)); // Actual HUD width from UI
+            // Calculate centering offset: (702 - 351) / 2 = 176
+            anchor.setLeft(Value.of(176));
+        }
+        // Special handling for right-anchored preset (BottomRight)
+        else if (hudPosition.right() >= 0) {
+            anchor.setWidth(Value.of(332));
+            anchor.setRight(Value.of(hudPosition.right()));
+        }
+        // Original logic for all other presets
+        else if (hudPosition.left() != 0) {
             anchor.setWidth(Value.of(332));
             anchor.setLeft(Value.of(hudPosition.left()));
         } else {
-            // Centered position - use Hotbar Width (702) for consistent alignment
+            // Original fallback for left == 0 (non-centered)
             anchor.setWidth(Value.of(702));
         }
 
