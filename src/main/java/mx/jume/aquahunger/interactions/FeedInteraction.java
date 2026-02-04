@@ -38,10 +38,16 @@ public class FeedInteraction extends SimpleInstantInteraction {
                     (foodValue) -> foodValue.maxHungerSaturation,
                     (foodValue, parent) -> foodValue.maxHungerSaturation = parent.maxHungerSaturation)
             .add()
+            .appendInherited(new KeyedCodec<>("ThirstRestoreAmount", Codec.FLOAT),
+                    ((foodValue, value) -> foodValue.thirstRestoreAmount = value),
+                    (foodValue) -> foodValue.thirstRestoreAmount,
+                    (foodValue, parent) -> foodValue.thirstRestoreAmount = parent.thirstRestoreAmount)
+            .add()
             .build();
 
     private Float hungerRestoration;
     private Float maxHungerSaturation;
+    private Float thirstRestoreAmount;
 
     private static final Set<String> RAW_MEATS = Set.of(
             "Food_Beef_Raw",
@@ -137,7 +143,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
                 100.0f + maxHungerSaturation);
     }
 
-    public static float getThirstRestoration(Item item) {
+    public static float getThirstRestoration(Item item, Float interactionValue) {
         // 0. External Config Override (Highest Priority)
         mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
                 .getExternalFoodsConfig();
@@ -160,6 +166,9 @@ public class FeedInteraction extends SimpleInstantInteraction {
 
         if (itemOverride != null) {
             baseThirstRestore = itemOverride;
+        } else if (interactionValue != null) {
+            // Use interaction value if provided in JSON
+            baseThirstRestore = interactionValue;
         } else {
             // 2. Resolve Tier and get base value from config
             baseThirstRestore = thirstFoodConfig.getTierThirstRestoration(HHMUtils.getItemTier(item));
@@ -187,6 +196,10 @@ public class FeedInteraction extends SimpleInstantInteraction {
                     + "x) to " + item.getId() + ": " + baseThirstRestore + " -> " + finalValue);
         }
         return finalValue;
+    }
+
+    public float getThirstRestoration(Item item) {
+        return getThirstRestoration(item, this.thirstRestoreAmount);
     }
 
     public float getHungerRestoration(Item item) {

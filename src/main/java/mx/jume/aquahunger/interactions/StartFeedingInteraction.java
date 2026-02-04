@@ -28,10 +28,16 @@ public class StartFeedingInteraction extends SimpleInstantInteraction {
                     (foodValue) -> foodValue.maxHungerSaturation,
                     (foodValue, parent) -> foodValue.maxHungerSaturation = parent.maxHungerSaturation)
             .add()
+            .appendInherited(new KeyedCodec<>("ThirstRestoreAmount", Codec.FLOAT),
+                    ((foodValue, value) -> foodValue.thirstRestoreAmount = value),
+                    (foodValue) -> foodValue.thirstRestoreAmount,
+                    (foodValue, parent) -> foodValue.thirstRestoreAmount = parent.thirstRestoreAmount)
+            .add()
             .build();
 
     private Float hungerRestoration;
     private Float maxHungerSaturation;
+    private Float thirstRestoreAmount;
 
     public float getHungerRestoration(Item item) {
         return FeedInteraction.getHungerRestoration(item, this.hungerRestoration);
@@ -39,6 +45,10 @@ public class StartFeedingInteraction extends SimpleInstantInteraction {
 
     public float getMaxHungerSaturation(Item item) {
         return FeedInteraction.getMaxHungerSaturation(item, this.maxHungerSaturation);
+    }
+
+    public float getThirstRestoration(Item item) {
+        return FeedInteraction.getThirstRestoration(item, this.thirstRestoreAmount);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class StartFeedingInteraction extends SimpleInstantInteraction {
         HHMHud.updatePlayerHungerRestorationPreview(playerRef, hungerRestoration, maxHungerSaturation);
 
         // Also update thirst preview
-        float thirstRestoration = FeedInteraction.getThirstRestoration(item);
+        float thirstRestoration = getThirstRestoration(item);
         mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, thirstRestoration);
     }
 }

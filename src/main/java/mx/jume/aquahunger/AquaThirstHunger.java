@@ -74,6 +74,7 @@ public class AquaThirstHunger extends JavaPlugin {
                 StartFeedingInteraction.CODEC);
         interactionRegistry.register("Hungry_Failed_Feeding", FailedFeedingInteraction.class,
                 FailedFeedingInteraction.CODEC);
+        interactionRegistry.register("AquaThirstHunger_DrinkWater", FeedInteraction.class, FeedInteraction.CODEC);
 
         // setup hunger component and hud on player join
         this.getEventRegistry().registerGlobal(PlayerReadyEvent.class, HHMPlayerReady::handle);

@@ -13,7 +13,6 @@
                 "1.5": {
                     "Type": "ModifyInventory",
                     "AdjustHeldItemQuantity": -1,
-                    "AddItem": "Container_Bucket",
                     "Next": {
                         "Type": "AquaThirstHunger_DrinkWater",
                         "ThirstRestoreAmount": 25.0
