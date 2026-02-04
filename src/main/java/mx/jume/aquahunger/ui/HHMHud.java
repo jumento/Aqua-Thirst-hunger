@@ -183,6 +183,13 @@ public class HHMHud extends CustomUIHud {
         hud.update(false, uiCommandBuilder);
     }
 
+    static public void refreshAllHuds(HHMHungerConfig config) {
+        for (PlayerRef playerRef : hudMap.keySet()) {
+            updatePlayerHudPosition(playerRef, config.getHudPosition());
+            updatePlayerHudVisibility(playerRef, true);
+        }
+    }
+
     static public void createPlayerHud(
             @NonNullDecl Store<EntityStore> store,
             @NonNullDecl Ref<EntityStore> ref,

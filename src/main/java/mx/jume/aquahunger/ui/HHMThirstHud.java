@@ -162,14 +162,30 @@ public class HHMThirstHud extends CustomUIHud {
         hud.update(false, uiCommandBuilder);
     }
 
+    static public void updatePlayerHudVisibility(@NonNullDecl PlayerRef playerRef, boolean visible) {
+        HHMThirstHud hud = hudMap.get(playerRef);
+        if (hud == null)
+            return;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        hud.updateVisibility(uiCommandBuilder, visible);
+        hud.update(false, uiCommandBuilder);
+    }
+
+    static public void refreshAllHuds(HHMThirstConfig config) {
+        for (PlayerRef playerRef : hudMap.keySet()) {
+            updatePlayerHudPosition(playerRef, config.getHudPosition());
+            updatePlayerHudVisibility(playerRef, true);
+        }
+    }
+
     static public void createPlayerHud(
             @NonNullDecl Store<EntityStore> store,
             @NonNullDecl Ref<EntityStore> ref,
             @NonNullDecl PlayerRef playerRef,
             @NonNullDecl Player player) {
-        ThirstComponent thirst = store.ensureAndGetComponent(ref, ThirstComponent.getComponentType());
+        ThirstComponent thirst = store.getComponent(ref, ThirstComponent.getComponentType());
         if (thirst == null)
-            return; // Should not happen if registered
+            return;
         HHMThirstHud hud = new HHMThirstHud(playerRef, player.getGameMode(), thirst.getThirstLevel());
         CompatHUD.get().setCustomHud(player, playerRef, hudIdentifier, hud);
     }

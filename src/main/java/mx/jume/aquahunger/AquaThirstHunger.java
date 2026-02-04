@@ -87,6 +87,7 @@ public class AquaThirstHunger extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new ThirstyCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffBarsCommand());
+        this.getCommandRegistry().registerCommand(new AquaHungerConfigCommand());
         this.getCommandRegistry().registerCommand(new HungryReloadCommand());
     }
 
@@ -148,6 +149,20 @@ public class AquaThirstHunger extends JavaPlugin {
 
     public void reloadConfig() throws Exception {
         this.configManager.reload();
+        syncHUDs();
+    }
+
+    /**
+     * Synchronizes HUD states for all players based on current configuration.
+     */
+    public void syncHUDs() {
+        HHMHungerConfig hConfig = getHungerConfig();
+        mx.jume.aquahunger.config.HHMThirstConfig tConfig = getThirstConfig();
+
+        // Update all active hunger huds
+        mx.jume.aquahunger.ui.HHMHud.refreshAllHuds(hConfig);
+        // Update all active thirst huds
+        mx.jume.aquahunger.ui.HHMThirstHud.refreshAllHuds(tConfig);
     }
 
     public static AquaThirstHunger get() {

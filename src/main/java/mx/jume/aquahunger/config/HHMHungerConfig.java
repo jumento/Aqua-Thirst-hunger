@@ -72,6 +72,10 @@ public class HHMHungerConfig {
                     ((config, value) -> config.configVersion = value),
                     (c) -> c.configVersion)
             .add()
+            .append(new KeyedCodec<>("ActivePreset", Codec.STRING),
+                    ((config, value) -> config.activePreset = value),
+                    (c) -> c.activePreset)
+            .add()
             .build();
 
     @SerializedName("InitialHungerLevel")
@@ -104,6 +108,8 @@ public class HHMHungerConfig {
     private boolean lifePerHunger = true;
     @SerializedName("ConfigVersion")
     private String configVersion = "1.5.0";
+    @SerializedName("ActivePreset")
+    private String activePreset = "CUSTOM";
 
     public float getInitialHungerLevel() {
         return initialHungerLevel;
@@ -223,6 +229,14 @@ public class HHMHungerConfig {
 
     public void setConfigVersion(String val) {
         this.configVersion = val;
+    }
+
+    public String getActivePreset() {
+        return activePreset;
+    }
+
+    public void setActivePreset(String val) {
+        this.activePreset = val;
     }
 
     public void ensureDefaults() {
