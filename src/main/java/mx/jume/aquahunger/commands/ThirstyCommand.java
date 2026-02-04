@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class ThirstyCommand extends AbstractPlayerCommand {
-    public static final String requiredPermission = "hungry.thirst.base";
+    public static final String requiredPermission = "thirsty.commmand.base";
 
     public ThirstyCommand() {
         super("aquathirst", "Thirst Command", false);

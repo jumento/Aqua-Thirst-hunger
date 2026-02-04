@@ -16,7 +16,7 @@ import mx.jume.aquahunger.components.ThirstComponent;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class SetThirstCommand extends AbstractPlayerCommand {
-    public static final String requiredPermission = "hungry.thirst.set.self";
+    public static final String requiredPermission = "thirsty.thirst.set.self";
 
     private final RequiredArg<Float> thirstLevel = this.withRequiredArg("thirstLevel", "A value between 0 and 100",
             ArgTypes.FLOAT);
@@ -51,13 +51,11 @@ public class SetThirstCommand extends AbstractPlayerCommand {
             @NonNullDecl PlayerRef playerRef,
             @NonNullDecl World world) {
         float newThirstLevel = this.thirstLevel.get(context);
-        // Using store as ComponentAccessor for convenience
-        HHMUtils.setPlayerThirstLevel(ref, store, newThirstLevel);
-        context.sendMessage(Message.raw("Thirst level has been set to " + newThirstLevel + "."));
+        setThirstLevel(context, store, ref, playerRef, newThirstLevel);
     }
 
     public static class SetThirstOtherCommand extends CommandBase {
-        public static final String requiredPermission = "hungry.thirst.set.other";
+        public static final String requiredPermission = "thirsty.thirst.set.other";
 
         private final RequiredArg<PlayerRef> playerArg = this.withRequiredArg("player", "The target player",
                 ArgTypes.PLAYER_REF);

@@ -101,11 +101,7 @@ public class AquaThirstHunger extends JavaPlugin {
         if (this.getHungerConfig().isSinglePlayer()) {
             final Set<String> singleplayerPermissions = Set.of(
                     HungryCommand.requiredPermission,
-                    HungryHideCommand.requiredPermission,
-                    HungryShowCommand.requiredPermission,
                     ThirstyCommand.requiredPermission,
-                    SetThirstCommand.requiredPermission,
-                    SetThirstCommand.SetThirstOtherCommand.requiredPermission,
                     HungryReloadCommand.requiredPermission);
             PermissionsModule.get().addGroupPermission("Adventure", singleplayerPermissions);
             PermissionsModule.get().addGroupPermission("Creative", singleplayerPermissions);
