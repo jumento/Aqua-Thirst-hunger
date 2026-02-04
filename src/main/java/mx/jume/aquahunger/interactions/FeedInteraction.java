@@ -220,6 +220,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
         final CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
 
         final Item item = context.getOriginalItemType();
+        final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
         if (item == null || commandBuffer == null)
             return;
 
@@ -237,10 +238,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
                 if (currentHungerLevel < targetHungerLevel) {
                     hungerComponent.setHungerLevel(targetHungerLevel);
 
-                    final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
                     if (playerRef != null) {
-                        HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
-                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, 0.0f);
                         HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
                     }
                     HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);
@@ -261,7 +259,6 @@ public class FeedInteraction extends SimpleInstantInteraction {
                     } else {
                         thirstComponent.dehydrate(-thirstRestoration);
                     }
-                    final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
                     if (playerRef != null) {
                         // We will implement updatePlayerThirstLevel in HHMThirstHud later
                         mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef,
@@ -281,6 +278,13 @@ public class FeedInteraction extends SimpleInstantInteraction {
                     effectController.addEffect(ref, poisonEffect, commandBuffer);
                 }
             }
+        }
+
+        // --- GLOBAL PREVIEW CLEANUP ---
+        // Always clear restoration previews after the interaction finishes
+        if (playerRef != null) {
+            HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
+            mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, 0.0f);
         }
     }
 }

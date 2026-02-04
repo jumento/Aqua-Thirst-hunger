@@ -20,7 +20,7 @@
                 }
             },
             "Failed": {
-                "Type": "Simple"
+                "Type": "Hungry_Failed_Feeding"
             }
         }
     ]

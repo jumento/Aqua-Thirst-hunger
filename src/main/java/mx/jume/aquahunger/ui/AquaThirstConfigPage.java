@@ -301,8 +301,8 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 config.setDamageIntervalSeconds(4.0f);
                 config.setEnableThirst(true);
                 foodConfig.setFruitMultiplier(3.5f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 10.0f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 10.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 14.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 16.0f);
                 break;
             case "HARD":
                 config.setMaxThirst(75.0f);
@@ -316,8 +316,8 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 config.setDamageIntervalSeconds(2.0f);
                 config.setEnableThirst(true);
                 foodConfig.setFruitMultiplier(1.5f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 5.0f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 5.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 8.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 10.0f);
                 break;
         }
     }
