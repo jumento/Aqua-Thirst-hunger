@@ -92,6 +92,14 @@ public class HHMThirstFoodValuesConfig {
         return tierThirstRestoration;
     }
 
+    public Map<String, Float> getItemThirstRestorationMap() {
+        return itemThirstRestoration;
+    }
+
+    public void setItemThirstRestoration(String itemId, float value) {
+        this.itemThirstRestoration.put(itemId, value);
+    }
+
     public void ensureDefaults() {
         ConfigMigrationManager.migrate(this);
     }

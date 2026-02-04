@@ -88,6 +88,7 @@ public class AquaThirstHunger extends JavaPlugin {
         this.getCommandRegistry().registerCommand(new AquaCheffCommand());
         this.getCommandRegistry().registerCommand(new AquaCheffBarsCommand());
         this.getCommandRegistry().registerCommand(new AquaHungerConfigCommand());
+        this.getCommandRegistry().registerCommand(new AquaThirstConfigCommand());
         this.getCommandRegistry().registerCommand(new HungryReloadCommand());
     }
 

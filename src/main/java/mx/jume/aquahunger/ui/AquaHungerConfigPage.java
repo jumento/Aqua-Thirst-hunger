@@ -91,10 +91,12 @@ public class AquaHungerConfigPage extends InteractiveCustomUIPage<AquaHungerConf
                         (o, v) -> o.lifePerHunger = (v != null ? v : false), o -> o.lifePerHunger)
                 .add()
                 .build();
+        @Nonnull
+        public static final BuilderCodec<ConfigEventData> CODEC_NONNULL = Objects.requireNonNull(CODEC);
     }
 
     public AquaHungerConfigPage(@Nonnull PlayerRef playerRef, @Nonnull ConfigManager configManager) {
-        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, ConfigEventData.CODEC);
+        super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, ConfigEventData.CODEC_NONNULL);
         this.configManager = Objects.requireNonNull(configManager);
     }
 
@@ -254,8 +256,10 @@ public class AquaHungerConfigPage extends InteractiveCustomUIPage<AquaHungerConf
             AquaThirstHunger.get().syncHUDs(); // Sync changes on preset
 
             // Refresh the page
-            player.getPageManager().openCustomPage(ref, store, new AquaHungerConfigPage(this.playerRef, configManager));
-            this.playerRef.sendMessage(Message.empty().insert("Preset applied: ").insert(preset).color("#00BFFF"));
+            player.getPageManager().openCustomPage(ref, store,
+                    new AquaHungerConfigPage(this.playerRef, Objects.requireNonNull(configManager)));
+            this.playerRef.sendMessage(
+                    Message.empty().insert("Preset applied: ").insert(Objects.requireNonNull(preset)).color("#00BFFF"));
             return;
         }
 
