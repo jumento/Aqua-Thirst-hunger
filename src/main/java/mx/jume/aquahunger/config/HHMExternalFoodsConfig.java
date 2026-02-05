@@ -222,33 +222,42 @@ public class HHMExternalFoodsConfig {
     }
 
     private void overwriteDefaultsFromResource() {
+        // The source is now bundled at the root of the JAR (pulled from mods folder
+        // during build)
+        String resourcePath = "/ExternalFoodsDefaultConfig.json";
         try {
             if (defaultConfigFile.getParentFile() != null) {
                 defaultConfigFile.getParentFile().mkdirs();
             }
 
-            // Resource path inside the jar
-            String resourcePath = "defaults/ExternalFoodsDefaultConfig.json";
-
-            File tmp = new File(defaultConfigFile.getParentFile(), defaultConfigFile.getName() + ".tmp");
-
-            try (var in = HHMExternalFoodsConfig.class.getClassLoader().getResourceAsStream(resourcePath)) {
+            // Get resource from JAR root
+            try (java.io.InputStream in = HHMExternalFoodsConfig.class.getResourceAsStream(resourcePath)) {
                 if (in == null) {
-                    LOGGER.severe("Missing bundled defaults resource: " + resourcePath);
-                    return;
+                    // Try without leading slash
+                    try (java.io.InputStream in2 = HHMExternalFoodsConfig.class.getClassLoader()
+                            .getResourceAsStream("ExternalFoodsDefaultConfig.json")) {
+                        if (in2 == null) {
+                            LOGGER.severe("CRITICAL: Default config not found inside the mod JAR!");
+                            return;
+                        }
+                        copyAndLog(in2);
+                    }
+                } else {
+                    copyAndLog(in);
                 }
-                java.nio.file.Files.copy(in, tmp.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
-
-            java.nio.file.Files.move(
-                    tmp.toPath(),
-                    defaultConfigFile.toPath(),
-                    java.nio.file.StandardCopyOption.REPLACE_EXISTING,
-                    java.nio.file.StandardCopyOption.ATOMIC_MOVE);
-
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to overwrite ExternalFoodsDefaultConfig.json from bundled defaults", e);
+            LOGGER.log(Level.SEVERE, "Failed to mandatory overwrite " + defaultConfigFile.getName(), e);
         }
+    }
+
+    private void copyAndLog(java.io.InputStream in) throws IOException {
+        // Absolute overwrite: Delete first
+        if (defaultConfigFile.exists()) {
+            defaultConfigFile.delete();
+        }
+        java.nio.file.Files.copy(in, defaultConfigFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        LOGGER.info("Successfully refreshed " + defaultConfigFile.getName() + " from internal mod data.");
     }
 
 }

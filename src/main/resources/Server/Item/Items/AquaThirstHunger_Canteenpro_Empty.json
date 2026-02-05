@@ -105,7 +105,7 @@
       },
       "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteenpro.png",
       "Consumable": true,
-      "MaxDurability": 5,
+      "MaxDurability": 3,
       "MaxStack": 3,
       "Scale": 2,
       "PlayerAnimationsId": {

@@ -84,11 +84,73 @@ public class HHMFoodValuesConfig {
         }
 
         public Float getItemHungerRestoration(@NonNullDecl String itemId) {
-                return itemHungerRestoration.get(itemId);
+                if (itemId == null)
+                        return null;
+
+                String cleanId = itemId;
+                if (cleanId.startsWith("*"))
+                        cleanId = cleanId.substring(1);
+                if (cleanId.contains(":"))
+                        cleanId = cleanId.substring(cleanId.indexOf(":") + 1);
+
+                int stateIdx = cleanId.indexOf("_State_");
+                if (stateIdx != -1)
+                        cleanId = cleanId.substring(0, stateIdx);
+                int variantIdx = cleanId.indexOf("_Variant_");
+                if (variantIdx != -1)
+                        cleanId = cleanId.substring(0, variantIdx);
+                int bracketIdx = cleanId.indexOf("[");
+                if (bracketIdx != -1)
+                        cleanId = cleanId.substring(0, bracketIdx);
+
+                if (itemHungerRestoration.containsKey(itemId))
+                        return itemHungerRestoration.get(itemId);
+                if (itemHungerRestoration.containsKey(cleanId))
+                        return itemHungerRestoration.get(cleanId);
+
+                String bestKey = null;
+                for (String key : itemHungerRestoration.keySet()) {
+                        if (itemId.startsWith(key) || cleanId.startsWith(key)) {
+                                if (bestKey == null || key.length() > bestKey.length())
+                                        bestKey = key;
+                        }
+                }
+                return (bestKey != null) ? itemHungerRestoration.get(bestKey) : null;
         }
 
         public Float getItemMaxHungerSaturation(@NonNullDecl String itemId) {
-                return itemMaxHungerSaturation.get(itemId);
+                if (itemId == null)
+                        return null;
+
+                String cleanId = itemId;
+                if (cleanId.startsWith("*"))
+                        cleanId = cleanId.substring(1);
+                if (cleanId.contains(":"))
+                        cleanId = cleanId.substring(cleanId.indexOf(":") + 1);
+
+                int stateIdx = cleanId.indexOf("_State_");
+                if (stateIdx != -1)
+                        cleanId = cleanId.substring(0, stateIdx);
+                int variantIdx = cleanId.indexOf("_Variant_");
+                if (variantIdx != -1)
+                        cleanId = cleanId.substring(0, variantIdx);
+                int bracketIdx = cleanId.indexOf("[");
+                if (bracketIdx != -1)
+                        cleanId = cleanId.substring(0, bracketIdx);
+
+                if (itemMaxHungerSaturation.containsKey(itemId))
+                        return itemMaxHungerSaturation.get(itemId);
+                if (itemMaxHungerSaturation.containsKey(cleanId))
+                        return itemMaxHungerSaturation.get(cleanId);
+
+                String bestKey = null;
+                for (String key : itemMaxHungerSaturation.keySet()) {
+                        if (itemId.startsWith(key) || cleanId.startsWith(key)) {
+                                if (bestKey == null || key.length() > bestKey.length())
+                                        bestKey = key;
+                        }
+                }
+                return (bestKey != null) ? itemMaxHungerSaturation.get(bestKey) : null;
         }
 
         public float getTierHungerRestoration(@NonNullDecl ItemTier tier) {

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "mx.jume.aquahunger"
-version = "0.8.19"
+version = "0.9.19"
 
 java {
     toolchain {
@@ -65,6 +65,9 @@ sourceSets {
 }
 
 tasks.jar {
+    from("mods/Aqua-Thirst-hunger") {
+        include("ExternalFoodsDefaultConfig.json")
+    }
     manifest {
         attributes(
             "Implementation-Title" to rootProject.name,

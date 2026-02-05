@@ -1144,25 +1144,5 @@
         "maxHungerSaturation": 165.0,
         "thirstRestoration": -7.0
     },
-    "AquaThirstHunger_Canteen": {
-        "hungerRestoration": 0.0,
-        "maxHungerSaturation": 100.0,
-        "thirstRestoration": 10.0
-    },
-    "AquaThirstHunger_Canteenpro_Empty": {
-        "hungerRestoration": 0.0,
-        "maxHungerSaturation": 100.0,
-        "thirstRestoration": 10.0
-    },
-    "AquaThirstHunger_Canteen*": {
-        "hungerRestoration": 0.0,
-        "maxHungerSaturation": 100.0,
-        "thirstRestoration": 10.0
-    },
-    "AquaThirstHunger_Canteenpro_Empty*": {
-        "hungerRestoration": 0.0,
-        "maxHungerSaturation": 100.0,
-        "thirstRestoration": 10.0
-    },
-    "__ConfigVersion": "1.5.0"
+    "__ConfigVersion": "1.6.0"
 }

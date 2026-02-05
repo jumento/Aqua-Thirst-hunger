@@ -174,7 +174,17 @@ public class FeedInteraction extends SimpleInstantInteraction {
             baseThirstRestore = thirstFoodConfig.getTierThirstRestoration(HHMUtils.getItemTier(item));
         }
 
-        // 3. Check for Fruit Resource Type
+        // 3. Debug: Log calculated value before fruit/dehydration multipliers
+        if (item.getId().contains("Canteen")) {
+            String cleanId = item.getId().contains(":") ? item.getId().substring(item.getId().indexOf(":") + 1)
+                    : item.getId();
+            if (cleanId.contains("["))
+                cleanId = cleanId.substring(0, cleanId.indexOf("["));
+            AquaThirstHunger.logInfo("[ThirstDebug] RawID: " + item.getId() + " | CleanID: " + cleanId + " | Match: "
+                    + (itemOverride != null) + " | Value: " + baseThirstRestore);
+        }
+
+        // 4. Check for Dehydration/Fruit Resource Type
         boolean isFruit = false;
         if (item.getResourceTypes() != null) {
             String fruitType = thirstFoodConfig.getFruitResourceTypeId();
@@ -189,7 +199,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
             }
         }
 
-        // 4. Apply Multiplier
+        // 5. Apply Multiplier
         float finalValue = baseThirstRestore * (isFruit ? thirstFoodConfig.getFruitMultiplier() : 1.0f);
         if (isFruit) {
             AquaThirstHunger.logInfo("Applied fruit multiplier (" + thirstFoodConfig.getFruitMultiplier()

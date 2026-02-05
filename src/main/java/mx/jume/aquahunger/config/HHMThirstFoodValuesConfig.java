@@ -69,7 +69,44 @@ public class HHMThirstFoodValuesConfig {
     }
 
     public Float getItemThirstRestoration(@NonNullDecl String itemId) {
-        return itemThirstRestoration.get(itemId);
+        if (itemId == null)
+            return null;
+
+        // Super Clean: Handle *, namespaces, and various state separators
+        String cleanId = itemId;
+        if (cleanId.startsWith("*"))
+            cleanId = cleanId.substring(1);
+        if (cleanId.contains(":"))
+            cleanId = cleanId.substring(cleanId.indexOf(":") + 1);
+
+        // Cut off all known state/variant separators
+        int stateIdx = cleanId.indexOf("_State_");
+        if (stateIdx != -1)
+            cleanId = cleanId.substring(0, stateIdx);
+        int variantIdx = cleanId.indexOf("_Variant_");
+        if (variantIdx != -1)
+            cleanId = cleanId.substring(0, variantIdx);
+        int bracketIdx = cleanId.indexOf("[");
+        if (bracketIdx != -1)
+            cleanId = cleanId.substring(0, bracketIdx);
+
+        // 1. Exact matches for both forms
+        if (itemThirstRestoration.containsKey(itemId))
+            return itemThirstRestoration.get(itemId);
+        if (itemThirstRestoration.containsKey(cleanId))
+            return itemThirstRestoration.get(cleanId);
+
+        // 2. Best prefix match (prioritize longest key)
+        String bestKey = null;
+        for (String key : itemThirstRestoration.keySet()) {
+            if (itemId.startsWith(key) || cleanId.startsWith(key)) {
+                if (bestKey == null || key.length() > bestKey.length()) {
+                    bestKey = key;
+                }
+            }
+        }
+
+        return (bestKey != null) ? itemThirstRestoration.get(bestKey) : null;
     }
 
     public float getTierThirstRestoration(@NonNullDecl ItemTier tier) {
