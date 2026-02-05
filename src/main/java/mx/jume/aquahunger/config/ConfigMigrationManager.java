@@ -87,6 +87,9 @@ public class ConfigMigrationManager {
         String currentVersion = config.getConfigVersion();
         if (LATEST_VERSION.equals(currentVersion))
             return;
+
+        LOGGER.info("[Migration] Detected FoodValuesConfig version: "
+                + (currentVersion == null ? "legacy" : currentVersion));
         backup("FoodValuesConfig.json", currentVersion);
         config.setConfigVersion(LATEST_VERSION);
     }
@@ -95,8 +98,8 @@ public class ConfigMigrationManager {
         String currentVersion = config.getConfigVersion();
         if (LATEST_VERSION.equals(currentVersion))
             return;
-        backup("ThirstFoodValuesConfig.json", currentVersion);
 
+        backup("ThirstFoodValuesConfig.json", currentVersion);
         if (isLegacy(currentVersion) || currentVersion.equals("1.3.0")) {
             Map<String, Object> oldDefaults = getThirstFoodValuesDefaults("1.3.0");
             Map<String, Object> newDefaults = getThirstFoodValuesDefaults(LATEST_VERSION);

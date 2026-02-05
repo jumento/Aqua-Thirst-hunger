@@ -6,3 +6,9 @@ items.AquaThirstHunger_Canteen_Pro_Empty.description = Busca una fuente de agua 
 items.AquaThirstHunger_Canteen_Pro.name = Cantimplora Pro con agua
 items.AquaThirstHunger_Canteen_Pro.description = Llena de agua, lista para tomarse
 
+items.AquaThirstHunger_BasicBottle_Empty.name = Bote Básico vacio
+items.AquaThirstHunger_BasicBottle_Empty.description = Un bote simple para llevar agua.
+items.AquaThirstHunger_BasicBottle.name = Bote Básico con agua
+items.AquaThirstHunger_BasicBottle.description = Bote básico lleno de agua, contiene 5 usos.
+
+

@@ -22,8 +22,9 @@
     "ItemHungerRestoration": {
         "AquaThirstHunger_Canteen": 0.0,
         "AquaThirstHunger_Canteenpro_Empty": 0.0,
+        "AquaThirstHunger_BasicBottle_Empty": 0.0,
         "Potion_Empty": 0.0
     },
     "ItemMaxHungerSaturation": {},
-    "ConfigVersion": "1.5.0"
+    "ConfigVersion": "1.6.0"
 }

@@ -2,11 +2,11 @@
 $C = "../Common.ui";
 Group {
   LayoutMode: Top;
-  Anchor: (Width: 455, Height: 650);
+  Anchor: (Width: 455, Height: 610);
   $C.@Container #aquathirstconfig {
     ScrollbarStyle: $C.@DefaultScrollbarStyle;
     LayoutMode: Top;
-    Anchor: (Width: 450, Height: 550, Left: 0, Right: 0, Top: 0, Bottom: 0);
+    Anchor: (Width: 450, Height: 600, Left: 0, Right: 0, Top: 0, Bottom: 0);
 
     #Title {
       Group #TitleHeader {
@@ -20,7 +20,7 @@ Group {
 
     #Content {
       LayoutMode: Top;
-      Anchor: (Width: 455, Height: 550);
+      Anchor: (Width: 455, Height: 600);
       Group #DifficultyButtonsDONTTOUCH {
         LayoutMode: CenterMiddle;
         Padding: (Bottom: 15);
@@ -46,9 +46,7 @@ Group {
       }
       Group #StateDONTTOUCH {
         LayoutMode: Top;
-        Padding: (Full: 0);
         Label #configtype {
-          Padding: (Full: 0);
           Text: "Config: Custom";
           Style: (TextColor: #00ffaa, RenderBold: true);
         }
@@ -60,7 +58,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Maximum thirst limit for the player.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 1, Bottom: 1);
+          Padding: (Top: 1, Bottom: 1);
           Label #LblMaxThirst {
             Anchor: (Width: 220);
             Text: "MaxThirst";
@@ -75,7 +73,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Thirst level after respawning.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 1, Bottom: 1);
+          Padding: (Top: 1, Bottom: 1);
           Label #LblRespawnThirst {
             Anchor: (Width: 220);
             Text: "RespawnThirstLevel";
@@ -90,7 +88,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Whether to reset thirst to respawn level on death.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 1, Bottom: 1);
+          Padding: (Top: 1, Bottom: 1);
           Label #LblResetDeath {
             Anchor: (Width: 220);
             Text: "ResetThirstOnDeath";
@@ -105,7 +103,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Rate at which thirst depletion is applied (in seconds).";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblDepletionTickRate {
             Anchor: (Width: 220);
             Text: "DepletionTickRate";
@@ -120,7 +118,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Base amount of thirst lost per tick.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblBaseThirstDepletion {
             Anchor: (Width: 220);
             Text: "BaseThirstDepletion";
@@ -135,7 +133,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Thirst consumed when hitting or breaking blocks.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblDepletionPerBlockHit {
             Anchor: (Width: 220);
             Text: "DepletionPerBlockHit";
@@ -150,7 +148,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Extra thirst depletion multiplier when sprinting.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblSprintDepletionModifier {
             Anchor: (Width: 220);
             Text: "SprintDepletionModifier";
@@ -165,7 +163,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Damage applied when thirst reaches zero.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblDehydrationDamage {
             Anchor: (Width: 220);
             Text: "DehydrationDamage";
@@ -180,7 +178,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Interval between dehydration damage ticks (in seconds).";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblDamageIntervalSeconds {
             Anchor: (Width: 220);
             Text: "DamageIntervalSeconds";
@@ -195,7 +193,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Master switch to enable/disable the thirst system.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 1, Bottom: 1);
+          Padding: (Top: 1, Bottom: 1);
           Label #LblEnableThirst {
             Anchor: (Width: 220);
             Text: "EnableThirst";
@@ -210,7 +208,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Extra thirst restoration multiplier when eating fruits.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblFruitMultiplier {
             Anchor: (Width: 220);
             Text: "FruitMultiplier";
@@ -225,7 +223,7 @@ Group {
           LayoutMode: Left;
           TooltipText: "Thirst restored by the standard Canteen.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblCanteenThirst {
             Anchor: (Width: 220);
             Text: "CanteenThirst";
@@ -240,13 +238,28 @@ Group {
           LayoutMode: Left;
           TooltipText: "Thirst restored by the Pro Canteen.";
           Anchor: (Width: 430, Height: 28);
-          Padding: (Full: 1, Top: 2, Bottom: 2);
+          Padding: (Top: 2, Bottom: 2);
           Label #LblCanteenProThirst {
             Anchor: (Width: 220);
             Text: "CanteenProThirst";
             Style: (TextColor: #ffffff);
           }
           $C.@TextField #InputCanteenProThirst {
+            Anchor: (Height: 25);
+            FlexWeight: 1;
+          }
+        }
+        Group #RowBasicBottleThirst {
+          LayoutMode: Left;
+          TooltipText: "Thirst restored by the Basic Bottle.";
+          Anchor: (Width: 430, Height: 28);
+          Padding: (Top: 2, Bottom: 2);
+          Label #LblBasicBottleThirst {
+            Anchor: (Width: 220);
+            Text: "BasicBottleThirst";
+            Style: (TextColor: #ffffff);
+          }
+          $C.@TextField #InputBasicBottleThirst {
             Anchor: (Height: 25);
             FlexWeight: 1;
           }

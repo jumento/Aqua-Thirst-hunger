@@ -43,6 +43,7 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         public String fruitMultiplier;
         public String canteenThirst;
         public String canteenProThirst;
+        public String basicBottleThirst;
 
         public static final BuilderCodec<ConfigEventData> CODEC = BuilderCodec
                 .builder(ConfigEventData.class, ConfigEventData::new)
@@ -87,6 +88,10 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                         (o, v) -> o.canteenProThirst = (v != null ? v : "0"),
                         o -> Objects.requireNonNull(o.canteenProThirst))
                 .add()
+                .append(new KeyedCodec<>("@BasicBottleThirst", Codec.STRING),
+                        (o, v) -> o.basicBottleThirst = (v != null ? v : "0"),
+                        o -> Objects.requireNonNull(o.basicBottleThirst))
+                .add()
                 .build();
 
         @Nonnull
@@ -125,6 +130,8 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         cmd.set("#InputCanteenThirst.Value", String.valueOf(canteenThirst != null ? canteenThirst : 0f));
         Float canteenProThirst = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty");
         cmd.set("#InputCanteenProThirst.Value", String.valueOf(canteenProThirst != null ? canteenProThirst : 0f));
+        Float basicBottleThirst = foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty");
+        cmd.set("#InputBasicBottleThirst.Value", String.valueOf(basicBottleThirst != null ? basicBottleThirst : 0f));
 
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnEasy", createSyncData("PRESET:EASY"));
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnNormal", createSyncData("PRESET:NORMAL"));
@@ -147,7 +154,8 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 .append("@EnableThirst", "#ChkEnableThirst #CheckBox.Value")
                 .append("@FruitMultiplier", "#InputFruitMultiplier.Value")
                 .append("@CanteenThirst", "#InputCanteenThirst.Value")
-                .append("@CanteenProThirst", "#InputCanteenProThirst.Value");
+                .append("@CanteenProThirst", "#InputCanteenProThirst.Value")
+                .append("@BasicBottleThirst", "#InputBasicBottleThirst.Value");
     }
 
     @Override
@@ -227,14 +235,23 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
             }
 
             float cT = Float.parseFloat(data.canteenThirst.trim());
-            if (cT != foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen")) {
+            Float currentCT = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen");
+            if (currentCT == null || cT != currentCT) {
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", cT);
                 modifiedManually = true;
             }
 
             float cpT = Float.parseFloat(data.canteenProThirst.trim());
-            if (cpT != foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty")) {
+            Float currentCPT = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty");
+            if (currentCPT == null || cpT != currentCPT) {
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", cpT);
+                modifiedManually = true;
+            }
+
+            float bbT = Float.parseFloat(data.basicBottleThirst.trim());
+            Float currentBBT = foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty");
+            if (currentBBT == null || bbT != currentBBT) {
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", bbT);
                 modifiedManually = true;
             }
 
@@ -288,6 +305,7 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 foodConfig.setFruitMultiplier(5.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 20.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 30.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 30.0f);
                 break;
             case "NORMAL":
                 config.setMaxThirst(100.0f);
@@ -303,6 +321,7 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 foodConfig.setFruitMultiplier(3.5f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 14.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 16.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 16.0f);
                 break;
             case "HARD":
                 config.setMaxThirst(75.0f);
@@ -318,6 +337,7 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 foodConfig.setFruitMultiplier(1.5f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 8.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 10.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 10.0f);
                 break;
         }
     }

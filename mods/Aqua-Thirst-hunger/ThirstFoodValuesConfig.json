@@ -12,7 +12,8 @@
     },
     "ItemThirstRestoration": {
         "AquaThirstHunger_Canteen": 14.0,
-        "AquaThirstHunger_Canteenpro_Empty": 16.0
+        "AquaThirstHunger_Canteenpro_Empty": 16.0,
+        "AquaThirstHunger_BasicBottle_Empty": 16.0
     },
-    "ConfigVersion": "1.5.0"
+    "ConfigVersion": "1.6.0"
 }

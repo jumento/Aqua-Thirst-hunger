@@ -79,6 +79,7 @@ public class HHMFoodValuesConfig {
                 tierMaxHungerSaturation.put(ItemTier.Unique, 25.0f);
 
                 itemHungerRestoration.put("AquaThirstHunger_Canteenpro_Empty", 0.0f);
+                itemHungerRestoration.put("AquaThirstHunger_BasicBottle_Empty", 0.0f);
                 itemHungerRestoration.put("AquaThirstHunger_Canteen", 0.0f);
                 itemHungerRestoration.put("Potion_Empty", 0.0f);
         }
@@ -183,6 +184,14 @@ public class HHMFoodValuesConfig {
 
         public Map<ItemTier, Float> getTierMaxHungerSaturation() {
                 return tierMaxHungerSaturation;
+        }
+
+        public Map<String, Float> getItemHungerRestorationMap() {
+                return itemHungerRestoration;
+        }
+
+        public Map<String, Float> getItemMaxHungerSaturationMap() {
+                return itemMaxHungerSaturation;
         }
 
         public void ensureDefaults() {

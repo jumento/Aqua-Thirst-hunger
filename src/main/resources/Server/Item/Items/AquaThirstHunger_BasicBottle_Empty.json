@@ -1,22 +1,22 @@
 {
   "Parent": "Potion_Empty",
   "TranslationProperties": {
-    "Name": "server.items.AquaThirstHunger_Canteen_Pro_Empty.name",
-    "Description": "server.items.AquaThirstHunger_Canteen_Pro_Empty.description"
+    "Name": "server.items.AquaThirstHunger_BasicBottle_Empty.name",
+    "Description": "server.items.AquaThirstHunger_BasicBottle_Empty.description"
   },
   "BlockType": {
     "Material": "Empty",
     "DrawType": "Model",
-    "CustomModel": "Items/AquaThirstHunger_Canteenpro_Empty.blockymodel",
+    "CustomModel": "Items/AquaThirstandHunger_bottle.blockymodel",
     "CustomModelScale": 0.5,
     "CustomModelTexture": [
       {
-        "Texture": "Items/AquaThirstHunger_Canteenpro_Empty.png",
+        "Texture": "Items/AquaThirstandHunger_Bottle_Empty.png",
         "Weight": 1
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteenpro_Empty.png",
+  "Icon": "Icons/ItemsGenerated/AquaThirstandHunger_bottle_Empty.png",
   "IconProperties": {
     "Scale": 0.5,
     "Rotation": [
@@ -29,7 +29,7 @@
       -11
     ]
   },
-  "MaxStack": 10,
+  "MaxStack": 6,
   "Categories": [
     "Items.Survival"
   ],
@@ -37,19 +37,18 @@
     "TimeSeconds": 2.0,
     "Input": [
       {
-        "ItemId": "Ingredient_Leather_Light",
+        "ItemId": "*Container_Bucket_State_Filled_Water"
+      },
+      {
+        "ItemId": "Potion_Empty",
         "Quantity": 3
       },
       {
-        "ItemId": "Ingredient_Fibre",
-        "Quantity": 10
+        "ItemId": "Ingredient_Bar_Silver"
       },
       {
-        "ItemId": "Container_Bucket"
-      },
-      {
-        "ItemId": "Ingredient_Charcoal",
-        "Quantity": 5
+        "ItemId": "Ingredient_Life_Essence_Concentrated",
+        "Quantity": 3
       }
     ],
     "BenchRequirement": [
@@ -89,23 +88,23 @@
     "Filled_Water": {
       "Variant": true,
       "TranslationProperties": {
-        "Name": "server.items.AquaThirstHunger_Canteen_Pro.name",
-        "Description": "server.items.AquaThirstHunger_Canteen_Pro.description"
+        "Name": "server.items.AquaThirstHunger_BasicBottle.name",
+        "Description": "server.items.AquaThirstHunger_BasicBottle.description"
       },
       "BlockType": {
         "Material": "Empty",
         "DrawType": "Model",
-        "CustomModel": "Items/AquaThirstHunger_Canteenpro_Empty.blockymodel",
+        "CustomModel": "Items/AquaThirstandHunger_bottle.blockymodel",
         "CustomModelTexture": [
           {
-            "Texture": "Items/AquaThirstHunger_Canteenpro.png",
+            "Texture": "Items/AquaThirstandHunger_bottle.png",
             "Weight": 1
           }
         ]
       },
-      "Icon": "Icons/ItemsGenerated/AquaThirstHunger_Canteenpro.png",
+      "Icon": "Icons/ItemsGenerated/AquaThirstandHunger_bottle.png",
       "Consumable": true,
-      "MaxDurability": 3,
+      "MaxDurability": 5,
       "MaxStack": 3,
       "Scale": 2,
       "PlayerAnimationsId": {
@@ -143,7 +142,7 @@
                     {
                       "Type": "ModifyInventory",
                       "AdjustHeldItemDurability": -1,
-                      "BrokenItem": "AquaThirstHunger_Canteenpro_Empty"
+                      "BrokenItem": "AquaThirstHunger_BasicBottle_Empty"
                     }
                   ]
                 }
@@ -155,9 +154,9 @@
           ]
         }
       },
-      "Quality": "Rare"
+      "Quality": "Epic"
     }
   },
-  "Quality": "Uncommon",
-  "ItemLevel": 2
+  "Quality": "Rare",
+  "ItemLevel": 3
 }
