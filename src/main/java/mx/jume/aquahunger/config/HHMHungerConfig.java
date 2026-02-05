@@ -107,9 +107,9 @@ public class HHMHungerConfig {
     @SerializedName("LifePerHunger")
     private boolean lifePerHunger = true;
     @SerializedName("ConfigVersion")
-    private String configVersion = "1.5.0";
+    private String configVersion = "1.6.0";
     @SerializedName("ActivePreset")
-    private String activePreset = "CUSTOM";
+    private String activePreset = "NORMAL";
 
     public float getInitialHungerLevel() {
         return initialHungerLevel;

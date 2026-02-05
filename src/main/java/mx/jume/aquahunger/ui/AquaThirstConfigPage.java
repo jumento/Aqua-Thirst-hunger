@@ -44,6 +44,7 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         public String canteenThirst;
         public String canteenProThirst;
         public String basicBottleThirst;
+        public String staminaBoostThreshold;
 
         public static final BuilderCodec<ConfigEventData> CODEC = BuilderCodec
                 .builder(ConfigEventData.class, ConfigEventData::new)
@@ -92,6 +93,10 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                         (o, v) -> o.basicBottleThirst = (v != null ? v : "0"),
                         o -> Objects.requireNonNull(o.basicBottleThirst))
                 .add()
+                .append(new KeyedCodec<>("@StaminaBoostThreshold", Codec.STRING),
+                        (o, v) -> o.staminaBoostThreshold = (v != null ? v : "0"),
+                        o -> Objects.requireNonNull(o.staminaBoostThreshold))
+                .add()
                 .build();
 
         @Nonnull
@@ -126,12 +131,13 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
 
         // Food values
         cmd.set("#InputFruitMultiplier.Value", String.valueOf(foodConfig.getFruitMultiplier()));
-        Float canteenThirst = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen");
-        cmd.set("#InputCanteenThirst.Value", String.valueOf(canteenThirst != null ? canteenThirst : 0f));
-        Float canteenProThirst = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty");
-        cmd.set("#InputCanteenProThirst.Value", String.valueOf(canteenProThirst != null ? canteenProThirst : 0f));
-        Float basicBottleThirst = foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty");
-        cmd.set("#InputBasicBottleThirst.Value", String.valueOf(basicBottleThirst != null ? basicBottleThirst : 0f));
+        cmd.set("#InputCanteenThirst.Value",
+                String.valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen").floatValue()));
+        cmd.set("#InputCanteenProThirst.Value", String
+                .valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty").floatValue()));
+        cmd.set("#InputBasicBottleThirst.Value", String
+                .valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty").floatValue()));
+        cmd.set("#InputStaminaBoostThreshold.Value", String.valueOf((int) config.getStaminaBoostThreshold()));
 
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnEasy", createSyncData("PRESET:EASY"));
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnNormal", createSyncData("PRESET:NORMAL"));
@@ -155,7 +161,8 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
                 .append("@FruitMultiplier", "#InputFruitMultiplier.Value")
                 .append("@CanteenThirst", "#InputCanteenThirst.Value")
                 .append("@CanteenProThirst", "#InputCanteenProThirst.Value")
-                .append("@BasicBottleThirst", "#InputBasicBottleThirst.Value");
+                .append("@BasicBottleThirst", "#InputBasicBottleThirst.Value")
+                .append("@StaminaBoostThreshold", "#InputStaminaBoostThreshold.Value");
     }
 
     @Override
@@ -215,6 +222,12 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
             float dI = Float.parseFloat(data.damageInterval.trim());
             if (dI != config.getDamageIntervalSeconds()) {
                 config.setDamageIntervalSeconds(dI);
+                modifiedManually = true;
+            }
+
+            float sBT = Float.parseFloat(data.staminaBoostThreshold.trim());
+            if (sBT != config.getStaminaBoostThreshold()) {
+                config.setStaminaBoostThreshold(sBT);
                 modifiedManually = true;
             }
 
@@ -292,49 +305,55 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
 
         switch (preset) {
             case "EASY":
-                config.setMaxThirst(200.0f);
-                config.setRespawnThirstLevel(80.0f);
+                config.setMaxThirst(100.0f);
+                config.setEnableThirst(true);
                 config.setResetThirstOnDeath(false);
+                config.setRespawnThirstLevel(80.0f);
                 config.setDepletionTickRate(2.0f);
-                config.setDepletionPerTick(0.02f);
+                config.setDepletionPerTick(0.01f);
                 config.setDepletionPerBlockHit(0.01f);
                 config.setSprintDepletionModifier(0.05f);
                 config.setDehydrationDamage(1.0f);
-                config.setDamageIntervalSeconds(6.0f);
-                config.setEnableThirst(true);
-                foodConfig.setFruitMultiplier(5.0f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 20.0f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 30.0f);
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 30.0f);
+                config.setDamageIntervalSeconds(5.0f);
+                config.setStaminaBoostThreshold(70.0f);
+
+                foodConfig.setFruitMultiplier(10.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 15.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 20.0f);
+                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 20.0f);
                 break;
             case "NORMAL":
                 config.setMaxThirst(100.0f);
-                config.setRespawnThirstLevel(50.0f);
+                config.setEnableThirst(true);
                 config.setResetThirstOnDeath(true);
+                config.setRespawnThirstLevel(50.0f);
                 config.setDepletionTickRate(2.0f);
                 config.setDepletionPerTick(0.05f);
                 config.setDepletionPerBlockHit(0.05f);
                 config.setSprintDepletionModifier(0.1f);
                 config.setDehydrationDamage(2.0f);
                 config.setDamageIntervalSeconds(4.0f);
-                config.setEnableThirst(true);
-                foodConfig.setFruitMultiplier(3.5f);
+                config.setStaminaBoostThreshold(90.0f);
+
+                foodConfig.setFruitMultiplier(5.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 14.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 16.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 16.0f);
                 break;
             case "HARD":
-                config.setMaxThirst(75.0f);
-                config.setRespawnThirstLevel(25.0f);
+                config.setMaxThirst(100.0f);
+                config.setEnableThirst(true);
                 config.setResetThirstOnDeath(true);
+                config.setRespawnThirstLevel(20.0f);
                 config.setDepletionTickRate(1.0f);
-                config.setDepletionPerTick(0.1f);
+                config.setDepletionPerTick(0.125f);
                 config.setDepletionPerBlockHit(0.1f);
                 config.setSprintDepletionModifier(0.2f);
                 config.setDehydrationDamage(5.0f);
                 config.setDamageIntervalSeconds(2.0f);
-                config.setEnableThirst(true);
-                foodConfig.setFruitMultiplier(1.5f);
+                config.setStaminaBoostThreshold(100.0f);
+
+                foodConfig.setFruitMultiplier(3.5f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", 8.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", 10.0f);
                 foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", 10.0f);

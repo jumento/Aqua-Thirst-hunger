@@ -10,5 +10,7 @@
     "ResetThirstOnDeath": true,
     "RespawnThirstLevel": 50.0,
     "EnableThirst": true,
-    "ConfigVersion": "1.5.0"
+    "ActivePreset": "NORMAL",
+    "StaminaBoostThreshold": 90.0,
+    "ConfigVersion": "1.6.0"
 }

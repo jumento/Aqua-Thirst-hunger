@@ -77,6 +77,7 @@ public class HHMUtils {
 
     private static EntityEffect dehydrationEntityEffect;
     public static final String dehydrationEntityEffectId = "Dehydration";
+    public static final String staminaBoostEntityEffectId = "FruitVeggie_Buff_T2";
 
     public static EntityEffect getDehydrationEntityEffect() {
         if (dehydrationEntityEffect == null) {
@@ -89,8 +90,24 @@ public class HHMUtils {
         return dehydrationEntityEffect;
     }
 
+    private static EntityEffect staminaBoostEntityEffect;
+
+    public static EntityEffect getStaminaBoostEntityEffect() {
+        if (staminaBoostEntityEffect == null) {
+            staminaBoostEntityEffect = EntityEffect.getAssetMap().getAsset(staminaBoostEntityEffectId);
+            if (staminaBoostEntityEffect == null) {
+                AquaThirstHunger.logInfo("Stamina Boost effect asset not found.");
+            }
+        }
+        return staminaBoostEntityEffect;
+    }
+
     public static boolean activeEntityEffectIsDehydration(ActiveEntityEffect effect) {
         return activeEntityEffectIs(effect, dehydrationEntityEffectId);
+    }
+
+    public static boolean activeEntityEffectIsStaminaBoost(ActiveEntityEffect effect) {
+        return activeEntityEffectIs(effect, staminaBoostEntityEffectId);
     }
 
     public static boolean activeEntityEffectIs(ActiveEntityEffect effect, String entityEffectId) {

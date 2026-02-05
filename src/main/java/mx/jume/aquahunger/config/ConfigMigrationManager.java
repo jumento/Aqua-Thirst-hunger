@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class ConfigMigrationManager {
     private static final Logger LOGGER = Logger.getLogger("AquaThirstHunger");
-    public static final String LATEST_VERSION = "1.5.0";
+    public static final String LATEST_VERSION = "1.6.0";
 
     public static void migrate(HHMHungerConfig config) {
         String currentVersion = config.getConfigVersion();
@@ -77,6 +77,9 @@ public class ConfigMigrationManager {
             config.setDepletionPerBlockHit(
                     merge(config.getDepletionPerBlockHit(), oldDefaults.get("DepletionPerBlockHit"),
                             newDefaults.get("DepletionPerBlockHit"), "DepletionPerBlockHit"));
+            config.setStaminaBoostThreshold(
+                    merge(config.getStaminaBoostThreshold(), oldDefaults.get("StaminaBoostThreshold"),
+                            newDefaults.get("StaminaBoostThreshold"), "StaminaBoostThreshold"));
         }
 
         config.setConfigVersion(LATEST_VERSION);
@@ -100,8 +103,9 @@ public class ConfigMigrationManager {
             return;
 
         backup("ThirstFoodValuesConfig.json", currentVersion);
-        if (isLegacy(currentVersion) || currentVersion.equals("1.3.0")) {
-            Map<String, Object> oldDefaults = getThirstFoodValuesDefaults("1.3.0");
+        if (isLegacy(currentVersion) || currentVersion.equals("1.3.0") || currentVersion.equals("1.5.0")) {
+            Map<String, Object> oldDefaults = getThirstFoodValuesDefaults(
+                    currentVersion.equals("1.3.0") ? "1.3.0" : "1.5.0");
             Map<String, Object> newDefaults = getThirstFoodValuesDefaults(LATEST_VERSION);
             config.setFruitMultiplier(merge(config.getFruitMultiplier(), oldDefaults.get("FruitMultiplier"),
                     newDefaults.get("FruitMultiplier"), "FruitMultiplier"));
@@ -126,7 +130,7 @@ public class ConfigMigrationManager {
 
     private static boolean isLegacy(String version) {
         return version == null || version.isEmpty() || version.equals("1.0.0") || version.equals("1.2")
-                || version.equals("1.0");
+                || version.equals("1.0") || version.equals("1.5.0");
     }
 
     @SuppressWarnings("unchecked")
@@ -186,6 +190,7 @@ public class ConfigMigrationManager {
         d.put("RespawnThirstLevel", 50.0f);
         d.put("BaseThirstDepletion", 0.05f);
         d.put("DepletionPerBlockHit", 0.05f);
+        d.put("StaminaBoostThreshold", 90.0f);
         return d;
     }
 

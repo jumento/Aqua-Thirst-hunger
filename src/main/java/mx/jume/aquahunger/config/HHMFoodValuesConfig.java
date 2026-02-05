@@ -51,7 +51,7 @@ public class HHMFoodValuesConfig {
         @SerializedName("IgnoreCustomAssetValues")
         private boolean ignoreCustomAssetValues = false;
         @SerializedName("ConfigVersion")
-        private String configVersion = "1.5.0";
+        private String configVersion = "1.6.0";
         @SerializedName("TierHungerRestoration")
         private final Map<ItemTier, Float> tierHungerRestoration = new EnumMap<>(ItemTier.class);
         @SerializedName("TierMaxHungerSaturation")

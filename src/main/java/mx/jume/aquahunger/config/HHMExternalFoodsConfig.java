@@ -25,7 +25,7 @@ public class HHMExternalFoodsConfig {
     private final File userConfigFile;
     private final Gson gson;
 
-    private String configVersion = "1.5.0";
+    private String configVersion = "1.6.0";
     private Map<String, ExternalFoodEntry> defaultEntries = new HashMap<>();
     private Map<String, ExternalFoodEntry> userEntries = new HashMap<>();
     private Map<String, ExternalFoodEntry> mergedEntries = new HashMap<>();

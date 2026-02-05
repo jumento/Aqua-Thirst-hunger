@@ -64,6 +64,10 @@ public class HHMThirstConfig {
                     ((config, value) -> config.activePreset = value),
                     (c) -> c.activePreset)
             .add()
+            .append(new KeyedCodec<>("StaminaBoostThreshold", Codec.FLOAT),
+                    ((config, value) -> config.staminaBoostThreshold = value),
+                    HHMThirstConfig::getStaminaBoostThreshold)
+            .add()
             .build();
 
     @SerializedName("MaxThirst")
@@ -89,9 +93,11 @@ public class HHMThirstConfig {
     @SerializedName("EnableThirst")
     private boolean enableThirst = true;
     @SerializedName("ConfigVersion")
-    private String configVersion = "1.5.0";
+    private String configVersion = "1.6.0";
     @SerializedName("ActivePreset")
-    private String activePreset = "CUSTOM";
+    private String activePreset = "NORMAL";
+    @SerializedName("StaminaBoostThreshold")
+    private float staminaBoostThreshold = 90.0f;
 
     public float getMaxThirst() {
         return maxThirst;
@@ -195,6 +201,14 @@ public class HHMThirstConfig {
 
     public void setActivePreset(String val) {
         this.activePreset = val;
+    }
+
+    public float getStaminaBoostThreshold() {
+        return staminaBoostThreshold;
+    }
+
+    public void setStaminaBoostThreshold(float val) {
+        this.staminaBoostThreshold = val;
     }
 
     public void ensureDefaults() {

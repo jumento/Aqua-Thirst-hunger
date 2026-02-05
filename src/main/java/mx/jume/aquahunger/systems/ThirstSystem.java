@@ -108,6 +108,20 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
             }
         }
 
+        // Stamina Boost Logic
+        if (effectController != null) {
+            float thirstPercent = (thirstLevel / config.getMaxThirst()) * 100f;
+            if (thirstPercent >= config.getStaminaBoostThreshold() && config.getStaminaBoostThreshold() <= 100f) {
+                EntityEffect boostEffect = HHMUtils.getStaminaBoostEntityEffect();
+                if (boostEffect != null) {
+                    effectController.addEffect(ref, boostEffect, commandBuffer);
+                }
+            } else {
+                HHMUtils.removeActiveEffects(ref, commandBuffer, effectController,
+                        HHMUtils::activeEntityEffectIsStaminaBoost);
+            }
+        }
+
         PlayerRef playerRef = archetypeChunk.getComponent(index, PlayerRef.getComponentType());
         if (playerRef == null)
             return;

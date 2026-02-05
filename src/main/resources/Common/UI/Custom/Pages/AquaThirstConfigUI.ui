@@ -264,6 +264,21 @@ Group {
             FlexWeight: 1;
           }
         }
+        Group #RowStaminaBoostThreshold {
+          LayoutMode: Left;
+          TooltipText: "Thirst % required to get Food_Stamina_Boost_Medium.";
+          Anchor: (Width: 430, Height: 28);
+          Padding: (Top: 2, Bottom: 2);
+          Label #LblStaminaBoostThreshold {
+            Anchor: (Width: 220);
+            Text: "Stamina Boost (%)";
+            Style: (TextColor: #ffffff);
+          }
+          $C.@TextField #InputStaminaBoostThreshold {
+            Anchor: (Height: 25);
+            FlexWeight: 1;
+          }
+        }
       }
       Group #ActionArea {
         LayoutMode: MiddleCenter;

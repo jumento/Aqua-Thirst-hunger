@@ -13,5 +13,6 @@
     "SinglePlayer": true,
     "EnableHunger": true,
     "LifePerHunger": true,
-    "ConfigVersion": "1.5.0"
+    "ActivePreset": "NORMAL",
+    "ConfigVersion": "1.6.0"
 }
