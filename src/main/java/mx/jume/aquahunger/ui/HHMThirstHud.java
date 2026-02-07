@@ -183,9 +183,8 @@ public class HHMThirstHud extends CustomUIHud {
             @NonNullDecl Ref<EntityStore> ref,
             @NonNullDecl PlayerRef playerRef,
             @NonNullDecl Player player) {
-        ThirstComponent thirst = store.getComponent(ref, ThirstComponent.getComponentType());
-        if (thirst == null)
-            return;
+        ThirstComponent thirst = store.ensureAndGetComponent(ref, ThirstComponent.getComponentType());
+
         HHMThirstHud hud = new HHMThirstHud(playerRef, player.getGameMode(), thirst.getThirstLevel());
         CompatHUD.get().setCustomHud(player, playerRef, hudIdentifier, hud);
     }

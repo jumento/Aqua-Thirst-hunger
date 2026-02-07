@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "mx.jume.aquahunger"
-version = "0.9.19"
+version = "0.10.19"
 
 java {
     toolchain {
