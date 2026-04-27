@@ -189,9 +189,9 @@ All configs live in `mods/Aqua-Thirst-hunger/` and are generated on first run:
 
 ## Authors
 
-**The Aqua Thirst & Hunger Team** — Jume, Andiemg, Antigravity.
+**The Aqua Thirst & Hunger Team** — Jume, Andiemg.
 
-Original `Hunger Core` foundation by **@Aex12**.
+Thanks to `Hunger Core` foundation by **@Aex12**.
 
 ## License
 
