@@ -1,0 +1,44 @@
+# Gradle
+/.gradle/
+/build/
+/buildSrc/build/
+/**/build/
+
+# Eclipse / Java compiled
+/bin/
+*.class
+
+# IntelliJ IDEA
+*.iml
+*.iws
+*.ipr
+.idea/
+out/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# JVM crash logs
+hs_err_pid*.log
+replay_pid*.log
+
+# Backups
+*.bak
+
+# Logs
+*.log
+
+# Hytale proprietary server JAR — do NOT commit
+/libs/*.jar
+
+# Per-installation runtime configs (regenerated on first run)
+/mods/Aqua-Thirst-hunger/HungerConfig.json
+/mods/Aqua-Thirst-hunger/ThirstConfig.json
+/mods/Aqua-Thirst-hunger/FoodValuesConfig.json
+/mods/Aqua-Thirst-hunger/ThirstFoodValuesConfig.json
+/mods/Aqua-Thirst-hunger/ExternalFoodsConfig.json

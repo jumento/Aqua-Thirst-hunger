@@ -1,0 +1,25 @@
+items.AquaThirstHunger_Canteen.name = Canteen Rustic
+items.AquaThirstHunger_Canteen.description = Not the best option, but the most accessible way to get water
+
+items.AquaThirstHunger_Canteen_Pro_Empty.name = Empty Pro Canteen
+items.AquaThirstHunger_Canteen_Pro_Empty.description = Find a water source to fill it
+
+items.AquaThirstHunger_Canteen_Pro.name = Pro Canteen (Filled)
+items.AquaThirstHunger_Canteen_Pro.description = Filled with water, ready to drink
+
+items.AquaThirstHunger_BasicBottle_Empty.name = Empty Basic Bottle
+items.AquaThirstHunger_BasicBottle_Empty.description = A simple bottle to carry water.
+items.AquaThirstHunger_BasicBottle.name = Basic Bottle (Filled)
+items.AquaThirstHunger_BasicBottle.description = Basic Bottle filled with water, contains 5 uses.
+
+chat.xp.satiated = #F39C12[Survival] #FFFFFFYou feel satisfied. #2ECC71+100 XP
+chat.xp.gluttony = #E67E22[Gluttony] #FFFFFFYou ate more than enough! #27AE60+50 XP
+chat.xp.resilience = #C0392B[Resilience] #FFFFFFYou survived at the limit! #27AE60+50 XP
+chat.xp.resilience_thirst = #2980B9[Resilience] #FFFFFFExtreme hydration reached. #27AE60+25 XP
+
+title.most_gluttonous = Most Gluttonous
+title.most_hungry = Most Hungry
+title.most_thirsty = Most Thirsty
+title.most_dehydrated = Most Dehydrated
+
+

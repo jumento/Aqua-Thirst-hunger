@@ -1,0 +1,12 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/stomach_growl.ogg"
+      ],
+      "Volume": 3
+    }
+  ],
+  "Volume": 3,
+  "Parent": "SFX_Attn_Loud"
+}

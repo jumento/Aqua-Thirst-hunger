@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "xpMaps": {
+    "NUTRITION": { "Base": 5 },
+    "THIRST": { "Base": 5 }
+  }
+}

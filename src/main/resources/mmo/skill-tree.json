@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 3,
+  "overrides": {
+    "NUTRITION": [
+      {
+        "tier": 0,
+        "levelRequired": 10,
+        "choicesRequired": 1,
+        "requiredLevel": 0,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner I",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner I",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness I",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton I",
+            "description": "Eat to receive Raw Wildmeat.",
+            "iconPath": "Food_Wildmeat_Raw",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 1,
+        "levelRequired": 20,
+        "choicesRequired": 1,
+        "requiredLevel": 10,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner II",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner II",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness II",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton II",
+            "description": "Eat to receive Raw Fish.",
+            "iconPath": "Food_Fish_Raw",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 2,
+        "levelRequired": 30,
+        "choicesRequired": 1,
+        "requiredLevel": 20,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner III",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner III",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness III",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton III",
+            "description": "Eat to receive Red Berries.",
+            "iconPath": "Plant_Fruit_Berries_Red",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 3,
+        "levelRequired": 40,
+        "choicesRequired": 1,
+        "requiredLevel": 30,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner IV",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner IV",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness IV",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton IV",
+            "description": "Eat to receive Egg. (-1% junk chance)",
+            "iconPath": "Food_Egg",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 4,
+        "levelRequired": 50,
+        "choicesRequired": 1,
+        "requiredLevel": 40,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner V",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner V",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness V",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton V",
+            "description": "Eat to receive Apple. (-2% junk chance)",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 5,
+        "levelRequired": 60,
+        "choicesRequired": 1,
+        "requiredLevel": 50,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner VI",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_miner_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner VI",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_fitness_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness VI",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton VI",
+            "description": "Eat to receive Cheese. (-2% junk chance)",
+            "iconPath": "Food_Cheese",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 6,
+        "levelRequired": 70,
+        "choicesRequired": 1,
+        "requiredLevel": 60,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_runner_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner VII",
+            "description": "Reduces hunger drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton VII",
+            "description": "Eat to receive Berry Salad.",
+            "iconPath": "Food_Salad_Berry",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_hungry_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Hungry I",
+            "description": "Reduces the chance of receiving junk by 5%.",
+            "iconPath": "Ingredient_Bone",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 7,
+        "levelRequired": 80,
+        "choicesRequired": 1,
+        "requiredLevel": 70,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_miner_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner VII",
+            "description": "Reduces hunger drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_8",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton VIII",
+            "description": "Eat to receive Popcorn.",
+            "iconPath": "Food_Popcorn",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_hungry_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Hungry II",
+            "description": "Reduces the chance of receiving junk by 5%.",
+            "iconPath": "Ingredient_Bone",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 8,
+        "levelRequired": 90,
+        "choicesRequired": 1,
+        "requiredLevel": 80,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_fitness_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness VII",
+            "description": "Reduces passive hunger drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_glutton_9",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Glutton IX",
+            "description": "Eat to receive Meat Pie.",
+            "iconPath": "Food_Pie_Meat",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_hungry_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Hungry III",
+            "description": "Reduces the chance of receiving junk by 5%.",
+            "iconPath": "Ingredient_Bone",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      },
+      {
+        "tier": 9,
+        "levelRequired": 100,
+        "choicesRequired": 1,
+        "requiredLevel": 90,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "nutrition_king_fitness",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness King",
+            "description": "Full Mastery: -20% running, -20% mining, -15% passive.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_mega_glutton",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Mega Glutton",
+            "description": "Double Benefit! All your Glutton rewards are doubled (Does not apply to junk).",
+            "iconPath": "Food_Pie_Meat",
+            "combatTarget": "NUTRITION"
+          },
+          {
+            "id": "nutrition_hungry_supreme",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Hungry Supreme",
+            "description": "Reduces the chance of receiving junk by 15%.",
+            "iconPath": "Ingredient_Bone",
+            "combatTarget": "NUTRITION"
+          }
+        ]
+      }
+    ],
+    "THIRST": [
+      {
+        "tier": 0,
+        "levelRequired": 10,
+        "choicesRequired": 1,
+        "requiredLevel": 0,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner I",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner I",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness I",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_1",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated I",
+            "description": "+5% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 1,
+        "levelRequired": 20,
+        "choicesRequired": 1,
+        "requiredLevel": 10,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner II",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner II",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness II",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_2",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated II",
+            "description": "+10% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 2,
+        "levelRequired": 30,
+        "choicesRequired": 1,
+        "requiredLevel": 20,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner III",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner III",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness III",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_3",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated III",
+            "description": "+5% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 3,
+        "levelRequired": 40,
+        "choicesRequired": 1,
+        "requiredLevel": 30,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner IV",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner IV",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness IV",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_4",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated IV",
+            "description": "+10% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 4,
+        "levelRequired": 50,
+        "choicesRequired": 1,
+        "requiredLevel": 40,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner V",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner V",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness V",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_5",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated V",
+            "description": "+5% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 5,
+        "levelRequired": 60,
+        "choicesRequired": 1,
+        "requiredLevel": 50,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner VI",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_miner_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner VI",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness VI",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_6",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated VI",
+            "description": "+5% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 6,
+        "levelRequired": 70,
+        "choicesRequired": 1,
+        "requiredLevel": 60,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_runner_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner VII",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated VII",
+            "description": "+10% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness VII",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 7,
+        "levelRequired": 80,
+        "choicesRequired": 1,
+        "requiredLevel": 70,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_miner_7",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Miner VII",
+            "description": "Reduces thirst drain while mining by 5%.",
+            "iconPath": "Tool_Pickaxe_Copper",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_8",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated VIII",
+            "description": "+5% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_fitness_8",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness VIII",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 8,
+        "levelRequired": 90,
+        "choicesRequired": 1,
+        "requiredLevel": 80,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_fitness_9",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Fitness IX",
+            "description": "Reduces passive thirst drain by 5%.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_rehydrated_9",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Rehydrated IX",
+            "description": "+10% thirst restored when consuming an item.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_runner_8",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Runner VIII",
+            "description": "Reduces thirst drain while running by 5%.",
+            "iconPath": "Armor_Boots_Leather",
+            "combatTarget": "THIRST"
+          }
+        ]
+      },
+      {
+        "tier": 9,
+        "levelRequired": 100,
+        "choicesRequired": 1,
+        "requiredLevel": 90,
+        "xpRequired": 0,
+        "choices": [
+          {
+            "id": "thirst_hydration_master",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Hydration Master",
+            "description": "Expert Hydration: +20% drinking bonus.",
+            "iconPath": "Potion_Empty_Small",
+            "combatTarget": "THIRST"
+          },
+          {
+            "id": "thirst_healthy_lifestyle",
+            "type": "BONUS_XP",
+            "value": 0.001,
+            "displayName": "Super Healthy",
+            "description": "Total Efficiency: -20% running, -20% mining, -15% passive.",
+            "iconPath": "Plant_Fruit_Apple",
+            "combatTarget": "THIRST"
+          }
+        ]
+      }
+    ]
+  }
+}

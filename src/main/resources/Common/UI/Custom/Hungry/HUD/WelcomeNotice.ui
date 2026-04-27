@@ -1,0 +1,50 @@
+// Cuadro emergente no-bloqueante de bienvenida de integración.
+// Se inyecta en el HUD vía clear=false y no bloquea el movimiento.
+// Posicionado ~200px arriba del centro de la pantalla.
+
+Group #WelcomeNoticeRoot {
+    LayoutMode: Middle;
+    Visible: false;
+
+    Group {
+        Anchor: (Width: 650, Height: 260, Bottom: 200);
+        LayoutMode: Top;
+        Padding: (Top: 24, Bottom: 16, Left: 40, Right: 40);
+        Background: "Sanitypapiro.png";
+
+        Label #WelcomeNoticeLine1 {
+            Text: "";
+            Style: (FontSize: 22, TextColor: #3b1a00, HorizontalAlignment: Center, RenderBold: true);
+            Anchor: (Bottom: 3);
+        }
+
+        Label #WelcomeNoticeLine2 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #4a2800, HorizontalAlignment: Center);
+            Anchor: (Bottom: 2);
+        }
+
+        Label #WelcomeNoticeLine3 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #4a2800, HorizontalAlignment: Center);
+            Anchor: (Bottom: 2);
+        }
+
+        Label #WelcomeNoticeLine4 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #4a2800, HorizontalAlignment: Center);
+            Anchor: (Bottom: 2);
+        }
+
+        Label #WelcomeNoticeLine5 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #4a2800, HorizontalAlignment: Center);
+            Anchor: (Bottom: 8);
+        }
+
+        Label #WelcomeNoticeDismiss {
+            Text: "";
+            Style: (FontSize: 16, TextColor: #1a5c00, HorizontalAlignment: Center, RenderBold: true);
+        }
+    }
+}

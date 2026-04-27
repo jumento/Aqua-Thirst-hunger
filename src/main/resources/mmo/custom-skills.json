@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "id": "NUTRITION",
+      "displayName": "Nutrición",
+      "category": "misc",
+      "description": "Mejora tu metabolismo y resistencia al hambre.",
+      "iconPath": "Plant_Fruit_Apple",
+      "triggerTypes": []
+    },
+    {
+      "id": "THIRST",
+      "displayName": "Hidratación",
+      "category": "misc",
+      "description": "Mejora tu resistencia a la sed.",
+      "iconPath": "Potion_Empty_Small",
+      "triggerTypes": []
+    }
+  ],
+  "disabledBuiltinSkills": []
+}

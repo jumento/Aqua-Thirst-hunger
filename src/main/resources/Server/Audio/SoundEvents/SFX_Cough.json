@@ -1,0 +1,12 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/cofcof.ogg"
+      ],
+      "Volume": 3
+    }
+  ],
+  "Volume": 3,
+  "Parent": "SFX_Attn_Loud"
+}

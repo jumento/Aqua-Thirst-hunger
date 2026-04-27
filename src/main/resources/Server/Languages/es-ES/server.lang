@@ -1,0 +1,24 @@
+items.AquaThirstHunger_Canteen.name = Cantimplora Rustica
+items.AquaThirstHunger_Canteen.description = No es la mejor forma, pero la mas accesible para conseguir agua
+
+items.AquaThirstHunger_Canteen_Pro_Empty.name = Cantimplora Pro vacia
+items.AquaThirstHunger_Canteen_Pro_Empty.description = Busca una fuente de agua para llenarla
+items.AquaThirstHunger_Canteen_Pro.name = Cantimplora Pro con agua
+items.AquaThirstHunger_Canteen_Pro.description = Llena de agua, lista para tomarse
+
+items.AquaThirstHunger_BasicBottle_Empty.name = Bote Básico vacio
+items.AquaThirstHunger_BasicBottle_Empty.description = Un bote simple para llevar agua.
+items.AquaThirstHunger_BasicBottle.name = Bote Básico con agua
+items.AquaThirstHunger_BasicBottle.description = Bote básico lleno de agua, contiene 5 usos.
+
+chat.xp.satiated = #F39C12[Supervivencia] #FFFFFFTe sientes satisfecho. #2ECC71+100 XP
+chat.xp.gluttony = #E67E22[Glotonería] #FFFFFF¡Has comido más de la cuenta! #27AE60+50 XP
+chat.xp.resilience = #C0392B[Resiliencia] #FFFFFF¡Sobreviviste al límite! #27AE60+50 XP
+chat.xp.resilience_thirst = #2980B9[Resiliencia] #FFFFFFHidratación extrema alcanzada. #27AE60+25 XP
+
+title.most_gluttonous = El más Comelón
+title.most_hungry = El más Hambriento
+title.most_thirsty = El más Sediento
+title.most_dehydrated = El más Deshidratado
+
+

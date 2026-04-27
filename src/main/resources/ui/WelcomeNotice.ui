@@ -1,0 +1,40 @@
+Group #WelcomeNoticeRoot {
+    LayoutMode: Middle;
+    Visible: false;
+
+    Group {
+        Anchor: (Width: 400, Center: 0, Bottom: 200);
+        LayoutMode: Top;
+        Padding: (Full: 14);
+        Background: #000000(0.75);
+
+        Label #NoticeLine1 {
+            Text: "";
+            Style: (FontSize: 22, TextColor: #ffffff, HorizontalAlignment: Center, RenderBold: true);
+            Anchor: (Bottom: 6);
+        }
+
+        Label #NoticeLine2 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #cccccc, HorizontalAlignment: Center);
+            Anchor: (Bottom: 4);
+        }
+
+        Label #NoticeLine3 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #cccccc, HorizontalAlignment: Center);
+            Anchor: (Bottom: 4);
+        }
+
+        Label #NoticeLine4 {
+            Text: "";
+            Style: (FontSize: 18, TextColor: #cccccc, HorizontalAlignment: Center);
+            Anchor: (Bottom: 10);
+        }
+
+        Label #NoticeDismiss {
+            Text: "";
+            Style: (FontSize: 16, TextColor: #55ff55, HorizontalAlignment: Center);
+        }
+    }
+}

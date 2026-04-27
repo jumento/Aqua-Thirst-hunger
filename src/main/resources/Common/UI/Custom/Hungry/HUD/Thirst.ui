@@ -1,0 +1,66 @@
+@HHMThirstBarFill = "ThirstBarFill.png";
+@HHMThirstBarFillTranslucent = "ThirstBarFillTranslucent.png";
+@HHMCreativeThirstBarFill = "CreativeThirstBarFill.png";
+
+Group {
+    LayoutMode: Bottom;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group #HHMThirstContainer {
+        Group {
+            Anchor: (Width: 351, Right: -5);
+            LayoutMode: Left;
+
+            Group {
+                Anchor: (Width: 318, Height: 12);
+                Background: "ThirstBackground.png";
+
+                ProgressBar #HHMThirstRestorePreviewBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMThirstBarFillTranslucent;
+                    Value: 0;
+                    Visible: true;
+                }
+                ProgressBar #HHMThirstBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMThirstBarFill;
+                    Value: 1.0;
+                    Visible: true;
+                }
+                ProgressBar #HHMCreativeThirstBar {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: @HHMCreativeThirstBarFill;
+                    Value: 1.0;
+                    Visible: false;
+                }
+                ProgressBar #HHMThirstBarEffect {
+                    Anchor: (Width: 318, Height: 12);
+                    BarTexturePath: "ThirstBarEffect.png";
+                    Value: 1.0;
+                }
+            }
+
+            Group {
+                Anchor: (Width: 65, Height: 20, Left: 8);
+                
+                Group #HHMThirstIcon {
+                    Anchor: (Width: 20, Height: 20, Left: 0, Top: 0);
+                    Background: "ThirstIcon.png";
+                }
+                
+                Label #HHMThirstXpUp {
+                    Text: "+XP";
+                    Style: (TextColor: #55FF55, FontSize: 14);
+                    Anchor: (Width: 40, Height: 20, Left: 20, Top: 0);
+                    Visible: false;
+                }
+                Label #HHMThirstXpDown {
+                    Text: "-XP";
+                    Style: (TextColor: #FF5555, FontSize: 14);
+                    Anchor: (Width: 40, Height: 20, Left: 20, Top: 0);
+                    Visible: false;
+                }
+            }
+        }
+    }
+}

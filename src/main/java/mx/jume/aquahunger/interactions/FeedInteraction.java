@@ -1,0 +1,332 @@
+package mx.jume.aquahunger.interactions;
+
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect;
+import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import mx.jume.aquahunger.HHMUtils;
+import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.assets.FoodValue;
+import mx.jume.aquahunger.components.HungerComponent;
+import mx.jume.aquahunger.config.HHMFoodValuesConfig;
+import mx.jume.aquahunger.ui.HHMHud;
+
+import mx.jume.aquahunger.compat.SuperlativeManager;
+import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+
+import java.util.Set;
+
+public class FeedInteraction extends SimpleInstantInteraction {
+    public static final BuilderCodec<FeedInteraction> CODEC = BuilderCodec
+            .builder(FeedInteraction.class, FeedInteraction::new, SimpleInstantInteraction.CODEC)
+            .appendInherited(new KeyedCodec<>("HungerRestoration", Codec.FLOAT),
+                    ((foodValue, value) -> foodValue.hungerRestoration = value),
+                    (foodValue) -> foodValue.hungerRestoration,
+                    (foodValue, parent) -> foodValue.hungerRestoration = parent.hungerRestoration)
+            .add()
+            .appendInherited(new KeyedCodec<>("MaxHungerSaturation", Codec.FLOAT),
+                    ((foodValue, value) -> foodValue.maxHungerSaturation = value),
+                    (foodValue) -> foodValue.maxHungerSaturation,
+                    (foodValue, parent) -> foodValue.maxHungerSaturation = parent.maxHungerSaturation)
+            .add()
+            .appendInherited(new KeyedCodec<>("ThirstRestoreAmount", Codec.FLOAT),
+                    ((foodValue, value) -> foodValue.thirstRestoreAmount = value),
+                    (foodValue) -> foodValue.thirstRestoreAmount,
+                    (foodValue, parent) -> foodValue.thirstRestoreAmount = parent.thirstRestoreAmount)
+            .add()
+            .build();
+
+    private Float hungerRestoration;
+    private Float maxHungerSaturation;
+    private Float thirstRestoreAmount;
+
+    private static final Set<String> RAW_MEATS = Set.of(
+            "Food_Beef_Raw",
+            "Food_Pork_Raw",
+            "Food_Chicken_Raw",
+            "Food_Wildmeat_Raw");
+
+    public static float getHungerRestoration(Item item, Float interactionValue) {
+        // Hardcoded safety for canteens
+        String id = item.getId();
+        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
+            //AquaThirstHunger.logInfo("Force-zeroing hunger for canteen item: " + id);
+            return 0.0f;
+        }
+
+        // 0. External Config Override (Highest Priority)
+        mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
+                .getExternalFoodsConfig();
+        if (externalConfig != null) {
+            var entry = externalConfig.resolve(item.getId());
+            if (entry != null) {
+                return entry.hungerRestoration;
+            }
+        }
+
+        HHMFoodValuesConfig config = AquaThirstHunger.get().getFoodValuesConfig();
+        // first prefer user config
+        Float configValue = config.getItemHungerRestoration(item.getId());
+        if (configValue != null)
+            return configValue;
+
+        // then asset (mod author) values
+        if (!config.isIgnoreCustomAssetValues()) {
+            Float assetValue = FoodValue.getHungerRestoration(item.getId());
+            if (assetValue != null)
+                return assetValue;
+        }
+
+        // then interaction (mod author) values
+        if (!config.isIgnoreInteractionValues()) {
+            if (interactionValue != null)
+                return interactionValue;
+        }
+
+        // finally the tier config value
+        return config.getTierHungerRestoration(HHMUtils.getItemTier(item));
+    }
+
+    public static float getMaxHungerSaturation(Item item, Float interactionValue) {
+        // Hardcoded safety for canteens
+        String id = item.getId();
+        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
+            return 0.0f;
+        }
+
+        // 0. External Config Override (Highest Priority)
+        mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
+                .getExternalFoodsConfig();
+        if (externalConfig != null) {
+            var entry = externalConfig.resolve(item.getId());
+            if (entry != null) {
+                return entry.maxHungerSaturation;
+            }
+        }
+
+        HHMFoodValuesConfig config = AquaThirstHunger.get().getFoodValuesConfig();
+        // first prefer user config
+        Float configValue = config.getItemMaxHungerSaturation(item.getId());
+        if (configValue != null)
+            return configValue;
+
+        // then asset (mod author) values
+        if (!config.isIgnoreCustomAssetValues()) {
+            Float assetValue = FoodValue.getMaxHungerSaturation(item.getId());
+            if (assetValue != null)
+                return assetValue;
+        }
+
+        // then interaction (mod author) values
+        if (!config.isIgnoreInteractionValues()) {
+            if (interactionValue != null)
+                return interactionValue;
+        }
+
+        // finally the tier config value
+        return config.getTierMaxHungerSaturation(HHMUtils.getItemTier(item));
+    }
+
+    public static float getExpectedHungerLevel(float currentHungerLevel, float hungerRestoration,
+            float maxHungerSaturation) {
+        return Math.min(
+                currentHungerLevel + hungerRestoration,
+                100.0f + maxHungerSaturation);
+    }
+
+    public static float getThirstRestoration(Item item, Float interactionValue) {
+        // 0. External Config Override (Highest Priority)
+        mx.jume.aquahunger.config.HHMExternalFoodsConfig externalConfig = AquaThirstHunger.get()
+                .getExternalFoodsConfig();
+        if (externalConfig != null) {
+            var entry = externalConfig.resolve(item.getId());
+            if (entry != null) {
+                return entry.thirstRestoration;
+            }
+        }
+
+        mx.jume.aquahunger.config.HHMThirstFoodValuesConfig thirstFoodConfig = AquaThirstHunger.get()
+                .getThirstFoodValuesConfig();
+        if (thirstFoodConfig == null) {
+            return 0.0f;
+        }
+
+        // 1. Check for specific Item ID override in ThirstFoodValuesConfig
+        Float itemOverride = thirstFoodConfig.getItemThirstRestoration(item.getId());
+        float baseThirstRestore;
+
+        if (itemOverride != null) {
+            baseThirstRestore = itemOverride;
+        } else if (interactionValue != null) {
+            // Use interaction value if provided in JSON
+            baseThirstRestore = interactionValue;
+        } else {
+            // 2. Resolve Tier and get base value from config
+            baseThirstRestore = thirstFoodConfig.getTierThirstRestoration(HHMUtils.getItemTier(item));
+        }
+
+        // 3. Debug: Log calculated value before fruit/dehydration multipliers
+        if (item.getId().contains("Canteen")) {
+            String cleanId = item.getId().contains(":") ? item.getId().substring(item.getId().indexOf(":") + 1)
+                    : item.getId();
+            if (cleanId.contains("["))
+                cleanId = cleanId.substring(0, cleanId.indexOf("["));
+            //AquaThirstHunger.logInfo("[ThirstDebug] RawID: " + item.getId() + " | CleanID: " + cleanId + " | Match: "
+                    //+ (itemOverride != null) + " | Value: " + baseThirstRestore);
+        }
+
+        // 4. Check for Dehydration/Fruit Resource Type
+        boolean isFruit = false;
+        if (item.getResourceTypes() != null) {
+            String fruitType = thirstFoodConfig.getFruitResourceTypeId();
+            for (var resourceType : item.getResourceTypes()) {
+                if (resourceType != null && resourceType.id != null
+                        && resourceType.id.equalsIgnoreCase(fruitType)) {
+                    isFruit = true;
+                    //AquaThirstHunger
+                            //.logInfo("Detected fruit: " + item.getId() + " with ResourceType: " + resourceType.id);
+                    break;
+                }
+            }
+        }
+
+        // 5. Apply Multiplier
+        float finalValue = baseThirstRestore * (isFruit ? thirstFoodConfig.getFruitMultiplier() : 1.0f);
+        if (isFruit) {
+            //AquaThirstHunger.logInfo("Applied fruit multiplier (" + thirstFoodConfig.getFruitMultiplier()
+                    //+ "x) to " + item.getId() + ": " + baseThirstRestore + " -> " + finalValue);
+        }
+        return finalValue;
+    }
+
+    public float getThirstRestoration(Item item) {
+        return getThirstRestoration(item, this.thirstRestoreAmount);
+    }
+
+    public float getHungerRestoration(Item item) {
+        return getHungerRestoration(item, this.hungerRestoration);
+    }
+
+    public float getMaxHungerSaturation(Item item) {
+        return getMaxHungerSaturation(item, this.maxHungerSaturation);
+    }
+
+    @Override
+    protected void firstRun(
+            @NonNullDecl InteractionType interactionType,
+            @NonNullDecl InteractionContext context,
+            @NonNullDecl CooldownHandler cooldownHandler) {
+        final Ref<EntityStore> ref = context.getEntity();
+        final Store<EntityStore> store = ref.getStore();
+        final CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
+
+        final Item item = context.getOriginalItemType();
+        final PlayerRef playerRef = store.getComponent(ref, PlayerRef.getComponentType());
+        if (item == null || commandBuffer == null)
+            return;
+
+        // --- Hunger Logic ---
+        if (AquaThirstHunger.get().getHungerConfig().isEnableHunger()) {
+            final HungerComponent hungerComponent = store.getComponent(ref, HungerComponent.getComponentType());
+            if (hungerComponent != null) {
+                float currentHungerLevel = hungerComponent.getHungerLevel();
+                float hungerRestoration = getHungerRestoration(item);
+                float maxHungerSaturation = getMaxHungerSaturation(item);
+
+                float targetHungerLevel = getExpectedHungerLevel(currentHungerLevel, hungerRestoration,
+                        maxHungerSaturation);
+
+                if (currentHungerLevel < targetHungerLevel) {
+                    hungerComponent.setHungerLevel(targetHungerLevel);
+                    
+                    // XP Trigger
+                    float satiatedThreshold = AquaThirstHunger.get().getHungerConfig().getSatiatedThreshold();
+                    if (currentHungerLevel < satiatedThreshold && targetHungerLevel >= satiatedThreshold) {
+                        mx.jume.aquahunger.compat.IntegrationManager.awardXP(ref, store, "NUTRITION", satiatedThreshold, "EATING");
+                        hungerComponent.incrementTimesFilled();
+                        SuperlativeManager.checkGluttony(playerRef, hungerComponent.getTimesFilledTotal());
+                    } else if (targetHungerLevel > satiatedThreshold) {
+                        mx.jume.aquahunger.compat.IntegrationManager.awardXP(ref, store, "NUTRITION", 50.0f, "EATING_SATURATED");
+                    }
+
+                    if (playerRef != null) {
+                        HHMHud.updatePlayerHungerLevel(playerRef, targetHungerLevel);
+                    }
+                    HHMUtils.removeActiveEffects(ref, commandBuffer, HHMUtils::activeEntityEffectIsHungerRelated);
+
+                }
+            }
+        }
+
+        // --- Thirst Logic ---
+        if (AquaThirstHunger.get().getThirstConfig().isEnableThirst()) {
+            final mx.jume.aquahunger.components.ThirstComponent thirstComponent = store.getComponent(ref,
+                    mx.jume.aquahunger.components.ThirstComponent.getComponentType());
+            if (thirstComponent != null) {
+                float thirstRestoration = getThirstRestoration(item);
+                if (thirstRestoration != 0) {
+                    float oldThirst = thirstComponent.getThirstLevel();
+                    // Check if it's dehydrating vs hydrating
+                    if (thirstRestoration > 0) {
+                        // Apply MMO Rehydration bonus (thirst_rehydrated_* picks)
+                        float rehydBonus = mx.jume.aquahunger.compat.IntegrationManager.getRehydrationBonus(ref, store);
+                        float finalThirstRestoration = thirstRestoration * (1.0f + rehydBonus);
+                        if (rehydBonus > 0f) {
+                            //AquaThirstHunger.logInfo(String.format(
+                                //"[mmo] Rehidratado bonus: base=%.1f bonus=+%.0f%% final=%.1f",
+                                //thirstRestoration, rehydBonus * 100, finalThirstRestoration));
+                        }
+                        thirstComponent.drink(finalThirstRestoration);
+
+                        
+                        // XP Trigger
+                        float newThirst = thirstComponent.getThirstLevel();
+                        float thirstSatiatedThreshold = AquaThirstHunger.get().getThirstConfig().getSatiatedThreshold();
+                        if (oldThirst < thirstSatiatedThreshold && newThirst >= thirstSatiatedThreshold) {
+                            mx.jume.aquahunger.compat.IntegrationManager.awardXP(ref, store, "THIRST", 100.0f, "DRINKING");
+                            thirstComponent.incrementTimesFilled();
+                            SuperlativeManager.checkThirsty(playerRef, thirstComponent.getTimesFilledTotal());
+                        }
+                    } else {
+                        thirstComponent.dehydrate(-thirstRestoration);
+                    }
+                    if (playerRef != null) {
+                        // We will implement updatePlayerThirstLevel in HHMThirstHud later
+                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef,
+                                thirstComponent.getThirstLevel());
+                    }
+                }
+            }
+        }
+
+        // Apply poison if raw meat
+        if (RAW_MEATS.contains(item.getId())) {
+            final EffectControllerComponent effectController = commandBuffer.getComponent(ref,
+                    EffectControllerComponent.getComponentType());
+            if (effectController != null) {
+                EntityEffect poisonEffect = HHMUtils.getPoisonT1EntityEffect();
+                if (poisonEffect != null) {
+                    effectController.addEffect(ref, poisonEffect, commandBuffer);
+                }
+            }
+        }
+
+        // --- GLOBAL PREVIEW CLEANUP ---
+        // Always clear restoration previews after the interaction finishes
+        if (playerRef != null) {
+            HHMHud.updatePlayerHungerRestorationPreview(playerRef, 0.0f, 0.0f);
+            mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstRestorationPreview(playerRef, 0.0f);
+        }
+    }
+}

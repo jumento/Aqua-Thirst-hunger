@@ -1,0 +1,200 @@
+package mx.jume.aquahunger.config;
+
+import com.google.gson.annotations.SerializedName;
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
+import com.hypixel.hytale.codec.codecs.map.MapCodec;
+import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
+public class HHMFoodValuesConfig {
+        public static final BuilderCodec<HHMFoodValuesConfig> CODEC = BuilderCodec
+                        .builder(HHMFoodValuesConfig.class, HHMFoodValuesConfig::new)
+                        .append(new KeyedCodec<>("IgnoreInteractionValues", Codec.BOOLEAN),
+                                        ((config, value) -> config.ignoreInteractionValues = value),
+                                        (c) -> c.ignoreInteractionValues)
+                        .add()
+                        .append(new KeyedCodec<>("IgnoreCustomAssetValues", Codec.BOOLEAN),
+                                        ((config, value) -> config.ignoreCustomAssetValues = value),
+                                        (c) -> c.ignoreCustomAssetValues)
+                        .add()
+                        .append(new KeyedCodec<>("ConfigVersion", Codec.STRING),
+                                        ((config, value) -> config.configVersion = value),
+                                        (c) -> c.configVersion)
+                        .add()
+                        .append(new KeyedCodec<>("TierHungerRestoration",
+                                        new EnumMapCodec<>(ItemTier.class, Codec.FLOAT)),
+                                        ((config, value) -> config.tierHungerRestoration.putAll(value)),
+                                        (c) -> c.tierHungerRestoration)
+                        .add()
+                        .append(new KeyedCodec<>("TierMaxHungerSaturation",
+                                        new EnumMapCodec<>(ItemTier.class, Codec.FLOAT)),
+                                        ((config, value) -> config.tierMaxHungerSaturation.putAll(value)),
+                                        (c) -> c.tierMaxHungerSaturation)
+                        .add()
+                        .append(new KeyedCodec<>("ItemHungerRestoration", new MapCodec<>(Codec.FLOAT, HashMap::new)),
+                                        ((config, value) -> config.itemHungerRestoration = value),
+                                        (c) -> c.itemHungerRestoration)
+                        .add()
+                        .append(new KeyedCodec<>("ItemMaxHungerSaturation", new MapCodec<>(Codec.FLOAT, HashMap::new)),
+                                        ((config, value) -> config.itemMaxHungerSaturation = value),
+                                        (c) -> c.itemMaxHungerSaturation)
+                        .add()
+                        .build();
+
+        @SerializedName("IgnoreInteractionValues")
+        private boolean ignoreInteractionValues = false;
+        @SerializedName("IgnoreCustomAssetValues")
+        private boolean ignoreCustomAssetValues = false;
+        @SerializedName("ConfigVersion")
+        private String configVersion = "1.7.5";
+        @SerializedName("TierHungerRestoration")
+        private final Map<ItemTier, Float> tierHungerRestoration = new EnumMap<>(ItemTier.class);
+        @SerializedName("TierMaxHungerSaturation")
+        private final Map<ItemTier, Float> tierMaxHungerSaturation = new EnumMap<>(ItemTier.class);
+        @SerializedName("ItemHungerRestoration")
+        private Map<String, Float> itemHungerRestoration = new HashMap<>();
+        @SerializedName("ItemMaxHungerSaturation")
+        private Map<String, Float> itemMaxHungerSaturation = new HashMap<>();
+
+        public HHMFoodValuesConfig() {
+                tierHungerRestoration.put(ItemTier.Common, 7.5f);
+                tierHungerRestoration.put(ItemTier.Uncommon, 12.5f);
+                tierHungerRestoration.put(ItemTier.Rare, 22.5f);
+                tierHungerRestoration.put(ItemTier.Epic, 35.0f);
+                tierHungerRestoration.put(ItemTier.Legendary, 50.0f);
+                tierHungerRestoration.put(ItemTier.Mythic, 70.0f);
+                tierHungerRestoration.put(ItemTier.Unique, 95.0f);
+
+                tierMaxHungerSaturation.put(ItemTier.Common, 0.0f);
+                tierMaxHungerSaturation.put(ItemTier.Uncommon, 15.0f);
+                tierMaxHungerSaturation.put(ItemTier.Rare, 30.0f);
+                tierMaxHungerSaturation.put(ItemTier.Epic, 45.0f);
+                tierMaxHungerSaturation.put(ItemTier.Legendary, 65.0f);
+                tierMaxHungerSaturation.put(ItemTier.Mythic, 80.0f);
+                tierMaxHungerSaturation.put(ItemTier.Unique, 100.0f);
+
+                itemHungerRestoration.put("AquaThirstHunger_Canteenpro_Empty", 0.0f);
+                itemHungerRestoration.put("AquaThirstHunger_BasicBottle_Empty", 0.0f);
+                itemHungerRestoration.put("AquaThirstHunger_Canteen", 0.0f);
+                itemHungerRestoration.put("Potion_Empty", 0.0f);
+        }
+
+        public Float getItemHungerRestoration(@NonNullDecl String itemId) {
+                if (itemId == null)
+                        return null;
+
+                String cleanId = itemId;
+                if (cleanId.startsWith("*"))
+                        cleanId = cleanId.substring(1);
+                if (cleanId.contains(":"))
+                        cleanId = cleanId.substring(cleanId.indexOf(":") + 1);
+
+                int stateIdx = cleanId.indexOf("_State_");
+                if (stateIdx != -1)
+                        cleanId = cleanId.substring(0, stateIdx);
+                int variantIdx = cleanId.indexOf("_Variant_");
+                if (variantIdx != -1)
+                        cleanId = cleanId.substring(0, variantIdx);
+                int bracketIdx = cleanId.indexOf("[");
+                if (bracketIdx != -1)
+                        cleanId = cleanId.substring(0, bracketIdx);
+
+                if (itemHungerRestoration.containsKey(itemId))
+                        return itemHungerRestoration.get(itemId);
+                if (itemHungerRestoration.containsKey(cleanId))
+                        return itemHungerRestoration.get(cleanId);
+
+                String bestKey = null;
+                for (String key : itemHungerRestoration.keySet()) {
+                        if (itemId.startsWith(key) || cleanId.startsWith(key)) {
+                                if (bestKey == null || key.length() > bestKey.length())
+                                        bestKey = key;
+                        }
+                }
+                return (bestKey != null) ? itemHungerRestoration.get(bestKey) : null;
+        }
+
+        public Float getItemMaxHungerSaturation(@NonNullDecl String itemId) {
+                if (itemId == null)
+                        return null;
+
+                String cleanId = itemId;
+                if (cleanId.startsWith("*"))
+                        cleanId = cleanId.substring(1);
+                if (cleanId.contains(":"))
+                        cleanId = cleanId.substring(cleanId.indexOf(":") + 1);
+
+                int stateIdx = cleanId.indexOf("_State_");
+                if (stateIdx != -1)
+                        cleanId = cleanId.substring(0, stateIdx);
+                int variantIdx = cleanId.indexOf("_Variant_");
+                if (variantIdx != -1)
+                        cleanId = cleanId.substring(0, variantIdx);
+                int bracketIdx = cleanId.indexOf("[");
+                if (bracketIdx != -1)
+                        cleanId = cleanId.substring(0, bracketIdx);
+
+                if (itemMaxHungerSaturation.containsKey(itemId))
+                        return itemMaxHungerSaturation.get(itemId);
+                if (itemMaxHungerSaturation.containsKey(cleanId))
+                        return itemMaxHungerSaturation.get(cleanId);
+
+                String bestKey = null;
+                for (String key : itemMaxHungerSaturation.keySet()) {
+                        if (itemId.startsWith(key) || cleanId.startsWith(key)) {
+                                if (bestKey == null || key.length() > bestKey.length())
+                                        bestKey = key;
+                        }
+                }
+                return (bestKey != null) ? itemMaxHungerSaturation.get(bestKey) : null;
+        }
+
+        public float getTierHungerRestoration(@NonNullDecl ItemTier tier) {
+                return tierHungerRestoration.getOrDefault(tier, 0.0f);
+        }
+
+        public float getTierMaxHungerSaturation(@NonNullDecl ItemTier tier) {
+                return tierMaxHungerSaturation.getOrDefault(tier, 0.0f);
+        }
+
+        public boolean isIgnoreInteractionValues() {
+                return ignoreInteractionValues;
+        }
+
+        public boolean isIgnoreCustomAssetValues() {
+                return ignoreCustomAssetValues;
+        }
+
+        public String getConfigVersion() {
+                return configVersion;
+        }
+
+        public void setConfigVersion(String configVersion) {
+                this.configVersion = configVersion;
+        }
+
+        public Map<ItemTier, Float> getTierHungerRestoration() {
+                return tierHungerRestoration;
+        }
+
+        public Map<ItemTier, Float> getTierMaxHungerSaturation() {
+                return tierMaxHungerSaturation;
+        }
+
+        public Map<String, Float> getItemHungerRestorationMap() {
+                return itemHungerRestoration;
+        }
+
+        public Map<String, Float> getItemMaxHungerSaturationMap() {
+                return itemMaxHungerSaturation;
+        }
+
+        public void ensureDefaults() {
+                ConfigMigrationManager.migrate(this);
+        }
+}
