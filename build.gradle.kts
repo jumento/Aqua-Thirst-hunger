@@ -14,10 +14,14 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "hytale-release"
+        url = uri("https://maven.hytale.com/release")
+    }
 }
 
 dependencies {
-    compileOnly(fileTree("libs") { include("*.jar") })
+    compileOnly("com.hypixel.hytale:Server:0.5.3")
     compileOnly("com.google.code.gson:gson:2.10.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -27,27 +31,24 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-// Generate Manifest Task based on AquaSanity template
 val generateManifest by tasks.registering {
     val outputDir = layout.buildDirectory.dir("generated/resources")
     outputs.dir(outputDir)
-    
+
     inputs.property("group", project.group)
     inputs.property("name", "Aqua-Thirst-hunger")
     inputs.property("version", project.version)
 
     doLast {
-        var activeServerVersion = "2026.03.26-89796e57b" // Base version
-        try {
+        val fetchedVersion: String? = try {
             val xmlText = URL("https://maven.hytale.com/release/com/hypixel/hytale/Server/maven-metadata.xml").readText()
-            val regex = "<release>(.*?)</release>".toRegex()
-            val match = regex.find(xmlText)
-            if (match != null) {
-                activeServerVersion = match.groupValues[1]
-            }
+            "<release>(.*?)</release>".toRegex().find(xmlText)?.groupValues?.get(1)
         } catch (e: Exception) {
-            println("Warning: Could not connect to Hytale Maven. Using base version.")
+            println("Warning: Could not connect to Hytale Maven. Using base version. (${e.message})")
+            null
         }
+
+        val activeServerVersion = ">=" + (fetchedVersion ?: "0.5.3")
 
         val json = """
             {
