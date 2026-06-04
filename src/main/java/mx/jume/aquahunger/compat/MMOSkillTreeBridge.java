@@ -3,20 +3,20 @@ package mx.jume.aquahunger.compat;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import mx.jume.aquahunger.AquaThirstHunger;
 
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.AddReason;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
+import org.joml.Vector3d;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -462,7 +462,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
                     store,
                     Collections.singletonList(dropStack),
                     pos,
-                    new Vector3f(
+                    new Rotation3f(
                             (float) (random.nextFloat() * 2 - 1), // X velocity
                             2.0f,                                 // Y velocity (upwards)
                             (float) (random.nextFloat() * 2 - 1)  // Z velocity
