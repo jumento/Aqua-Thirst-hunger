@@ -13,16 +13,12 @@ import mx.jume.aquahunger.components.HungerComponent;
 import mx.jume.aquahunger.AquaThirstHunger;
 import mx.jume.aquahunger.ui.HHMHud;
 import mx.jume.aquahunger.ui.HHMThirstHud;
-import mx.jume.aquahud.AquaHudBridge;
 
 public class GameModePacketWatcher implements PlayerPacketWatcher {
     @Override
     public void accept(PlayerRef playerRef, Packet packet) {
         if (!(packet instanceof SetGameMode setGameMode))
             return;
-
-        // SYNCHRONOUS in accept() — suppress ECS ticks immediately
-        AquaHudBridge.invalidateDom(playerRef);
 
         Ref<EntityStore> ref = playerRef.getReference();
         if (ref == null)
@@ -33,25 +29,11 @@ public class GameModePacketWatcher implements PlayerPacketWatcher {
         world.execute(() -> {
             GameMode gameMode = setGameMode.gameMode;
 
-            // 1. Update internal HUD state
-            HHMHud hungerHud = HHMHud.getHud(playerRef);
-            if (hungerHud != null) {
-                hungerHud.setGameMode(gameMode);
-                // TRANSPARENT: forzar show() para que build() regenere con el gameMode actual.
-                AquaHudBridge.forceTransparentRebuild(playerRef, HHMHud.hudIdentifier, hungerHud);
-            }
+            // Update HUD game mode state and push the change to the client
+            HHMHud.updatePlayerGameMode(playerRef, gameMode);
+            HHMThirstHud.updatePlayerGameMode(playerRef, gameMode);
 
-            HHMThirstHud thirstHud = HHMThirstHud.getHud(playerRef);
-            if (thirstHud != null) {
-                thirstHud.setGameMode(gameMode);
-                // TRANSPARENT: forzar show() para que build() regenere con el gameMode actual.
-                AquaHudBridge.forceTransparentRebuild(playerRef, HHMThirstHud.hudIdentifier, thirstHud);
-            }
-
-            // 2. Rebuild — covers unpredictable motor timing (COORDINATED/DELEGATED)
-            AquaHudBridge.rebuildAllDeferred(playerRef, world);
-
-            // 3. Hunger/thirst restoration in creative
+            // Hunger/thirst restoration in creative
             HungerComponent hunger = store.getComponent(ref, HungerComponent.getComponentType());
             mx.jume.aquahunger.components.ThirstComponent thirst = store.getComponent(ref,
                     mx.jume.aquahunger.components.ThirstComponent.getComponentType());

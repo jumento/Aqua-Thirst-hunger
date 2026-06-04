@@ -17,6 +17,5 @@ public class HHMPlayerDisconnect {
 
         HHMHud.removeHud(playerRef);
         HHMThirstHud.removeHud(playerRef);
-        mx.jume.aquahud.AquaHudBridge.onPlayerDisconnect(playerRef);
     }
 }
