@@ -5,7 +5,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import mx.jume.aquahunger.AquaThirstHunger;
 import mx.jume.aquahunger.ui.HHMHud;
-import mx.jume.aquahud.AquaHudBridge;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -81,7 +80,7 @@ public class WelcomeNoticeManager {
 
             HHMHud hud = HHMHud.getHud(playerRef);
             if (hud != null) {
-                AquaHudBridge.update(playerRef, HHMHud.hudIdentifier, cmd, hud);
+                hud.update(false, cmd);
                 //AquaThirstHunger.logInfo("[aquahunger] Notice UI injected successfully via AquaHudBridge.");
             } else {
                 //AquaThirstHunger.logWarning("[aquahunger] FAILED to show notice: No HUD instance found.");
@@ -98,7 +97,7 @@ public class WelcomeNoticeManager {
         boolean success = false;
         HHMHud hud = HHMHud.getHud(playerRef);
         if (hud != null) {
-            AquaHudBridge.update(playerRef, HHMHud.hudIdentifier, cmd, hud);
+            hud.update(false, cmd);
             success = true;
         }
         

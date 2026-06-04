@@ -18,8 +18,6 @@ import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HHMFoodValuesConfig;
 import mx.jume.aquahunger.events.GameModePacketWatcher;
 import mx.jume.aquahunger.events.HHMPlayerReady;
-import mx.jume.aquahud.AquaHudBridge;
-import mx.jume.aquahud.AquaHudWatcher;
 import mx.jume.aquahunger.interactions.FailedFeedingInteraction;
 import mx.jume.aquahunger.interactions.FeedInteraction;
 import mx.jume.aquahunger.interactions.StartFeedingInteraction;
@@ -79,8 +77,6 @@ public class AquaThirstHunger extends JavaPlugin {
 
         //logDebug("Registering events...");
 
-        AquaHudBridge.detect(this);
-        AquaHudWatcher.ensureRegistered();
         PacketAdapters.registerOutbound(new GameModePacketWatcher());
 
         this.getCommandRegistry().registerCommand(new HungryCommand());
@@ -98,8 +94,6 @@ public class AquaThirstHunger extends JavaPlugin {
     @Override
     protected void start() {
         super.start();
-
-        AquaHudBridge.recheckMhud();
 
         mx.jume.aquahunger.compat.IntegrationManager.init();
 

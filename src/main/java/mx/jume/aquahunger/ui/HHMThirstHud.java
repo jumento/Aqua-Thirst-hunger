@@ -14,7 +14,6 @@ import mx.jume.aquahunger.AquaThirstHunger;
 import mx.jume.aquahunger.components.ThirstComponent;
 import mx.jume.aquahunger.config.HHMThirstConfig;
 import mx.jume.aquahunger.config.HudPosition;
-import mx.jume.aquahud.AquaHudBridge;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 import java.util.Collections;
@@ -35,7 +34,7 @@ public class HHMThirstHud extends CustomUIHud {
     private boolean visible = true;
 
     public HHMThirstHud(@NonNullDecl PlayerRef playerRef, GameMode gameMode, float thirstLevel) {
-        super(playerRef);
+        super(playerRef, hudIdentifier);
         this.gameMode = gameMode;
         this.thirstLevel = thirstLevel;
         HHMThirstConfig config = AquaThirstHunger.get().getThirstConfig();
@@ -161,7 +160,7 @@ public class HHMThirstHud extends CustomUIHud {
 
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateThirstLevel(uiCommandBuilder, thirstLevel);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
+        hud.update(false, uiCommandBuilder);
     }
 
     static public void updatePlayerThirstRestorationPreview(@NonNullDecl PlayerRef playerRef,
@@ -171,7 +170,7 @@ public class HHMThirstHud extends CustomUIHud {
             return;
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateThirstRestorationPreview(uiCommandBuilder, thirstRestoration);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
+        hud.update(false, uiCommandBuilder);
     }
 
     static public void updatePlayerGameMode(@NonNullDecl PlayerRef playerRef, GameMode gameMode) {
@@ -180,7 +179,7 @@ public class HHMThirstHud extends CustomUIHud {
             return;
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateGameMode(uiCommandBuilder, gameMode);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
+        hud.update(false, uiCommandBuilder);
     }
 
     static public void updatePlayerHudPosition(@NonNullDecl PlayerRef playerRef, HudPosition hudPosition) {
@@ -189,7 +188,7 @@ public class HHMThirstHud extends CustomUIHud {
             return;
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateHudPosition(uiCommandBuilder, hudPosition);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
+        hud.update(false, uiCommandBuilder);
     }
 
     static public void updatePlayerHudVisibility(@NonNullDecl PlayerRef playerRef, boolean visible) {
@@ -198,7 +197,7 @@ public class HHMThirstHud extends CustomUIHud {
             return;
         UICommandBuilder uiCommandBuilder = new UICommandBuilder();
         hud.updateVisibility(uiCommandBuilder, visible);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
+        hud.update(false, uiCommandBuilder);
     }
 
     static public void refreshAllHuds(HHMThirstConfig config) {
@@ -216,6 +215,6 @@ public class HHMThirstHud extends CustomUIHud {
         ThirstComponent thirst = store.ensureAndGetComponent(ref, ThirstComponent.getComponentType());
 
         HHMThirstHud hud = new HHMThirstHud(playerRef, player.getGameMode(), thirst.getThirstLevel());
-        AquaHudBridge.register(player, playerRef, hudIdentifier, hud);
+        player.getHudManager().addCustomHud(playerRef, hud);
     }
 }

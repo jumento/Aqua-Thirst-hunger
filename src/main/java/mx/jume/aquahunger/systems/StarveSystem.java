@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import mx.jume.aquahunger.config.HHMHungerConfig;
@@ -25,6 +24,7 @@ import mx.jume.aquahunger.ui.HHMHud;
 import mx.jume.aquahunger.components.HungerComponent;
 
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+import org.joml.Vector3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -102,7 +102,7 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
                         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
                         if (transform != null) {
                             Vector3d pos = transform.getPosition();
-                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.getX(), pos.getY(), pos.getZ(), false, store);
+                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.x(), pos.y(), pos.z(), false, store);
                             soundTriggered = true;
                         }
                     }

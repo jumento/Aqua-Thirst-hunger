@@ -20,11 +20,11 @@ import mx.jume.aquahunger.ui.HHMThirstHud;
 import mx.jume.aquahunger.components.ThirstComponent;
 import mx.jume.aquahunger.components.HungerComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
+import org.joml.Vector3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -100,7 +100,7 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
                         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
                         if (transform != null) {
                             Vector3d pos = transform.getPosition();
-                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.getX(), pos.getY(), pos.getZ(), false, store);
+                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.x(), pos.y(), pos.z(), false, store);
                             soundTriggered = true;
                         }
                     }
