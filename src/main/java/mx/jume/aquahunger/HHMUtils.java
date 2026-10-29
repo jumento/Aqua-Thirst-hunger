@@ -30,11 +30,12 @@ public class HHMUtils {
     public static final String hungryEntityEffectId = "Hungry";
     public static final String poisonEntityEffectId = "Poison_T1";
 
-    @NonNullDecl
     public static EntityEffect getStarvingEntityEffect() {
         if (starvingEntityEffect == null) {
             starvingEntityEffect = EntityEffect.getAssetMap().getAsset(starvingEntityEffectId);
-            assert starvingEntityEffect != null;
+            if (starvingEntityEffect == null) {
+                return null;
+            }
             HHMHungerConfig conf = AquaThirstHunger.get().getHungerConfig();
             try {
                 // patch damageCalculator cooldown so that audio syncs properly with starvation
@@ -45,18 +46,17 @@ public class HHMUtils {
                 // timings otherwise.
                 float cooldown = Math.max(conf.getStarvationTickRate(), 1.0f);
                 f.setFloat(starvingEntityEffect, cooldown);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+            } catch (ReflectiveOperationException | RuntimeException e) {
+                // Only the sound timing depends on it; starvation itself keeps working.
+                AquaThirstHunger.logWarning("Could not sync the Starving effect cooldown: " + e);
             }
         }
         return starvingEntityEffect;
     }
 
-    @NonNullDecl
     public static EntityEffect getHungryEntityEffect() {
         if (hungryEntityEffect == null) {
             hungryEntityEffect = EntityEffect.getAssetMap().getAsset(hungryEntityEffectId);
-            assert hungryEntityEffect != null;
         }
         return hungryEntityEffect;
     }

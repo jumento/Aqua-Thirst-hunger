@@ -67,6 +67,9 @@
     "ui.bars.current": "Current: %s",
     "ui.bars.error": "Error saving/reloading: %s",
     "ui.bars.applied": "HUD position updated.",
+    "ui.config.active_preset": "Config: %s",
+    "ui.config.preset_applied": "Preset applied: %s",
+    "ui.config.invalid_fields": "These values were not valid numbers and were not saved: %s",
     "ui.config.reload_success": "System Reloaded Successfully.",
     "ui.config.reload_failed": "Reload Failed: %s."
 }

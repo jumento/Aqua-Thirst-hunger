@@ -44,13 +44,12 @@ public class GameModePacketWatcher implements PlayerPacketWatcher {
                         mx.jume.aquahunger.components.ThirstComponent.getComponentType());
 
                 float initialHunger = AquaThirstHunger.get().getHungerConfig().getInitialHungerLevel();
-                float initialThirst = AquaThirstHunger.get().getThirstConfig().getMaxThirst();
 
                 if (hunger != null && hunger.getHungerLevel() < initialHunger) {
                     hunger.setHungerLevel(initialHunger);
                 }
-                if (thirst != null && thirst.getThirstLevel() < initialThirst) {
-                    thirst.setThirstLevel(initialThirst);
+                if (thirst != null && thirst.getThirstLevel() < thirst.getMaxThirst()) {
+                    thirst.setThirstLevel(thirst.getMaxThirst());
                 }
                 HudService.refreshValues(playerRef);
             }

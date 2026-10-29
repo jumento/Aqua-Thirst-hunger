@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.ConfigManager;
 import mx.jume.aquahunger.config.HHMHungerConfig;
 
@@ -72,16 +73,18 @@ public class AquaLifePerHungerPage extends InteractiveCustomUIPage<AquaLifePerHu
         cmd.append("Pages/AquaLifePerHungerUI.ui");
 
         // Display Active Status
-        cmd.set("#configtype.Text", "Config: " + config.getActivePreset());
+        cmd.set("#configtype.Text", String.format(
+                LangManager.getForLanguage(this.playerRef.getLanguage(), "ui.config.active_preset"),
+                config.getActivePreset()));
 
         // CheckBoxes
         cmd.set("#ChkLifePerHunger #CheckBox.Value", config.isLifePerHunger());
 
         // TextFields
-        cmd.set("#InputPulseInterval.Value", String.valueOf(config.getPulseInterval()));
-        cmd.set("#InputHealthPerPulse.Value", String.valueOf(config.getHealthPerPulse()));
-        cmd.set("#InputHungerCost.Value", String.valueOf(config.getHungerCost()));
-        cmd.set("#InputThirstCost.Value", String.valueOf(config.getThirstCost()));
+        cmd.set("#InputPulseInterval.Value", ConfigForm.format(config.getPulseInterval()));
+        cmd.set("#InputHealthPerPulse.Value", ConfigForm.format(config.getHealthPerPulse()));
+        cmd.set("#InputHungerCost.Value", ConfigForm.format(config.getHungerCost()));
+        cmd.set("#InputThirstCost.Value", ConfigForm.format(config.getThirstCost()));
 
         // Bind events
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnCancel", createSyncData("close"));
@@ -107,39 +110,16 @@ public class AquaLifePerHungerPage extends InteractiveCustomUIPage<AquaLifePerHu
 
         HHMHungerConfig config = configManager.getHungerConfig();
 
-        // Save
-        boolean modifiedManually = false;
-        if (data.lifePerHunger != config.isLifePerHunger()) {
-            config.setLifePerHunger(data.lifePerHunger);
-            modifiedManually = true;
-        }
-
-        try {
-            float pulseInterval = Float.parseFloat(data.pulseInterval);
-            if (pulseInterval != config.getPulseInterval()) {
-                config.setPulseInterval(pulseInterval);
-                modifiedManually = true;
-            }
-
-            float healthPerPulse = Float.parseFloat(data.healthPerPulse);
-            if (healthPerPulse != config.getHealthPerPulse()) {
-                config.setHealthPerPulse(healthPerPulse);
-                modifiedManually = true;
-            }
-
-            float hungerCost = Float.parseFloat(data.hungerCost);
-            if (hungerCost != config.getHungerCost()) {
-                config.setHungerCost(hungerCost);
-                modifiedManually = true;
-            }
-
-            float thirstCost = Float.parseFloat(data.thirstCost);
-            if (thirstCost != config.getThirstCost()) {
-                config.setThirstCost(thirstCost);
-                modifiedManually = true;
-            }
-        } catch (NumberFormatException ignored) {
-        }
+        // Save (each field on its own: one invalid number no longer discards the rest)
+        ConfigForm form = new ConfigForm();
+        form.bool(data.lifePerHunger, config.isLifePerHunger(), config::setLifePerHunger);
+        form.number("PulseInterval", data.pulseInterval, config.getPulseInterval(), config::setPulseInterval);
+        form.number("HealthPerPulse", data.healthPerPulse, config.getHealthPerPulse(), config::setHealthPerPulse);
+        form.number("HungerCost", data.hungerCost, config.getHungerCost(), config::setHungerCost);
+        form.number("ThirstCost", data.thirstCost, config.getThirstCost(), config::setThirstCost);
+        config.sanitize();
+        form.reportInvalid(this.playerRef);
+        boolean modifiedManually = form.isModified();
 
         if ("close".equals(data.action)) {
             if (modifiedManually)

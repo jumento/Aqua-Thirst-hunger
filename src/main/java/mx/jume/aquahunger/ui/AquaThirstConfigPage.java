@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.ConfigManager;
 import mx.jume.aquahunger.config.HHMThirstConfig;
 import mx.jume.aquahunger.config.HHMThirstFoodValuesConfig;
@@ -115,28 +116,29 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         HHMThirstFoodValuesConfig foodConfig = configManager.getThirstFoodValuesConfig();
 
         cmd.append("Pages/AquaThirstConfigUI.ui");
-        cmd.set("#configtype.Text", "Config: " + config.getActivePreset());
+        cmd.set("#configtype.Text", String.format(
+                LangManager.getForLanguage(this.playerRef.getLanguage(), "ui.config.active_preset"),
+                config.getActivePreset()));
 
-        cmd.set("#InputMaxThirst.Value", String.valueOf((int) config.getMaxThirst()));
-        cmd.set("#InputRespawnThirst.Value", String.valueOf((int) config.getRespawnThirstLevel()));
-        cmd.set("#InputDepletionTickRate.Value", String.valueOf(config.getDepletionTickRate()));
-        cmd.set("#InputBaseThirstDepletion.Value", String.valueOf(config.getDepletionPerTick()));
-        cmd.set("#InputDepletionPerBlockHit.Value", String.valueOf(config.getDepletionPerBlockHit()));
-        cmd.set("#InputSprintDepletionModifier.Value", String.valueOf(config.getSprintDepletionModifier()));
-        cmd.set("#InputDehydrationDamage.Value", String.valueOf(config.getDehydrationDamage()));
-        cmd.set("#InputDamageIntervalSeconds.Value", String.valueOf(config.getDamageIntervalSeconds()));
+        cmd.set("#InputMaxThirst.Value", ConfigForm.format(config.getMaxThirst()));
+        cmd.set("#InputRespawnThirst.Value", ConfigForm.format(config.getRespawnThirstLevel()));
+        cmd.set("#InputDepletionTickRate.Value", ConfigForm.format(config.getDepletionTickRate()));
+        cmd.set("#InputBaseThirstDepletion.Value", ConfigForm.format(config.getDepletionPerTick()));
+        cmd.set("#InputDepletionPerBlockHit.Value", ConfigForm.format(config.getDepletionPerBlockHit()));
+        cmd.set("#InputSprintDepletionModifier.Value", ConfigForm.format(config.getSprintDepletionModifier()));
+        cmd.set("#InputDehydrationDamage.Value", ConfigForm.format(config.getDehydrationDamage()));
+        cmd.set("#InputDamageIntervalSeconds.Value", ConfigForm.format(config.getDamageIntervalSeconds()));
 
         cmd.set("#ChkResetDeath #CheckBox.Value", config.isResetThirstOnDeath());
         cmd.set("#ChkEnableThirst #CheckBox.Value", config.isEnableThirst());
 
-        cmd.set("#InputFruitMultiplier.Value", String.valueOf(foodConfig.getFruitMultiplier()));
-        cmd.set("#InputCanteenThirst.Value",
-                String.valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen").floatValue()));
-        cmd.set("#InputCanteenProThirst.Value", String
-                .valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty").floatValue()));
-        cmd.set("#InputBasicBottleThirst.Value", String
-                .valueOf((int) foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty").floatValue()));
-        cmd.set("#InputStaminaBoostThreshold.Value", String.valueOf((int) config.getStaminaBoostThreshold()));
+        cmd.set("#InputFruitMultiplier.Value", ConfigForm.format(foodConfig.getFruitMultiplier()));
+        cmd.set("#InputCanteenThirst.Value", ConfigForm.format(itemThirst(foodConfig, "AquaThirstHunger_Canteen")));
+        cmd.set("#InputCanteenProThirst.Value",
+                ConfigForm.format(itemThirst(foodConfig, "AquaThirstHunger_Canteenpro_Empty")));
+        cmd.set("#InputBasicBottleThirst.Value",
+                ConfigForm.format(itemThirst(foodConfig, "AquaThirstHunger_BasicBottle_Empty")));
+        cmd.set("#InputStaminaBoostThreshold.Value", ConfigForm.format(config.getStaminaBoostThreshold()));
 
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnEasy", createSyncData("PRESET:EASY"));
         evt.addEventBinding(CustomUIEventBindingType.Activating, "#BtnNormal", createSyncData("PRESET:NORMAL"));
@@ -175,100 +177,36 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         HHMThirstConfig config = configManager.getThirstConfig();
         HHMThirstFoodValuesConfig foodConfig = configManager.getThirstFoodValuesConfig();
 
-        boolean modifiedManually = false;
-        try {
-            float mT = Float.parseFloat(data.maxThirst.trim());
-            if (mT != config.getMaxThirst()) {
-                config.setMaxThirst(mT);
-                modifiedManually = true;
-            }
-
-            float rT = Float.parseFloat(data.respawnThirst.trim());
-            if (rT != config.getRespawnThirstLevel()) {
-                config.setRespawnThirstLevel(rT);
-                modifiedManually = true;
-            }
-
-            float dTR = Float.parseFloat(data.depletionTickRate.trim());
-            if (dTR != config.getDepletionTickRate()) {
-                config.setDepletionTickRate(dTR);
-                modifiedManually = true;
-            }
-
-            float bD = Float.parseFloat(data.baseDepletion.trim());
-            if (bD != config.getDepletionPerTick()) {
-                config.setDepletionPerTick(bD);
-                modifiedManually = true;
-            }
-
-            float dBH = Float.parseFloat(data.depletionBlockHit.trim());
-            if (dBH != config.getDepletionPerBlockHit()) {
-                config.setDepletionPerBlockHit(dBH);
-                modifiedManually = true;
-            }
-
-            float sM = Float.parseFloat(data.sprintMod.trim());
-            if (sM != config.getSprintDepletionModifier()) {
-                config.setSprintDepletionModifier(sM);
-                modifiedManually = true;
-            }
-
-            float dD = Float.parseFloat(data.dehydrationDamage.trim());
-            if (dD != config.getDehydrationDamage()) {
-                config.setDehydrationDamage(dD);
-                modifiedManually = true;
-            }
-
-            float dI = Float.parseFloat(data.damageInterval.trim());
-            if (dI != config.getDamageIntervalSeconds()) {
-                config.setDamageIntervalSeconds(dI);
-                modifiedManually = true;
-            }
-
-            float sBT = Float.parseFloat(data.staminaBoostThreshold.trim());
-            if (sBT != config.getStaminaBoostThreshold()) {
-                config.setStaminaBoostThreshold(sBT);
-                modifiedManually = true;
-            }
-
-            if (data.resetDeath != config.isResetThirstOnDeath()) {
-                config.setResetThirstOnDeath(data.resetDeath);
-                modifiedManually = true;
-            }
-            if (data.enableThirst != config.isEnableThirst()) {
-                config.setEnableThirst(data.enableThirst);
-                modifiedManually = true;
-            }
-
-            float fM = Float.parseFloat(data.fruitMultiplier.trim());
-            if (fM != foodConfig.getFruitMultiplier()) {
-                foodConfig.setFruitMultiplier(fM);
-                modifiedManually = true;
-            }
-
-            float cT = Float.parseFloat(data.canteenThirst.trim());
-            Float currentCT = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteen");
-            if (currentCT == null || cT != currentCT) {
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", cT);
-                modifiedManually = true;
-            }
-
-            float cpT = Float.parseFloat(data.canteenProThirst.trim());
-            Float currentCPT = foodConfig.getItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty");
-            if (currentCPT == null || cpT != currentCPT) {
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", cpT);
-                modifiedManually = true;
-            }
-
-            float bbT = Float.parseFloat(data.basicBottleThirst.trim());
-            Float currentBBT = foodConfig.getItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty");
-            if (currentBBT == null || bbT != currentBBT) {
-                foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", bbT);
-                modifiedManually = true;
-            }
-
-        } catch (Exception ignored) {
-        }
+        // Each field is applied on its own: one invalid number no longer discards the rest.
+        ConfigForm form = new ConfigForm();
+        form.number("MaxThirst", data.maxThirst, config.getMaxThirst(), config::setMaxThirst);
+        form.number("RespawnThirstLevel", data.respawnThirst, config.getRespawnThirstLevel(), config::setRespawnThirstLevel);
+        form.number("DepletionTickRate", data.depletionTickRate, config.getDepletionTickRate(), config::setDepletionTickRate);
+        form.number("BaseThirstDepletion", data.baseDepletion, config.getDepletionPerTick(), config::setDepletionPerTick);
+        form.number("DepletionPerBlockHit", data.depletionBlockHit, config.getDepletionPerBlockHit(),
+                config::setDepletionPerBlockHit);
+        form.number("SprintDepletionModifier", data.sprintMod, config.getSprintDepletionModifier(),
+                config::setSprintDepletionModifier);
+        form.number("DehydrationDamage", data.dehydrationDamage, config.getDehydrationDamage(),
+                config::setDehydrationDamage);
+        form.number("DamageIntervalSeconds", data.damageInterval, config.getDamageIntervalSeconds(),
+                config::setDamageIntervalSeconds);
+        form.number("StaminaBoostThreshold", data.staminaBoostThreshold, config.getStaminaBoostThreshold(),
+                config::setStaminaBoostThreshold);
+        form.bool(data.resetDeath, config.isResetThirstOnDeath(), config::setResetThirstOnDeath);
+        form.bool(data.enableThirst, config.isEnableThirst(), config::setEnableThirst);
+        form.number("FruitMultiplier", data.fruitMultiplier, foodConfig.getFruitMultiplier(), foodConfig::setFruitMultiplier);
+        form.number("AquaThirstHunger_Canteen", data.canteenThirst, itemThirst(foodConfig, "AquaThirstHunger_Canteen"),
+                v -> foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteen", v));
+        form.number("AquaThirstHunger_Canteenpro_Empty", data.canteenProThirst,
+                itemThirst(foodConfig, "AquaThirstHunger_Canteenpro_Empty"),
+                v -> foodConfig.setItemThirstRestoration("AquaThirstHunger_Canteenpro_Empty", v));
+        form.number("AquaThirstHunger_BasicBottle_Empty", data.basicBottleThirst,
+                itemThirst(foodConfig, "AquaThirstHunger_BasicBottle_Empty"),
+                v -> foodConfig.setItemThirstRestoration("AquaThirstHunger_BasicBottle_Empty", v));
+        config.sanitize();
+        form.reportInvalid(this.playerRef);
+        boolean modifiedManually = form.isModified();
 
         if ("close".equals(data.action)) {
             if (modifiedManually)
@@ -296,8 +234,10 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
 
             player.getPageManager().openCustomPage(ref, store,
                     new AquaThirstConfigPage(this.playerRef, Objects.requireNonNull(configManager)));
-            this.playerRef.sendMessage(Message.empty().insert("Thirst Preset applied: ")
-                    .insert(Objects.requireNonNull(preset)).color("#00FFAA"));
+            this.playerRef.sendMessage(Message.empty()
+                    .insert(String.format(LangManager.getForLanguage(this.playerRef.getLanguage(),
+                            "ui.config.preset_applied"), Objects.requireNonNull(preset)))
+                    .color("#00FFAA"));
             return;
         }
 
@@ -306,5 +246,9 @@ public class AquaThirstConfigPage extends InteractiveCustomUIPage<AquaThirstConf
         configManager.save();
     }
 
+    private static float itemThirst(HHMThirstFoodValuesConfig foodConfig, String itemId) {
+        Float value = foodConfig.getItemThirstRestoration(itemId);
+        return value != null ? value : 0.0f;
+    }
 
 }

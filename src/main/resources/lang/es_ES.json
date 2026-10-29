@@ -71,6 +71,9 @@
     "ui.bars.current": "Actual: %s",
     "ui.bars.error": "Error al guardar/recargar: %s",
     "ui.bars.applied": "Posición del HUD actualizada.",
+    "ui.config.active_preset": "Configuración: %s",
+    "ui.config.preset_applied": "Preset aplicado: %s",
+    "ui.config.invalid_fields": "Estos valores no eran números válidos y no se guardaron: %s",
     "ui.config.reload_success": "Sistema recargado exitosamente.",
     "ui.config.reload_failed": "Error al recargar: %s."
 }

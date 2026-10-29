@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.ConfigManager;
 import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HHMThirstConfig;
@@ -81,11 +82,15 @@ public class AquaCheffConfigPage extends InteractiveCustomUIPage<AquaCheffConfig
             case "NORMAL":
             case "HARD":
                 applyFullPreset(data.action, configManager);
+                String lang = this.playerRef.getLanguage();
                 try {
                     AquaThirstHunger.get().reloadConfig();
-                    this.playerRef.sendMessage(Message.empty().insert("System Reloaded Successfully."));
+                    this.playerRef.sendMessage(Message.empty()
+                            .insert(LangManager.getForLanguage(lang, "ui.config.reload_success")));
                 } catch (Exception e) {
-                    this.playerRef.sendMessage(Message.empty().insert("Reload Failed: " + e.getMessage()));
+                    this.playerRef.sendMessage(Message.empty()
+                            .insert(String.format(LangManager.getForLanguage(lang, "ui.config.reload_failed"),
+                                    e.getMessage())));
                 }
                 player.getPageManager().setPage(ref, store, Page.None);
                 break;

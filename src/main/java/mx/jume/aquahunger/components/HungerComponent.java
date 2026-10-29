@@ -58,10 +58,11 @@ public class HungerComponent implements Component<EntityStore> {
     private float healTimer = 0.0f; // Track time for lifePerHunger logic
     private float growlCooldownTimer = 3.0f; // Initialize at 3s to allow immediate first sound
     private float lastHungerLevel = 100.0f; // Track hunger level of previous tick
+    private float idleTime = 0.0f; // Seconds without moving or hitting blocks (AFK detection)
 
     public HungerComponent() {
-        this.hungerLevel = AquaThirstHunger.get().getHungerConfig().getInitialHungerLevel();
-        this.maxHunger = DEFAULT_MAX_HUNGER;
+        this.maxHunger = AquaThirstHunger.get().getHungerConfig().getMaxHungerLevel();
+        this.hungerLevel = Math.min(AquaThirstHunger.get().getHungerConfig().getInitialHungerLevel(), this.maxHunger);
     }
 
     public HungerComponent(float hungerLevel) {
@@ -72,14 +73,20 @@ public class HungerComponent implements Component<EntityStore> {
     public HungerComponent(HungerComponent other) {
         this.hungerLevel = other.hungerLevel;
         this.elapsedTime = other.elapsedTime;
+        this.starvationElapsedTime = other.starvationElapsedTime;
         this.lowestStaminaSeen = other.lowestStaminaSeen;
         this.blockHits = other.blockHits;
         this.maxHunger = other.maxHunger;
         this.timesFilledTotal = other.timesFilledTotal;
         this.timesEmptiedTotal = other.timesEmptiedTotal;
+        this.awardedResilienceXP = other.awardedResilienceXP;
         this.xpUp = other.xpUp;
         this.xpDown = other.xpDown;
         this.gluttonTriggered = other.gluttonTriggered;
+        this.healTimer = other.healTimer;
+        this.growlCooldownTimer = other.growlCooldownTimer;
+        this.lastHungerLevel = other.lastHungerLevel;
+        this.idleTime = other.idleTime;
     }
 
     @Nullable
@@ -125,6 +132,14 @@ public class HungerComponent implements Component<EntityStore> {
 
     public void incrementBlockHits() {
         this.blockHits += 1;
+        this.idleTime = 0.0f;
+    }
+
+    public float getIdleTime() { return idleTime; }
+
+    /** Accumulates idle time while the player stands still; any movement resets it. */
+    public void trackIdle(boolean standingStill, float dt) {
+        this.idleTime = standingStill ? this.idleTime + dt : 0.0f;
     }
 
     public float getHungerLevel() {
@@ -149,6 +164,9 @@ public class HungerComponent implements Component<EntityStore> {
 
     public void setMaxHunger(float maxHunger) {
         this.maxHunger = maxHunger;
+        if (this.hungerLevel > maxHunger) {
+            this.hungerLevel = maxHunger;
+        }
     }
 
     public float getTimesFilledTotal() {

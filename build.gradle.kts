@@ -36,6 +36,10 @@ tasks.withType<JavaCompile> {
 
 tasks.test {
     useJUnitPlatform()
+    // Config code writes backups under mods/Aqua-Thirst-hunger relative to the working directory.
+    val testWorkDir = layout.buildDirectory.dir("test-work").get().asFile
+    workingDir = testWorkDir
+    doFirst { testWorkDir.mkdirs() }
 }
 
 val generateManifest by tasks.registering {

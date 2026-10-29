@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class ConfigMigrationManager {
         private static final Logger LOGGER = Logger.getLogger("AquaThirstHunger");
-        public static final String LATEST_VERSION = "1.7.5";
+        public static final String LATEST_VERSION = "1.8.0";
 
         public static void migrate(HHMHungerConfig config) {
                 String currentVersion = config.getConfigVersion();
@@ -138,6 +138,15 @@ public class ConfigMigrationManager {
                                                         newDefaults.get("EnableDebugLogs"), "EnableDebugLogs"));
                 }
 
+                // 1.8.0: DamageIntervalSeconds is honoured from now on. Every earlier build applied
+                // dehydration damage on each depletion tick instead, so keep that cadence for existing files.
+                if (config.getDamageIntervalSeconds() != config.getDepletionTickRate()) {
+                        LOGGER.info("[Migration] DamageIntervalSeconds " + config.getDamageIntervalSeconds()
+                                        + " -> " + config.getDepletionTickRate()
+                                        + " (keeps the dehydration damage cadence of previous versions)");
+                        config.setDamageIntervalSeconds(config.getDepletionTickRate());
+                }
+
                 config.setConfigVersion(LATEST_VERSION);
                 LOGGER.info("[Migration] ThirstConfig updated to " + LATEST_VERSION);
         }
@@ -158,10 +167,12 @@ public class ConfigMigrationManager {
                 if (LATEST_VERSION.equals(currentVersion))
                         return;
 
+                LOGGER.info("[Migration] Detected ThirstFoodValuesConfig version: "
+                                + (currentVersion == null ? "legacy" : currentVersion));
                 backup("ThirstFoodValuesConfig.json", currentVersion);
-                if (isLegacy(currentVersion) || currentVersion.equals("1.3.0") || currentVersion.equals("1.5.0")) {
+                if (isLegacy(currentVersion) || "1.3.0".equals(currentVersion) || "1.5.0".equals(currentVersion)) {
                         Map<String, Object> oldDefaults = getThirstFoodValuesDefaults(
-                                        currentVersion.equals("1.3.0") ? "1.3.0" : "1.5.0");
+                                        "1.3.0".equals(currentVersion) ? "1.3.0" : "1.5.0");
                         Map<String, Object> newDefaults = getThirstFoodValuesDefaults(LATEST_VERSION);
                         config.setFruitMultiplier(merge(config.getFruitMultiplier(), oldDefaults.get("FruitMultiplier"),
                                         newDefaults.get("FruitMultiplier"), "FruitMultiplier"));

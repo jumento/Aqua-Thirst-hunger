@@ -95,7 +95,7 @@ public class HHMThirstConfig {
     @SerializedName("DehydrationDamage")
     private float dehydrationDamage = 0.5f;
     @SerializedName("DamageIntervalSeconds")
-    private float damageIntervalSeconds = 10.0f;
+    private float damageIntervalSeconds = 2.0f;
     @SerializedName("HudPosition")
     private HudPosition hudPosition = HudPosition.Preset.BelowHotbarRight;
     @SerializedName("ResetThirstOnDeath")
@@ -105,7 +105,7 @@ public class HHMThirstConfig {
     @SerializedName("EnableThirst")
     private boolean enableThirst = true;
     @SerializedName("ConfigVersion")
-    private String configVersion = "1.7.5";
+    private String configVersion = ConfigMigrationManager.LATEST_VERSION;
     @SerializedName("ActivePreset")
     private String activePreset = "NORMAL";
     @SerializedName("StaminaBoostThreshold")
@@ -255,6 +255,30 @@ public class HHMThirstConfig {
 
     public void ensureDefaults() {
         ConfigMigrationManager.migrate(this);
+        sanitize();
+    }
+
+    /** Clamps values that would break the thirst systems. */
+    public void sanitize() {
+        final String file = "ThirstConfig.json";
+        maxThirst = ConfigValues.atLeast(file, "MaxThirst", maxThirst, 1.0f);
+        depletionTickRate = ConfigValues.atLeast(file, "DepletionTickRate", depletionTickRate, 0.1f);
+        depletionPerTick = ConfigValues.atLeast(file, "BaseThirstDepletion", depletionPerTick, 0.0f);
+        depletionPerBlockHit = ConfigValues.atLeast(file, "DepletionPerBlockHit", depletionPerBlockHit, 0.0f);
+        sprintDepletionModifier = ConfigValues.atLeast(file, "SprintDepletionModifier", sprintDepletionModifier, 0.0f);
+        dehydrationDamage = ConfigValues.atLeast(file, "DehydrationDamage", dehydrationDamage, 0.0f);
+        damageIntervalSeconds = ConfigValues.atLeast(file, "DamageIntervalSeconds", damageIntervalSeconds, 0.1f);
+        respawnThirstLevel = ConfigValues.within(file, "RespawnThirstLevel", respawnThirstLevel, 0.0f, maxThirst);
+        // Values above 100 are allowed: they switch the stamina boost off.
+        staminaBoostThreshold = ConfigValues.atLeast(file, "StaminaBoostThreshold", staminaBoostThreshold, 0.0f);
+        satiatedThreshold = ConfigValues.within(file, "SatiatedThreshold", satiatedThreshold, 0.0f, 100.0f);
+        starveResilienceThreshold = ConfigValues.within(file, "StarveResilienceThreshold", starveResilienceThreshold, 0.0f, 100.0f);
+        if (hudPosition == null) {
+            hudPosition = HudPosition.Preset.BelowHotbarRight;
+        }
+        if (activePreset == null) {
+            activePreset = "CUSTOM";
+        }
     }
 
     public void applyPreset(String preset, HHMThirstFoodValuesConfig foodConfig) {

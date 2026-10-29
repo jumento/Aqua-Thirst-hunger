@@ -16,7 +16,7 @@ public class IntegrationManager {
         MMOSkillTreeBridge mmo = new MMOSkillTreeBridge();
         if (mmo.isAvailable()) {
             bridges.add(mmo);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[mmo] Success: MMOSkillTree bridge initialized and registered.");
+            mx.jume.aquahunger.AquaThirstHunger.logInfo("[mmo] Success: MMOSkillTree bridge initialized and registered.");
         } else {
             //mx.jume.aquahunger.AquaThirstHunger.logInfo("[mmo] MMOSkillTree bridge is not available.");
         }
@@ -24,7 +24,7 @@ public class IntegrationManager {
         RPGLevelingBridge rpg = new RPGLevelingBridge();
         if (rpg.isAvailable()) {
             bridges.add(rpg);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg] Success: RPGLeveling bridge initialized and registered.");
+            mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg] Success: RPGLeveling bridge initialized and registered.");
         } else {
             //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg] RPGLeveling bridge is not available.");
         }
@@ -32,13 +32,13 @@ public class IntegrationManager {
         EndlessLevelingBridge endless = new EndlessLevelingBridge();
         if (endless.isAvailable()) {
             bridges.add(endless);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[endless] Success: EndlessLeveling bridge initialized and registered.");
+            mx.jume.aquahunger.AquaThirstHunger.logInfo("[endless] Success: EndlessLeveling bridge initialized and registered.");
         } else {
             //mx.jume.aquahunger.AquaThirstHunger.logInfo("[endless] EndlessLeveling bridge is not available.");
         }
 
         if (bridges.isEmpty()) {
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg|mmo|endless] Running without active XP bridges.");
+            mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg|mmo|endless] Running without active XP bridges.");
         }
     }
 

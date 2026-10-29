@@ -168,21 +168,22 @@ public class AquaThirstHunger extends JavaPlugin {
     }
 
     public static void logInfo(String message) {
-        // LOGGER.at(Level.INFO).log(message);
+        LOGGER.at(Level.INFO).log(message);
     }
 
     public static void logWarning(String message) {
-        // LOGGER.at(Level.WARNING).log(message);
+        LOGGER.at(Level.WARNING).log(message);
     }
 
     public static void logSevere(String message) {
-        // LOGGER.at(Level.SEVERE).log(message);
+        LOGGER.at(Level.SEVERE).log(message);
     }
 
+    /** Verbose diagnostics, only when EnableDebugLogs is on in ThirstConfig.json. */
     public static void logDebug(String message) {
-        if (instance != null && instance.getThirstConfig().isEnableDebugLogs()) {
+        if (instance != null && instance.getThirstConfig() != null && instance.getThirstConfig().isEnableDebugLogs()) {
             String tag = message.startsWith("[") ? "" : "[aquathirst] ";
-            // LOGGER.at(Level.INFO).log(tag + "[debug] " + message);
+            LOGGER.at(Level.INFO).log(tag + "[debug] " + message);
         }
     }
 

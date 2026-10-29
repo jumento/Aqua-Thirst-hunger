@@ -57,8 +57,16 @@ public class ConfigManager {
         try (FileReader reader = new FileReader(file)) {
             T config = GSON.fromJson(reader, clazz);
             return config != null ? config : defaultValue;
-        } catch (IOException e) {
-            // AquaThirstHunger.LOGGER.at(Level.SEVERE).withCause(e).log("Failed to load config file: " + fileName);
+        } catch (IOException | com.google.gson.JsonParseException e) {
+            // Keep the broken file for the admin to fix: the defaults are saved over it right after.
+            File invalidCopy = new File(CONFIG_DIR, fileName + ".invalid.bak");
+            try {
+                java.nio.file.Files.copy(file.toPath(), invalidCopy.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ignored) {
+            }
+            AquaThirstHunger.logSevere("Failed to load " + fileName + " (" + e.getMessage()
+                    + "). Using defaults; the original file was copied to " + invalidCopy.getName());
             return defaultValue;
         }
     }

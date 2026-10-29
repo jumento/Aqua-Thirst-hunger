@@ -61,8 +61,16 @@ public class HungerLifeSystem extends EntityTickingSystem<EntityStore> {
         if (hunger.getHealTimer() >= config.getPulseInterval()) {
             hunger.setHealTimer(0.0f);
 
-            // Check resources (Hunger + Saturation must be >= 4.0, Thirst >= 1.0)
-            if (hunger.getHungerLevel() < config.getHungerCost() || thirst.getThirstLevel() < config.getThirstCost()) {
+            // Integrations (skills/levels) can make healing cheaper.
+            float costMultiplier = mx.jume.aquahunger.compat.IntegrationManager
+                    .getHealCostMultiplier(archetypeChunk.getReferenceTo(index), store);
+            float hungerCost = config.getHungerCost() * costMultiplier;
+            // With thirst disabled its bar is frozen, so it must not be spent (or required).
+            boolean thirstEnabled = AquaThirstHunger.get().getThirstConfig().isEnableThirst();
+            float thirstCost = thirstEnabled ? config.getThirstCost() * costMultiplier : 0.0f;
+
+            // Check resources
+            if (hunger.getHungerLevel() < hungerCost || thirst.getThirstLevel() < thirstCost) {
                 return;
             }
 
@@ -81,15 +89,15 @@ public class HungerLifeSystem extends EntityTickingSystem<EntityStore> {
                     entityStatMap.setStatValue(healthRef, newHealth);
 
                     // Drain hunger (effectively drains saturation first as it's the top of the bar)
-                    float newHunger = hunger.getHungerLevel() - config.getHungerCost();
+                    float newHunger = hunger.getHungerLevel() - hungerCost;
                     hunger.setHungerLevel(newHunger);
 
                     // Drain thirst
-                    thirst.dehydrate(config.getThirstCost());
+                    thirst.dehydrate(thirstCost);
 
                     // Update HUD immediately
                     if (playerRef != null) {
-                        HHMHud.updatePlayerHungerLevel(playerRef, newHunger);
+                        HHMHud.updatePlayerHungerLevel(playerRef, hunger.getHungerLevel());
                         mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, thirst.getThirstLevel());
                     }
                 }

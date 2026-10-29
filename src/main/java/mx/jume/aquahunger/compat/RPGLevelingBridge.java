@@ -140,42 +140,8 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
 
                 addXpMethod.invoke(apiInstance, playerRef.getUuid(), finalXp, xpSource);
 
-                // Paso 4: Retrasar la primera inyección 500ms
-                com.hypixel.hytale.server.core.universe.world.World world = store.getExternalData().getWorld();
-                if (world != null) {
-                    java.util.concurrent.CompletableFuture.delayedExecutor(500, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (playerRef != null && playerRef.getReference() != null) {
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(playerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                            
-                    // Limpieza (TTL) a los 3 segundos
-                    java.util.concurrent.CompletableFuture.delayedExecutor(3000, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (playerRef != null && playerRef.getReference() != null) {
-                                        if (hunger != null) {
-                                            hunger.setXpUp(false);
-                                            hunger.setXpDown(false);
-                                        }
-                                        if (thirst != null) {
-                                            thirst.setXpUp(false);
-                                            thirst.setXpDown(false);
-                                        }
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(playerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                }
+                // +XP / -XP en el HUD durante unos segundos
+                XpFeedback.show(playerRef);
 
                 if (hungerMod != 0.0f || thirstMod != 0.0f) {
                     double xpDiff = finalXp - amount;
@@ -313,47 +279,10 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
 
                 //AquaThirstHunger.logInfo(String.format("[rpg] Player %s subió de nivel RPG! (Nivel: %d).",
                 //    hytalePlayerRef.getUsername(), newLevel));
-                
-                // Forzar feedback visual WOW pero retrasado para evadir el reinject
-                mx.jume.aquahunger.components.HungerComponent hunger = ref.getStore().getComponent(ref, mx.jume.aquahunger.components.HungerComponent.getComponentType());
-                mx.jume.aquahunger.components.ThirstComponent thirst = ref.getStore().getComponent(ref, mx.jume.aquahunger.components.ThirstComponent.getComponentType());
-                if (hunger != null) hunger.setXpUp(true);
-                
-                com.hypixel.hytale.server.core.universe.world.World world = ref.getStore().getExternalData().getWorld();
-                if (world != null) {
-                    java.util.concurrent.CompletableFuture.delayedExecutor(500, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (hytalePlayerRef != null && hytalePlayerRef.getReference() != null && hytalePlayerRef.getReference().getStore() != null) {
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(hytalePlayerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(hytalePlayerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                            
-                    // Limpieza (TTL) a los 3 segundos
-                    java.util.concurrent.CompletableFuture.delayedExecutor(3000, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (hytalePlayerRef != null && hytalePlayerRef.getReference() != null && hytalePlayerRef.getReference().getStore() != null) {
-                                        if (hunger != null) {
-                                            hunger.setXpUp(false);
-                                            hunger.setXpDown(false);
-                                        }
-                                        if (thirst != null) {
-                                            thirst.setXpUp(false);
-                                            thirst.setXpDown(false);
-                                        }
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(hytalePlayerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(hytalePlayerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                }
+
+                // El listener puede llegar desde otro hilo: el feedback se aplica en el mundo del jugador.
+                mx.jume.aquahunger.ui.HudService.runOnPlayerWorld(hytalePlayerRef,
+                        () -> XpFeedback.showLevelUp(hytalePlayerRef));
             }
         } catch (Exception e) {
             //AquaThirstHunger.logWarning("[rpg] Error en LevelUpListener Proxy: " + e.getMessage());

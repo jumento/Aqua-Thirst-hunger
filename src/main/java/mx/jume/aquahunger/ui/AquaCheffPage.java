@@ -18,6 +18,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.ConfigManager;
 import mx.jume.aquahunger.config.HHMExternalFoodsConfig;
 
@@ -127,6 +128,8 @@ public class AquaCheffPage extends InteractiveCustomUIPage<AquaCheffPage.ConfigE
             @Nonnull Store<EntityStore> store,
             @Nonnull ConfigEventData data) {
         Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null || data.action == null)
+            return;
 
         switch (data.action) {
             case "save":
@@ -144,6 +147,7 @@ public class AquaCheffPage extends InteractiveCustomUIPage<AquaCheffPage.ConfigE
     }
 
     private void handleSave(Ref<EntityStore> ref, Store<EntityStore> store, Player player, ConfigEventData data) {
+        String lang = playerRef.getLanguage();
         try {
             // Handle blank ID by saving a template instead of erroring out (To prevent UI
             // hang and provide a guide)
@@ -152,56 +156,43 @@ public class AquaCheffPage extends InteractiveCustomUIPage<AquaCheffPage.ConfigE
                     : data.itemId.trim();
 
             if (data.itemId == null || data.itemId.trim().isEmpty()) {
-                playerRef.sendMessage(Message.empty().insert("Item ID was blank. Using template: ").insert(finalId));
+                playerRef.sendMessage(Message.empty()
+                        .insert(String.format(LangManager.getForLanguage(lang, "ui.cheff.blank_id"), finalId)));
             }
 
-            // Fallback to 0.0 for empty fields to avoid "hanging" the UI/Config
-            float hungerVal = 0.0f;
-            float saturationVal = 0.0f;
-            float thirstVal = 0.0f;
-
-            // Parse values with silent fallback
-            if (data.hungerValue != null && !data.hungerValue.trim().isEmpty()) {
-                try {
-                    hungerVal = Float.parseFloat(data.hungerValue.trim());
-                } catch (NumberFormatException ignored) {
-                }
-            }
-
-            if (data.saturationValue != null && !data.saturationValue.trim().isEmpty()) {
-                try {
-                    saturationVal = Float.parseFloat(data.saturationValue.trim());
-                } catch (NumberFormatException ignored) {
-                }
-            }
-
-            if (data.thirstValue != null && !data.thirstValue.trim().isEmpty()) {
-                try {
-                    thirstVal = Float.parseFloat(data.thirstValue.trim());
-                } catch (NumberFormatException ignored) {
-                }
-            }
+            // Fallback to 0.0 for empty or invalid fields to avoid "hanging" the UI/Config
+            float hungerVal = parseOrZero(data.hungerValue);
+            float saturationVal = parseOrZero(data.saturationValue);
+            float thirstVal = parseOrZero(data.thirstValue);
 
             // Save the configuration
             configManager.getExternalFoodsConfig().updateItem(finalId, hungerVal, saturationVal, thirstVal);
             configManager.save();
 
             // Success feedback
-            playerRef.sendMessage(Message.empty().insert("Configuration saved for: ").insert(finalId));
-            playerRef.sendMessage(
-                    Message.empty().insert("Values: [" + hungerVal + ", " + saturationVal + ", " + thirstVal + "]"));
+            playerRef.sendMessage(Message.empty()
+                    .insert(String.format(LangManager.getForLanguage(lang, "ui.cheff.save_success"), finalId)));
+            playerRef.sendMessage(Message.empty()
+                    .insert(String.format(LangManager.getForLanguage(lang, "ui.cheff.values"),
+                            hungerVal, saturationVal, thirstVal)));
 
             // Guaranteed Close
             player.getPageManager().setPage(ref, store, Page.None);
 
         } catch (Exception e) {
-            playerRef.sendMessage(Message.empty().insert("Error saving configuration: " + e.getMessage()));
+            playerRef.sendMessage(Message.empty()
+                    .insert(String.format(LangManager.getForLanguage(lang, "ui.cheff.save_error"), e.getMessage())));
             player.getPageManager().setPage(ref, store, Page.None);
         }
     }
 
+    private static float parseOrZero(String raw) {
+        Float value = ConfigForm.parse(raw);
+        return value != null ? value : 0.0f;
+    }
+
     private void handleCancel(Ref<EntityStore> ref, Store<EntityStore> store, Player player) {
-        playerRef.sendMessage(Message.empty().insert("Configuration editor closed."));
+        playerRef.sendMessage(Message.empty().insert(LangManager.getForLanguage(playerRef.getLanguage(), "ui.cheff.closed")));
         player.getPageManager().setPage(ref, store, Page.None);
     }
 }

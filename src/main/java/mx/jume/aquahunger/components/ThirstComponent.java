@@ -29,6 +29,10 @@ public class ThirstComponent implements Component<EntityStore> {
                     ((data, value) -> data.timesEmptiedTotal = value),
                     ThirstComponent::getTimesEmptiedTotal)
             .add()
+            .append(new KeyedCodec<>("StaminaBoostApplied", Codec.BOOLEAN),
+                    ((data, value) -> data.staminaBoostApplied = value),
+                    ThirstComponent::isStaminaBoostApplied)
+            .add()
             .build();
 
     public static final float DEFAULT_MAX_THIRST = 100.0f;
@@ -44,9 +48,13 @@ public class ThirstComponent implements Component<EntityStore> {
     private int blockHits = 0;
     private float coughCooldownTimer = 3.0f;
     private float lastThirstLevel = 100.0f;
+    private float idleTime = 0.0f; // Seconds without moving or hitting blocks (AFK detection)
+    // Starts "ready" so the first dehydration hit lands as soon as thirst reaches 0.
+    private float dehydrationDamageTimer = Float.MAX_VALUE;
+    private boolean staminaBoostApplied = false;
 
     public ThirstComponent() {
-        this.maxThirst = DEFAULT_MAX_THIRST;
+        this.maxThirst = AquaThirstHunger.get().getThirstConfig().getMaxThirst();
         this.thirstLevel = maxThirst;
     }
 
@@ -63,8 +71,14 @@ public class ThirstComponent implements Component<EntityStore> {
         this.maxThirst = other.maxThirst;
         this.timesFilledTotal = other.timesFilledTotal;
         this.timesEmptiedTotal = other.timesEmptiedTotal;
+        this.awardedResilienceXP = other.awardedResilienceXP;
         this.xpUp = other.xpUp;
         this.xpDown = other.xpDown;
+        this.coughCooldownTimer = other.coughCooldownTimer;
+        this.lastThirstLevel = other.lastThirstLevel;
+        this.idleTime = other.idleTime;
+        this.dehydrationDamageTimer = other.dehydrationDamageTimer;
+        this.staminaBoostApplied = other.staminaBoostApplied;
     }
 
     @Nullable
@@ -93,7 +107,34 @@ public class ThirstComponent implements Component<EntityStore> {
 
     public void incrementBlockHits() {
         this.blockHits += 1;
+        this.idleTime = 0.0f;
     }
+
+    public float getIdleTime() { return idleTime; }
+
+    /** Accumulates idle time while the player stands still; any movement resets it. */
+    public void trackIdle(boolean standingStill, float dt) {
+        this.idleTime = standingStill ? this.idleTime + dt : 0.0f;
+    }
+
+    /** @return true when a dehydration hit is due (every {@code interval} seconds at 0 thirst). */
+    public boolean tickDehydrationDamage(float dt, float interval) {
+        if (this.dehydrationDamageTimer != Float.MAX_VALUE) {
+            this.dehydrationDamageTimer += dt;
+        }
+        if (this.dehydrationDamageTimer >= interval) {
+            this.dehydrationDamageTimer = 0.0f;
+            return true;
+        }
+        return false;
+    }
+
+    public void resetDehydrationDamage() {
+        this.dehydrationDamageTimer = Float.MAX_VALUE;
+    }
+
+    public boolean isStaminaBoostApplied() { return staminaBoostApplied; }
+    public void setStaminaBoostApplied(boolean applied) { this.staminaBoostApplied = applied; }
 
     public float getThirstLevel() {
         return this.thirstLevel;
@@ -117,6 +158,9 @@ public class ThirstComponent implements Component<EntityStore> {
 
     public void setMaxThirst(float maxThirst) {
         this.maxThirst = maxThirst;
+        if (this.thirstLevel > maxThirst) {
+            this.thirstLevel = maxThirst;
+        }
     }
 
     public float getTimesFilledTotal() {
