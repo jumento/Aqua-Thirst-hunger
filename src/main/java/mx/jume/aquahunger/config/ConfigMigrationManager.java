@@ -13,6 +13,9 @@ public class ConfigMigrationManager {
         private static final Logger LOGGER = Logger.getLogger("AquaThirstHunger");
         public static final String LATEST_VERSION = "1.8.0";
 
+        /** The hunger cap every build before 1.8.0 used, ignoring MaxHungerLevel. */
+        static final float PRE_1_8_MAX_HUNGER = 200.0f;
+
         public static void migrate(HHMHungerConfig config) {
                 String currentVersion = config.getConfigVersion();
                 if (LATEST_VERSION.equals(currentVersion))
@@ -73,6 +76,19 @@ public class ConfigMigrationManager {
                                         newDefaults.get("HungerCost"), "HungerCost"));
                         config.setThirstCost(merge(config.getThirstCost(), oldDefaults.get("ThirstCost"),
                                         newDefaults.get("ThirstCost"), "ThirstCost"));
+                }
+
+                // 1.8.0: MaxHungerLevel is honoured from now on. Every earlier build capped hunger at
+                // PRE_1_8_MAX_HUNGER whatever the file said, so a file whose initial or respawn level is
+                // above its own maximum relied on that cap: keep it instead of cutting those levels down.
+                float maxHunger = config.getMaxHungerLevel();
+                if (maxHunger < PRE_1_8_MAX_HUNGER
+                                && (config.getInitialHungerLevel() > maxHunger || config.getRespawnHungerLevel() > maxHunger)) {
+                        LOGGER.info("[Migration] MaxHungerLevel " + maxHunger + " -> " + PRE_1_8_MAX_HUNGER
+                                        + " (InitialHungerLevel " + config.getInitialHungerLevel()
+                                        + " / RespawnHungerLevel " + config.getRespawnHungerLevel()
+                                        + " relied on the cap of previous versions)");
+                        config.setMaxHungerLevel(PRE_1_8_MAX_HUNGER);
                 }
 
                 config.setConfigVersion(LATEST_VERSION);

@@ -16,7 +16,7 @@ Plan aprobado con las decisiones recomendadas de la §12 (HUD solo nativo, sed m
 | 3 — Gameplay y config | Hecha |
 | 4 — Integraciones | Hecha en código, contra las APIs de RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (inspeccionadas, no ejecutadas; ver §6.1). Falta verificar en juego con cada mod |
 | 5 — Documentación | Parcial: README y `CHANGELOG.md` actualizados |
-| 6 — Verificación y release | Parcial: 23 pruebas unitarias; en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod). Falta la prueba en juego (§10.3) |
+| 6 — Verificación y release | Parcial: 27 pruebas unitarias; en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod), y migra a 1.8.0 copias de configs reales de 1.6.0 y 1.6.1 sin perder valores. Falta la prueba en juego (§10.3) |
 
 Bugs corregidos: B01–B27 (B23–B27 aparecieron en la fase 4, ver §7). Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
 
@@ -194,7 +194,7 @@ Severidad: **A** = rompe una función o provoca un crash · **M** = comportamien
 | B02 | A | `ExternalFoodsDefaultConfig.json` no se empaqueta | `build.gradle.kts` | moverlo a `src/main/resources` |
 | B03 | M | El *throttle* de 200 ms **descarta** actualizaciones del HUD: tras comer, beber o curarse, el HUD puede quedarse con el valor viejo hasta el siguiente tick de desgaste (2 s por defecto, 30 s en Easy) | [HHMHud.java:181](../src/main/java/mx/jume/aquahunger/ui/HHMHud.java#L181), `HHMThirstHud` | dirty flag con envío por tick |
 | B04 | A | RPG Leveling nunca se inicializa | `IntegrationManager` | §6 |
-| B05 | M | `MaxHungerLevel` se muestra y edita en la UI pero se ignora: el componente lo fija en 200, así que el preset Hard (150) no se aplica | [HungerComponent.java:43](../src/main/java/mx/jume/aquahunger/components/HungerComponent.java#L43) | aplicar la config y escalar el HUD |
+| B05 | M | `MaxHungerLevel` se muestra y edita en la UI pero se ignora: el componente lo fija en 200, así que el preset Hard (150) no se aplica | [HungerComponent.java:43](../src/main/java/mx/jume/aquahunger/components/HungerComponent.java#L43) | aplicar la config y escalar el HUD; al migrar, un config anterior a 1.8.0 con nivel inicial o de reaparición por encima de su máximo pasa a máximo 200, el tope que regía |
 | B06 | M | `DamageIntervalSeconds` se edita en la UI pero se ignora: el daño por deshidratación se aplica en cada tick de desgaste (los presets coinciden, las configs personalizadas no) | `ThirstSystem` | temporizador propio |
 | B07 | M | "AFK": estar quieto multiplica **todo** el desgaste por 0,1, incluido minar o luchar sin moverse | [StarveSystem.java:136](../src/main/java/mx/jume/aquahunger/systems/StarveSystem.java#L136), `ThirstSystem` | aplicarlo solo al metabolismo base y tras N s de inactividad real |
 | B08 | M | Sed máxima ligada al nivel global (§6) | [ThirstSystem.java:140](../src/main/java/mx/jume/aquahunger/systems/ThirstSystem.java#L140) | decisión de diseño |

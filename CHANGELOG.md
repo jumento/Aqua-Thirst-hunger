@@ -58,3 +58,6 @@ versions of those mods for Hytale 0.7.
 ### Config migration
 - `ConfigVersion` goes from `1.7.5` to `1.8.0`, with a `.bak` copy of each migrated file.
   Values out of range (for example a tick rate of 0) are clamped and logged.
+- Earlier versions capped hunger at 200 whatever `MaxHungerLevel` said. A file whose
+  `InitialHungerLevel` or `RespawnHungerLevel` is above its own `MaxHungerLevel` relied on that cap,
+  so its `MaxHungerLevel` becomes 200 instead of those levels being cut down.

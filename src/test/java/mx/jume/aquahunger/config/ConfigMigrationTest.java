@@ -41,6 +41,59 @@ class ConfigMigrationTest {
     }
 
     @Test
+    void oldHungerConfigThatReliedOnTheOldCapKeepsIt() {
+        HHMHungerConfig config = new HHMHungerConfig();
+        config.setConfigVersion("1.6.0");
+        config.setMaxHungerLevel(100f); // ignored before 1.8.0: hunger was capped at 200
+        config.setInitialHungerLevel(200f);
+
+        ConfigMigrationManager.migrate(config);
+        config.sanitize();
+
+        assertEquals(200f, config.getMaxHungerLevel());
+        assertEquals(200f, config.getInitialHungerLevel());
+    }
+
+    @Test
+    void oldRespawnLevelAboveTheMaxAlsoKeepsTheOldCap() {
+        HHMHungerConfig config = new HHMHungerConfig();
+        config.setConfigVersion("1.7.5");
+        config.setMaxHungerLevel(100f);
+        config.setInitialHungerLevel(100f);
+        config.setRespawnHungerLevel(150f);
+
+        ConfigMigrationManager.migrate(config);
+
+        assertEquals(200f, config.getMaxHungerLevel());
+    }
+
+    @Test
+    void oldHungerConfigWithAConsistentMaxKeepsItsMax() {
+        HHMHungerConfig config = new HHMHungerConfig();
+        config.setConfigVersion("1.7.5");
+        config.setMaxHungerLevel(150f); // Hard preset
+        config.setInitialHungerLevel(70f);
+        config.setRespawnHungerLevel(30f);
+
+        ConfigMigrationManager.migrate(config);
+
+        assertEquals(150f, config.getMaxHungerLevel());
+    }
+
+    @Test
+    void currentHungerConfigAboveItsMaxIsClampedBySanitize() {
+        HHMHungerConfig config = new HHMHungerConfig();
+        config.setMaxHungerLevel(100f);
+        config.setInitialHungerLevel(200f);
+
+        ConfigMigrationManager.migrate(config);
+        config.sanitize();
+
+        assertEquals(100f, config.getMaxHungerLevel());
+        assertEquals(100f, config.getInitialHungerLevel());
+    }
+
+    @Test
     void freshDefaultsKeepTheOldDamageCadence() {
         HHMThirstConfig config = new HHMThirstConfig();
         assertEquals(config.getDepletionTickRate(), config.getDamageIntervalSeconds());
