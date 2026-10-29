@@ -13,12 +13,12 @@ Plan aprobado con las decisiones recomendadas de la §12 (HUD solo nativo, sed m
 | 0 — Build reproducible | Hecha |
 | 1 — Migración de API | Hecha |
 | 2 — HUD nativo | Hecha |
-| 3 — Gameplay y config | Hecha, con 17 pruebas unitarias |
-| 4 — Integraciones | Pendiente: necesita los JARs actuales de RPG Leveling, Endless Leveling y MMO Skill Tree |
+| 3 — Gameplay y config | Hecha |
+| 4 — Integraciones | Hecha en código, contra las APIs de RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (inspeccionadas, no ejecutadas; ver §6.1). Falta verificar en juego con cada mod |
 | 5 — Documentación | Parcial: README y `CHANGELOG.md` actualizados |
-| 6 — Verificación y release | Parcial: en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita (`start()` completo) y se apaga sin errores. Falta la prueba en juego (§10.3) |
+| 6 — Verificación y release | Parcial: 23 pruebas unitarias; en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod). Falta la prueba en juego (§10.3) |
 
-Bugs corregidos: B01–B03, B05–B07, B09–B20 y B22 (páginas). B21: `hide`/`show` registrados; `RpgStatusCommand` queda para la fase 4. B04 y la fuente del nivel de "SURVIVAL" (B08) quedan para la fase 4. Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
+Bugs corregidos: B01–B27 (B23–B27 aparecieron en la fase 4, ver §7). Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
 
 ---
 
@@ -156,6 +156,24 @@ Se eliminan `AquaHudBridge`, `AquaMultiHUD`, `AquaHudWatcher`, `HUD/MultipleHUD.
 ### AquaSanity (mod hermano)
 Comparte el "flat join" de `aquahud` y `notified_players.json`. AquaSanity tampoco funcionará en 0.7.x hasta que migre a HUD nativo. Con HUDs nativos no hace falta coordinar HUDs entre los dos mods; solo se mantiene el contrato del archivo de notificados y la supresión del aviso. Se propone como tarea aparte.
 
+### 6.1 Resultado de la fase 4: APIs verificadas
+
+JARs descargados de CurseForge (archivos oficiales, versión para Hytale 0.7) a `libs/optional/`, inspeccionados con `javap`; no se ejecutaron.
+
+| Mod (archivo) | ID real | Qué cambió | Cómo queda |
+|---|---|---|---|
+| RPG Leveling 0.4.2 (`RPGLeveling-0.4.2.jar`) | `Zuxaw:RPGLeveling` | Nada de lo que usamos: `isAvailable/get/addXP(UUID,double,XPSource)/getPlayerLevel/registerLevelUpListener`. `addXP` pasa la XP al hilo del mundo por su cuenta | Se llama a `initialize()` en nuestro `start()` (RPG ya arrancó, es dependencia opcional); listener de nivel con proxy completo, desregistrado al apagar |
+| Endless Leveling 14.1.0 (`EndlessLeveling.jar`) | `Airijko:EndlessLevelingCore` (antes `airijko:EndlessLeveling`) | `grantXp(UUID,double)` y `getPlayerLevel(UUID)` siguen; nuevo `addLevelUpListener(Consumer<LevelUpEvent>)` | ID nuevo en el manifest; level-up por listener (el sondeo de 200 ms queda solo como respaldo si falta el método); `grantXp` sigue diferido con `world.execute` |
+| MMO Skill Tree 1.7.4 (`MMOSkillTree-1.7.4.jar`) | `Ziggfreed:MMOSkillTree` | Lee `custom-skills.json`, `xp-maps.json` y `skill-tree.json` de `mods/mmoskilltree/` **en su `setup()`**, y descarta overrides de skills que no estén registradas en ese momento. `SkillTreeService`/`SkillReward` pasaron a `.skilltree`. `addXp` solo modifica el componente existente (seguro desde un tick) | `LoadBefore: Ziggfreed:MMOSkillTree` (y fuera de `OptionalDependencies`, que crearía un ciclo) y escritura de los 3 archivos en nuestro `setup()`: las skills existen desde el primer arranque. Las clases de MMO se cargan con su propio class loader (`OptionalPlugins`) |
+
+Notas:
+- **Por qué no un content pack para MMO:** MMO 1.6+ acepta skills y XP maps como assets (`Server/MMOSkillTree/CustomSkills/`), pero los nodos del árbol solo vienen de `skill-tree.json` del dueño y MMO ignora los overrides de skills que no conoce cuando lo lee en `setup()`, antes de cargar los assets. Con las skills en un pack, el árbol de NUTRITION y THIRST se perdería.
+- MMO 1.7 sigue aceptando un override escrito como lista de tiers (nuestra plantilla); los que guarda él usan un mapa por tier. Los archivos solo se reescriben si cambia su contenido, y un archivo con JSON inválido no se toca.
+- **Class loader de 0.7:** un plugin ve las clases de sus `Dependencies` y `OptionalDependencies`, no las de cualquier plugin cargado. Por eso la detección de mods va por ID de plugin (`PluginManager.getPlugin`) y las clases se piden al class loader del mod.
+- **XP fuera del tick:** no hizo falta mover las llamadas. RPG ya difiere sus `addXP`, el `addXp` de MMO es seguro y la de Endless ya se difería.
+- **"SURVIVAL" (B08):** el nivel que sube la sed máxima es ahora explícito: el nivel global de RPG Leveling o Endless Leveling (el mayor). MMO no tiene nivel global y no cuenta, igual que antes.
+- **Posible mejora (no hecha):** Endless Leveling expone `HudSuppression.addCinematicListener` para sus cinemáticas; se podrían ocultar nuestras barras durante ellas, pero hay que verlo en juego primero.
+
 ### MultipleHUD y AutoMultiHUD
 Ya no son necesarios. Se elimina toda la integración, incluida la escritura en `PlayerPacketTracker.incomingJarOverride` de AutoMultiHUD.
 
@@ -194,6 +212,11 @@ Severidad: **A** = rompe una función o provoca un crash · **M** = comportamien
 | B20 | B | En cada tick con sed > 0 se recorren y quitan los efectos de deshidratación, y se vuelve a aplicar el buff de stamina | `ThirstSystem` | actuar solo en las transiciones |
 | B21 | B | Comandos sin registrar: `RpgStatusCommand`, `HungryHideCommand`, `HungryShowCommand` (código muerto) | `commands/` | registrarlos como subcomandos útiles o eliminarlos |
 | B22 | B | Textos fijos en inglés en las páginas ("System Reloaded Successfully.", "WARNING: …") y traducciones a mano en `getCasualName` | `ui/`, `MMOSkillTreeBridge` | moverlos a `lang/` |
+| B23 | A | Endless Leveling ahora se registra como `Airijko:EndlessLevelingCore`; con el ID viejo del manifest y el class loader de 0.7 el bridge nunca encuentra su API | `build.gradle.kts`, `EndlessLevelingBridge` | ID nuevo y carga por el class loader del mod |
+| B24 | A | MMO 1.7 movió `SkillTreeService` y `SkillReward` a `com.ziggfreed.mmoskilltree.skilltree`: la lectura de recompensas falla, el sistema Glotón queda apagado y los bonos del árbol pasan al cálculo por nivel | `MMOSkillTreeBridge` | probar el paquete nuevo y el viejo |
+| B25 | M | La recompensa final de Hidratación "Super Healthy" (`thirst_healthy_lifestyle`) no hace nada: el código buscaba `thirst_king_fitness` y `thirst_super_healthy`, que nunca existieron en el árbol | `MMOSkillTreeBridge` | ID real y prueba que cruza el código con la plantilla |
+| B26 | M | En 0.7 el class loader de un plugin solo ve sus dependencias declaradas: la detección de AquaSanity por nombre de clase siempre falla y el aviso de bienvenida sale aunque AquaSanity esté instalado | `AquaThirstHunger`, `WelcomeNoticeManager` | detectar por ID de plugin (`PluginManager`) |
+| B27 | B | El proxy del listener de RPG devolvía `null` en `equals`/`hashCode` (excepción si RPG guarda los listeners en un conjunto) y nunca se desregistraba | `RPGLevelingBridge` | proxy completo y `shutdown()` |
 
 Además: los `CODEC` de Hytale de las clases de config no se usan (los archivos se leen con Gson), lo que duplica el mantenimiento; y `SuperlativeManager` se reinicia con el servidor (se podría persistir).
 
@@ -251,7 +274,7 @@ Cada fase termina con build verde y un commit. Las fases 0–3 no dependen de JA
 - Migración `ConfigVersion 1.7.5 → 1.8.0` con backup: añadir los campos nuevos sin pisar los valores existentes del usuario.
 - **Aceptación:** pruebas manuales de gameplay de §10, y configs antiguas de 1.0.0 que migran sin perder valores.
 
-### Fase 4 — Integraciones (necesita los JARs actuales)
+### Fase 4 — Integraciones (hecha en código, ver §6.1)
 - Conseguir los JARs actuales de RPG Leveling, Endless Leveling y MMO Skill Tree (+ ZiggfreedCommon) en `libs/optional/` (ignorado por git; solo para inspeccionar la API, no se empaquetan).
 - Rehacer los adaptadores (§6): inicialización real de RPG, firmas nuevas de EL V11, `LoadBefore` y escritura temprana para MMO (sin reinicios), XP fuera del tick y sin hacks de HUD.
 - Comando `/aquahunger integrations` (solo op) que muestre qué integración y qué función están activas.

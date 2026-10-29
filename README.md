@@ -36,7 +36,9 @@ When you combine the mod with **MMO Skill Tree**, **RPG Leveling And Stats/Skill
 - 🏹 **[RPG Leveling And Stats/Skills](https://www.curseforge.com/hytale/mods/rpg-leveling-and-stats)** → Earn XP boosts and let your level dynamically affect your food and water consumption, as well as your XP gains.
 - 🗡️ **[Endless Leveling](https://www.curseforge.com/hytale/mods/endlessleveling)** → The higher your level, the more stable your hunger and thirst stats become. Gain extra XP when you keep your stats healthy… and lose XP when you neglect them.
 - 🧙‍♂️ **[MMO Skill Tree](https://www.curseforge.com/hytale/mods/mmo-skill-tree)** → We use this powerful API to create a survival skill tree with rewards. It's incredible how much deeper the mod becomes once you have room to grow!
-  - *Requires restarting the server twice (the first to initialize systems, the second to load the tree).*
+  - *No restarts needed: the NUTRITION and THIRST skills are set up before MMO Skill Tree loads.*
+
+Built against RPG Leveling 0.4.2, Endless Leveling 14.1.0 and MMO Skill Tree 1.7.4 (their Hytale 0.7 versions). `/aquahunger integrations` shows which ones are connected.
 
 ### ⚙️ Main commands
 
@@ -51,6 +53,7 @@ Requires operator permissions (`/op self`).
 - `/aquahunger set <0-100>` → set hunger level
 - `/aquathirst set <0-100>` → set hydration level
 - `/aquahunger hide` / `/aquahunger show` → hide or show your own hunger and thirst bars
+- `/aquahunger integrations` → which RPG and skill mods are connected, and your levels in them
 
 ### 🧬 Universal Compatibility
 
@@ -102,7 +105,9 @@ Cuando combinas el mod con **MMO Skill Tree**, **RPG Leveling And Stats/Skills**
 - 🏹 **RPG Leveling And Stats/Skills** → Obtén mejoras de XP y haz que tu nivel afecte dinámicamente tu consumo de agua y comida, así como tu ganancia de XP.
 - 🗡️ **Endless Leveling** → Cuanto más nivel consigas, más estables serán tus niveles de hambre y sed. Ganas XP adicional si mantienes tus stats en buen estado… y menos XP si los descuidas.
 - 🧙‍♂️ **MMO Skill Tree** → Usamos esta robusta API para crear un árbol de habilidades y recompensas de supervivencia. ¡Es increíble lo interesante que se vuelve el mod cuando tienes posibilidades de mejora!
-  - *Requiere reiniciar el servidor 2 veces (la primera para arrancar sistemas, la segunda para cargar el árbol).*
+  - *Sin reinicios: las skills NUTRITION y THIRST se preparan antes de que cargue MMO Skill Tree.*
+
+Hecho sobre RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (sus versiones para Hytale 0.7). `/aquahunger integrations` muestra cuáles están conectados.
 
 ### ⚙️ Comandos principales
 
@@ -117,6 +122,7 @@ Requiere permisos (`/op self`).
 - `/aquahunger set <0-100>` → ajustar hambre
 - `/aquathirst set <0-100>` → ajustar hidratación
 - `/aquahunger hide` / `/aquahunger show` → ocultar o mostrar tus barras de hambre y sed
+- `/aquahunger integrations` → qué mods de RPG y habilidades están conectados, y tus niveles en ellos
 
 ### 🧬 Compatibilidad Universal
 

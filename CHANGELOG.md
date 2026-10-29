@@ -19,6 +19,21 @@ Port to Hytale server 0.7.x. Requires a 0.7.2 or newer 0.7 server; 1.0.0 does no
 - The server log now shows integration status and config problems; `EnableDebugLogs` in
   `ThirstConfig.json` adds verbose diagnostics.
 
+### Integrations
+Built against RPG Leveling 0.4.2, Endless Leveling 14.1.0 and MMO Skill Tree 1.7.4, the
+versions of those mods for Hytale 0.7.
+- RPG Leveling now connects. In 1.0.0 the integration was never started, so it gave no XP,
+  no consumption bonus and no level-up feedback.
+- Endless Leveling is found under its current plugin ID (`Airijko:EndlessLevelingCore`); before,
+  it was not detected at all on Hytale 0.7. Level-ups come from its own event.
+- MMO Skill Tree no longer needs two restarts: the NUTRITION and THIRST skills are written to
+  `mods/mmoskilltree/` before MMO Skill Tree reads its config (the manifest loads us first).
+  The files are only rewritten when they change.
+- With MMO Skill Tree 1.7, skill tree rewards and Glutton items work again. MMO moved the classes
+  we read them from, and the mod had silently fallen back to level-based bonuses.
+- `/aquahunger integrations` shows which of these mods are connected and your levels in them.
+  It replaces `/rpgstatus`, which was never registered.
+
 ### Fixed
 - `ExternalFoodsDefaultConfig.json` (bundled values for foods from other mods) was missing
   from the JAR, so new installs had no defaults for them.
@@ -35,6 +50,10 @@ Port to Hytale server 0.7.x. Requires a 0.7.2 or newer 0.7 server; 1.0.0 does no
 - A config file with `"ConfigVersion": null` or invalid JSON stopped the mod from loading;
   invalid files are now copied to `<name>.invalid.bak` and defaults are used.
 - Mod items whose ID contains "Canteen" from other mods were forced to restore no hunger.
+- The last reward of the THIRST tree, Super Healthy, did nothing. It now lowers thirst drain by
+  20% while running, 20% while mining and 15% at rest, as its description says.
+- With AquaSanity installed, our welcome notice showed anyway on Hytale 0.7; it is skipped again.
+- Glutton item names in chat come from the language files instead of being fixed in the code.
 
 ### Config migration
 - `ConfigVersion` goes from `1.7.5` to `1.8.0`, with a `.bak` copy of each migrated file.
