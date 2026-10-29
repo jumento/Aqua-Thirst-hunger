@@ -4,6 +4,22 @@
 
 Todo lo que se afirma como "verificado" se comprobó compilando el código actual contra el `HytaleServer.jar` 0.7.2 instalado en esta máquina e inspeccionando su bytecode, o leyendo el código del mod. Lo marcado como **a verificar** depende de JARs de terceros que todavía no tenemos.
 
+## Estado de ejecución
+
+Plan aprobado con las decisiones recomendadas de la §12 (HUD solo nativo, sed máxima por nivel visible en el HUD, versión 1.1.0, AquaSanity en tarea aparte). Rama `update/hytale-0.7`.
+
+| Fase | Estado |
+|---|---|
+| 0 — Build reproducible | Hecha |
+| 1 — Migración de API | Hecha |
+| 2 — HUD nativo | Hecha |
+| 3 — Gameplay y config | Hecha, con 17 pruebas unitarias |
+| 4 — Integraciones | Pendiente: necesita los JARs actuales de RPG Leveling, Endless Leveling y MMO Skill Tree |
+| 5 — Documentación | Parcial: README y `CHANGELOG.md` actualizados |
+| 6 — Verificación y release | Parcial: en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita (`start()` completo) y se apaga sin errores. Falta la prueba en juego (§10.3) |
+
+Bugs corregidos: B01–B03, B05–B07, B09–B20 y B22 (páginas). B21: `hide`/`show` registrados; `RpgStatusCommand` queda para la fase 4. B04 y la fuente del nivel de "SURVIVAL" (B08) quedan para la fase 4. Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
+
 ---
 
 ## 1. Resumen ejecutivo
