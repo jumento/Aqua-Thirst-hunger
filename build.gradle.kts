@@ -71,8 +71,10 @@ val generateManifest by tasks.registering {
               },
               "OptionalDependencies": {
                 "Zuxaw:RPGLeveling": "*",
-                "Ziggfreed:MMOSkillTree": "*",
-                "airijko:EndlessLeveling": "*"
+                "Airijko:EndlessLevelingCore": "*"
+              },
+              "LoadBefore": {
+                "Ziggfreed:MMOSkillTree": "*"
               },
               "IncludesAssetPack": true,
               "DisabledByDefault": false

@@ -22,6 +22,7 @@ public class HungryCommand extends AbstractPlayerCommand {
         this.addSubCommand(new HungryStatsCommand());
         this.addSubCommand(new HungryHideCommand());
         this.addSubCommand(new HungryShowCommand());
+        this.addSubCommand(new HungryIntegrationsCommand());
         this.requirePermission(requiredPermission);
     }
 
@@ -49,6 +50,9 @@ public class HungryCommand extends AbstractPlayerCommand {
         }
         if (context.sender().hasPermission(HungryShowCommand.requiredPermission)) {
             message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.show"));
+        }
+        if (context.sender().hasPermission(HungryIntegrationsCommand.requiredPermission)) {
+            message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.integrations"));
         }
 
         playerRef.sendMessage(message);

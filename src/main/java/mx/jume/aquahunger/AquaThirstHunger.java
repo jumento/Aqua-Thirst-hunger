@@ -13,6 +13,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.assets.FoodValue;
 import mx.jume.aquahunger.assets.HungryAssetRegistryLoader;
 import mx.jume.aquahunger.commands.*;
+import mx.jume.aquahunger.compat.MMOSkillTreeRegistrar;
+import mx.jume.aquahunger.compat.OptionalPlugins;
 import mx.jume.aquahunger.components.HungerComponent;
 import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HHMFoodValuesConfig;
@@ -54,6 +56,11 @@ public class AquaThirstHunger extends JavaPlugin {
         //logDebug("Configuration loaded.");
 
         mx.jume.aquahunger.compat.NotifiedPlayersManager.load(java.nio.file.Paths.get("mods/Aqua-Thirst-hunger"));
+
+        // MMO Skill Tree reads its skill files in its own setup; the manifest's LoadBefore makes ours run first.
+        if (OptionalPlugins.isPresent(OptionalPlugins.MMO_SKILL_TREE)) {
+            MMOSkillTreeRegistrar.ensureRegistered();
+        }
 
         final var entityStoreRegistry = this.getEntityStoreRegistry();
         this.hungerComponentType = entityStoreRegistry.registerComponent(HungerComponent.class, "HungerComponent", HungerComponent.CODEC);
@@ -112,6 +119,12 @@ public class AquaThirstHunger extends JavaPlugin {
         }
     }
 
+    @Override
+    protected void shutdown() {
+        mx.jume.aquahunger.compat.IntegrationManager.shutdown();
+        super.shutdown();
+    }
+
     public ComponentType<EntityStore, HungerComponent> getHungerComponentType() { return this.hungerComponentType; }
     public ComponentType<EntityStore, mx.jume.aquahunger.components.ThirstComponent> getThirstComponentType() { return this.thirstComponentType; }
     public HHMHungerConfig getHungerConfig() { return this.configManager.getHungerConfig(); }
@@ -133,38 +146,22 @@ public class AquaThirstHunger extends JavaPlugin {
 
     public static AquaThirstHunger get() { return instance; }
 
+    // Installed checks go through the plugin manager: on 0.7 our class loader cannot see
+    // plugins the manifest does not declare (MMO Skill Tree, AquaSanity).
     public boolean isRpgLevelingPresent() {
-        if (checkClass("org.zuxaw.plugin.api.RPGLevelingAPI")) return true;
-        if (checkClass("com.zuxaw.rpgleveling.api.RPGLevelingAPI")) return true;
-        return false;
+        return OptionalPlugins.isPresent(OptionalPlugins.RPG_LEVELING);
     }
 
     public boolean isEndlessLevelingPresent() {
-        return checkClass("com.airijko.endlessleveling.api.EndlessLevelingAPI");
+        return OptionalPlugins.isPresent(OptionalPlugins.ENDLESS_LEVELING);
     }
 
     public boolean isHytaleMMOPresent() {
-        return checkClass("com.ziggfreed.mmoskilltree.api.MMOSkillTreeAPI");
-    }
-
-    private boolean checkClass(String className) {
-        try {
-            Class.forName(className);
-            //logDebug("Found class: " + className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            try {
-                Thread.currentThread().getContextClassLoader().loadClass(className);
-                //logDebug("Found class via CtxCL: " + className);
-                return true;
-            } catch (ClassNotFoundException e2) {
-                return false;
-            }
-        }
+        return OptionalPlugins.isPresent(OptionalPlugins.MMO_SKILL_TREE);
     }
 
     public boolean isAquaSanityPresent() {
-        return checkClass("mx.jume.aquasanity.AquaSanity");
+        return OptionalPlugins.isPresent(OptionalPlugins.AQUA_SANITY);
     }
 
     public static void logInfo(String message) {

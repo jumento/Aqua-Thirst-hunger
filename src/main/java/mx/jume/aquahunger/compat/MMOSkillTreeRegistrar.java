@@ -12,11 +12,24 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
+/**
+ * Writes our NUTRITION and THIRST skills into MMO Skill Tree's owner config files.
+ *
+ * <p>MMO reads {@code custom-skills.json}, {@code xp-maps.json} and {@code skill-tree.json} once,
+ * in its own setup, and only keeps skill-tree overrides for skills that are already registered
+ * at that moment. So the skills cannot come from a content pack (packs load later) and the files
+ * must be written before MMO's setup: the manifest declares {@code LoadBefore: Ziggfreed:MMOSkillTree}
+ * and this runs from our setup. MMO 1.7 still accepts a skill-tree override written as a list of tiers.
+ */
 public final class MMOSkillTreeRegistrar {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String[] SKILLS = {"NUTRITION", "THIRST"};
+
+    /** Same relative path MMO Skill Tree uses for its owner config. */
+    static final Path MMO_CONFIG_DIR = Paths.get("mods", "mmoskilltree");
 
     private static final String CUSTOM_SKILLS_FILE = "custom-skills.json";
     private static final String SKILL_TREE_FILE    = "skill-tree.json";
@@ -30,40 +43,43 @@ public final class MMOSkillTreeRegistrar {
         if (registered) return;
         registered = true;
 
-        Path mmoDir = resolveMMODir();
-        if (mmoDir == null) {
-            //AquaThirstHunger.logInfo("[mmo] Directorio mmoskilltree no encontrado, omitiendo registro.");
-            return;
-        }
-
         try {
-            boolean skillInjected = injectCustomSkills(mmoDir);
-            boolean treeInjected  = injectSkillTree(mmoDir);
-            boolean xpInjected    = injectXpMaps(mmoDir);
-
-            if (skillInjected || treeInjected || xpInjected) {
-                //AquaThirstHunger.logInfo("[mmo] Skill trees (NUTRITION, THIRST) registrados/actualizados correctamente.");
+            if (register(MMO_CONFIG_DIR)) {
+                AquaThirstHunger.logInfo("[mmo] NUTRITION and THIRST skills written to " + MMO_CONFIG_DIR + ".");
             } else {
-                //AquaThirstHunger.logInfo("[mmo] Skills ya estaban registrados correctamente.");
+                AquaThirstHunger.logDebug("[mmo] NUTRITION and THIRST skills already up to date in " + MMO_CONFIG_DIR + ".");
             }
         } catch (Exception e) {
-            //System.err.println("[AquaHunger] Error al registrar skill tree: " + e.getMessage());
+            AquaThirstHunger.logWarning("[mmo] Could not write the NUTRITION and THIRST skills to " + MMO_CONFIG_DIR
+                    + " (" + e + "). MMO Skill Tree will start without them.");
         }
+    }
+
+    /**
+     * Puts our skills into the three files under {@code mmoDir}, replacing earlier versions of them
+     * and keeping everything else. A file is only rewritten when its content changes.
+     *
+     * @return true if any file was written
+     */
+    static boolean register(Path mmoDir) throws IOException {
+        boolean skillInjected = injectCustomSkills(mmoDir);
+        boolean treeInjected  = injectSkillTree(mmoDir);
+        boolean xpInjected    = injectXpMaps(mmoDir);
+        return skillInjected || treeInjected || xpInjected;
     }
 
     private static boolean injectCustomSkills(Path mmoDir) throws IOException {
         Path file = mmoDir.resolve(CUSTOM_SKILLS_FILE);
         JsonObject root = readOrCreateObject(file);
+        JsonObject before = root.deepCopy();
 
         if (!root.has("schemaVersion")) root.addProperty("schemaVersion", 1);
-        if (!root.has("skills")) root.add("skills", new JsonArray());
+        if (!root.has("skills") || !root.get("skills").isJsonArray()) root.add("skills", new JsonArray());
         if (!root.has("disabledBuiltinSkills")) root.add("disabledBuiltinSkills", new JsonArray());
 
         JsonArray currentSkills = root.getAsJsonArray("skills");
         JsonObject templateRoot = loadClasspathJson("/mmo/custom-skills.json").getAsJsonObject();
         JsonArray templateSkills = templateRoot.getAsJsonArray("skills");
-
-        boolean changed = false;
 
         for (int t = 0; t < templateSkills.size(); t++) {
             JsonObject templateSkill = templateSkills.get(t).getAsJsonObject();
@@ -74,28 +90,27 @@ public final class MMOSkillTreeRegistrar {
                 JsonElement elem = currentSkills.get(i);
                 if (elem.isJsonObject()) {
                     JsonObject obj = elem.getAsJsonObject();
-                    if (obj.has("id") && id.equals(obj.get("id").getAsString())) {
+                    if (obj.has("id") && id.equalsIgnoreCase(obj.get("id").getAsString())) {
                         currentSkills.remove(i);
                     }
                 }
             }
             currentSkills.add(templateSkill);
-            changed = true;
         }
 
-        if (changed) writeJson(file, root);
-        return changed;
+        return writeIfChanged(file, before, root);
     }
 
     private static boolean injectSkillTree(Path mmoDir) throws IOException {
         Path file = mmoDir.resolve(SKILL_TREE_FILE);
         JsonObject root = readOrCreateObject(file);
+        JsonObject before = root.deepCopy();
 
         if (!root.has("schemaVersion")) root.addProperty("schemaVersion", 3);
-        if (!root.has("overrides")) root.add("overrides", new JsonObject());
+        if (!root.has("overrides") || !root.get("overrides").isJsonObject()) root.add("overrides", new JsonObject());
 
         JsonObject overrides = root.getAsJsonObject("overrides");
-        
+
         // Limpiamos los viejos en la raiz si existen (por si venian de una versión muy vieja)
         if (root.has("NUTRITION")) root.remove("NUTRITION");
         if (root.has("THIRST")) root.remove("THIRST");
@@ -103,76 +118,46 @@ public final class MMOSkillTreeRegistrar {
         JsonObject templateRoot = loadClasspathJson("/mmo/skill-tree.json").getAsJsonObject();
         JsonObject templateOverrides = templateRoot.getAsJsonObject("overrides");
 
-        boolean changed = false;
         for (String skillId : SKILLS) {
             if (templateOverrides.has(skillId)) {
-                if (overrides.has(skillId)) {
-                    overrides.remove(skillId); // Remover explícitamente y reemplazar
-                }
                 overrides.add(skillId, templateOverrides.get(skillId));
-                changed = true;
             }
         }
 
-        if (changed) writeJson(file, root);
-        return changed;
+        return writeIfChanged(file, before, root);
     }
 
     private static boolean injectXpMaps(Path mmoDir) throws IOException {
         Path file = mmoDir.resolve(XP_MAPS_FILE);
         JsonObject root = readOrCreateObject(file);
+        JsonObject before = root.deepCopy();
 
         if (!root.has("schemaVersion")) root.addProperty("schemaVersion", 1);
-        if (!root.has("xpMaps")) root.add("xpMaps", new JsonObject());
+        if (!root.has("xpMaps") || !root.get("xpMaps").isJsonObject()) root.add("xpMaps", new JsonObject());
 
         JsonObject xpMaps = root.getAsJsonObject("xpMaps");
         JsonObject templateRoot = loadClasspathJson("/mmo/xp-maps.json").getAsJsonObject();
         JsonObject templateXpMaps = templateRoot.has("xpMaps") ? templateRoot.getAsJsonObject("xpMaps") : templateRoot;
 
-        boolean changed = false;
         for (String skillId : SKILLS) {
             if (templateXpMaps.has(skillId)) {
-                if (xpMaps.has(skillId)) {
-                    xpMaps.remove(skillId);
-                }
                 xpMaps.add(skillId, templateXpMaps.get(skillId));
-                changed = true;
             }
         }
 
-        if (changed) writeJson(file, root);
-        return changed;
+        return writeIfChanged(file, before, root);
     }
 
-    private static Path resolveMMODir() {
-        try {
-            Path dataDir = AquaThirstHunger.get().getConfigManager().getDataDirectory();
-            Path modsRoot = dataDir.getParent();
-            if (modsRoot == null) return null;
-
-            String[] folders = {"mmoskilltree", "mmoskills", "MMOSkillTree", "MMOSkills"};
-            for (String folder : folders) {
-                Path p = modsRoot.resolve(folder);
-                if (Files.isDirectory(p)) {
-                    //AquaThirstHunger.logInfo("[mmo] Directorio MMO detectado en: " + p.toAbsolutePath());
-                    return p;
-                }
-            }
-            // Fallback a mmoskilltree por defecto si no existe ninguno
-            Path defaultPath = modsRoot.resolve("mmoskilltree");
-            //AquaThirstHunger.logInfo("[mmo] No se detectó carpeta MMO existente, usando: " + defaultPath.toAbsolutePath());
-            return defaultPath;
-        } catch (Exception e) {
-            //AquaThirstHunger.logWarning("[mmo] Error resolviendo directorio MMOSkillTree: " + e.getMessage());
-            return null;
-        }
-    }
-
+    /** An existing file that is not a JSON object throws, so an owner's broken file is never replaced. */
     private static JsonObject readOrCreateObject(Path file) throws IOException {
         if (Files.exists(file)) {
             try (Reader reader = new InputStreamReader(Files.newInputStream(file), StandardCharsets.UTF_8)) {
                 JsonElement elem = JsonParser.parseReader(reader);
                 if (elem != null && elem.isJsonObject()) return elem.getAsJsonObject();
+                if (elem == null || elem.isJsonNull()) return new JsonObject();
+                throw new IOException(file + " is not a JSON object");
+            } catch (com.google.gson.JsonParseException e) {
+                throw new IOException(file + " is not valid JSON: " + e.getMessage(), e);
             }
         }
         return new JsonObject();
@@ -187,10 +172,14 @@ public final class MMOSkillTreeRegistrar {
         }
     }
 
-    private static void writeJson(Path file, JsonElement json) throws IOException {
+    private static boolean writeIfChanged(Path file, JsonObject before, JsonObject after) throws IOException {
+        if (Files.exists(file) && before.equals(after)) {
+            return false;
+        }
         Files.createDirectories(file.getParent());
         try (Writer writer = new OutputStreamWriter(Files.newOutputStream(file), StandardCharsets.UTF_8)) {
-            GSON.toJson(json, writer);
+            GSON.toJson(after, writer);
         }
+        return true;
     }
 }

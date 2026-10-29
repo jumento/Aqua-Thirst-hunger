@@ -3,15 +3,16 @@ package mx.jume.aquahunger.compat;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
- * Bridge para EndlessLeveling (airijko:EndlessLeveling).
+ * Bridge para Endless Leveling ({@code Airijko:EndlessLevelingCore}). Checked against 14.1.0.
  *
  * <p>Paquete real de la API: {@code com.airijko.endlessleveling.api}
  *
@@ -30,43 +31,52 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
     private static final String API_CLASS = "com.airijko.endlessleveling.api.EndlessLevelingAPI";
 
     private boolean available = false;
-    private Object apiInstance;
     private Method grantXpMethod;
     private Method getLevelMethod;
     private Method apiGetMethod;
-
-    // Cache de niveles para detectar level-ups (EndlessLeveling no expone listener)
-    private final ConcurrentHashMap<UUID, Integer> cachedLevels = new ConcurrentHashMap<>();
+    private Consumer<Object> levelUpListener;
+    private Method removeListenerMethod;
 
     public EndlessLevelingBridge() {
-        // Constructor ligero — la detección se hace en isAvailable()
+        // Lightweight: initialize() runs once Endless Leveling has started (from our start()).
+    }
+
+    public synchronized void initialize() {
+        if (available) {
+            return;
+        }
+        try {
+            Class<?> apiClass = OptionalPlugins.loadClass(OptionalPlugins.ENDLESS_LEVELING, API_CLASS);
+
+            // EndlessLevelingAPI.get() — singleton (no tiene isAvailable estático)
+            apiGetMethod = apiClass.getMethod("get");
+            if (apiGetMethod.invoke(null) == null) {
+                AquaThirstHunger.logWarning("[endless] EndlessLevelingAPI.get() returned null.");
+                return;
+            }
+
+            // grantXp(UUID, double) se mantiene en la 14.x (fuente API_GRANT).
+            grantXpMethod = apiClass.getMethod("grantXp", UUID.class, double.class);
+            getLevelMethod = apiClass.getMethod("getPlayerLevel", UUID.class);
+
+            registerLevelUpListener(apiClass);
+
+            available = true;
+        } catch (ClassNotFoundException e) {
+            // Endless Leveling is not installed.
+        } catch (Exception e) {
+            AquaThirstHunger.logWarning("[endless] Could not connect to Endless Leveling: " + e);
+        }
     }
 
     @Override
     public boolean isAvailable() {
-        if (available) return true;
-        try {
-            Class<?> apiClass = Class.forName(API_CLASS);
+        return available;
+    }
 
-            // EndlessLevelingAPI.get() — singleton (no tiene isAvailable estático)
-            Method getMethod = apiClass.getMethod("get");
-            apiInstance = getMethod.invoke(null);
-            if (apiInstance == null) {
-                return false;
-            }
-
-            // Cache API methods
-            grantXpMethod = apiClass.getMethod("grantXp", UUID.class, double.class);
-            getLevelMethod = apiClass.getMethod("getPlayerLevel", UUID.class);
-            apiGetMethod = apiClass.getMethod("get");
-
-            available = true;
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        } catch (Exception e) {
-            return false;
-        }
+    /** True when Endless Leveling's level-up events reach the HUD. */
+    public boolean hasLevelUpListener() {
+        return levelUpListener != null;
     }
 
     @Override
@@ -102,9 +112,7 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
                     else if (isResilienceT || (thirstMod < 0 && !isEatingReason && !isResilienceH)) thirst.setXpDown(true);
                 }
 
-                // Capturar nivel antes para detectar level-up
                 int levelBefore = elLevel;
-                cachedLevels.put(playerRef.getUuid(), levelBefore);
 
                 // Diferir grantXp a world.execute() para evitar conflictos con el
                 // procesamiento interno de EndlessLeveling durante ticks del ECS.
@@ -112,23 +120,25 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
                 if (world != null) {
                     world.execute(() -> {
                         try {
-                            Object freshApi = apiGetMethod != null ? apiGetMethod.invoke(null) : apiInstance;
-                            if (freshApi == null) freshApi = apiInstance;
-                            grantXpMethod.invoke(freshApi, playerRef.getUuid(), finalXp);
-                        } catch (Exception ignored) {}
+                            grantXpMethod.invoke(apiGetMethod.invoke(null), playerRef.getUuid(), finalXp);
+                        } catch (Exception e) {
+                            AquaThirstHunger.logDebug("[endless] grantXp failed: " + e);
+                        }
                     });
 
                     // +XP / -XP en el HUD durante unos segundos
                     XpFeedback.show(playerRef);
 
-                    // Detectar level-up (diferido para que grantXp ya se haya procesado)
-                    java.util.concurrent.CompletableFuture.delayedExecutor(200, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> mx.jume.aquahunger.ui.HudService.runOnPlayerWorld(playerRef,
-                                    () -> checkLevelUp(playerRef, levelBefore)));
+                    // Sin listener (API vieja): detectar el level-up comparando niveles después del grantXp.
+                    if (levelUpListener == null) {
+                        java.util.concurrent.CompletableFuture.delayedExecutor(200, java.util.concurrent.TimeUnit.MILLISECONDS)
+                                .execute(() -> mx.jume.aquahunger.ui.HudService.runOnPlayerWorld(playerRef,
+                                        () -> checkLevelUp(playerRef, levelBefore)));
+                    }
                 }
             }
         } catch (Exception e) {
-            // Silenciado como en RPGLevelingBridge
+            AquaThirstHunger.logDebug("[endless] Could not award XP: " + e);
         }
     }
 
@@ -138,12 +148,7 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
      */
     private void checkLevelUp(PlayerRef playerRef, int levelBefore) {
         try {
-            UUID uuid = playerRef.getUuid();
-            int levelAfter = getLevelByUuid(uuid);
-            cachedLevels.put(uuid, levelAfter);
-
-            if (levelAfter > levelBefore) {
-                // Feedback visual de subida de nivel (idéntico a RPGLevelingBridge)
+            if (getLevelByUuid(playerRef.getUuid()) > levelBefore) {
                 XpFeedback.showLevelUp(playerRef);
             }
         } catch (Exception ignored) {}
@@ -199,6 +204,11 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
     }
 
     @Override
+    public int getLevelingLevel(Ref<EntityStore> ref, Store<EntityStore> store) {
+        return getSkillLevel(ref, store, "GLOBAL");
+    }
+
+    @Override
     public float getStaminaLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
         return getLossMultiplier(ref, store);
     }
@@ -227,12 +237,57 @@ public class EndlessLevelingBridge implements HungerThirstIntegrationBridge {
     private int getLevelByUuid(UUID uuid) {
         if (!available || getLevelMethod == null) return 0;
         try {
-            Object freshApi = apiGetMethod != null ? apiGetMethod.invoke(null) : apiInstance;
-            if (freshApi == null) freshApi = apiInstance;
-            Object result = getLevelMethod.invoke(freshApi, uuid);
+            Object result = getLevelMethod.invoke(apiGetMethod.invoke(null), uuid);
             return result instanceof Integer ? Math.max(0, (Integer) result) : 0;
         } catch (Exception e) {
             return 0;
+        }
+    }
+
+    @Override
+    public synchronized void shutdown() {
+        if (levelUpListener == null || removeListenerMethod == null) {
+            return;
+        }
+        try {
+            removeListenerMethod.invoke(apiGetMethod.invoke(null), levelUpListener);
+        } catch (Exception ignored) {
+            // Endless Leveling may already be shutting down.
+        }
+        levelUpListener = null;
+    }
+
+    /**
+     * Endless Leveling 14+ publishes level-ups through addLevelUpListener(Consumer<LevelUpEvent>).
+     * The event is a record with playerUuid(); a plain Consumer avoids depending on its type.
+     */
+    private void registerLevelUpListener(Class<?> apiClass) {
+        try {
+            Method addMethod = apiClass.getMethod("addLevelUpListener", Consumer.class);
+            Consumer<Object> listener = this::handleLevelUpEvent;
+            addMethod.invoke(apiGetMethod.invoke(null), listener);
+            levelUpListener = listener;
+            removeListenerMethod = apiClass.getMethod("removeLevelUpListener", Consumer.class);
+        } catch (NoSuchMethodException e) {
+            // Older Endless Leveling: level-ups are detected by comparing levels after our grants.
+        } catch (Exception e) {
+            AquaThirstHunger.logWarning("[endless] Could not register the level-up listener: " + e);
+        }
+    }
+
+    private void handleLevelUpEvent(Object event) {
+        try {
+            Object uuid = event.getClass().getMethod("playerUuid").invoke(event);
+            if (!(uuid instanceof UUID playerUuid)) {
+                return;
+            }
+            PlayerRef playerRef = Universe.get().getPlayer(playerUuid);
+            if (playerRef != null) {
+                mx.jume.aquahunger.ui.HudService.runOnPlayerWorld(playerRef,
+                        () -> XpFeedback.showLevelUp(playerRef));
+            }
+        } catch (Exception e) {
+            AquaThirstHunger.logDebug("[endless] Level-up event not handled: " + e);
         }
     }
 }

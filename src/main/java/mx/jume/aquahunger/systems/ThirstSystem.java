@@ -148,10 +148,10 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
 
         thirst.dehydrate(depletion);
 
-        // Progression raises the maximum above the configured base; the HUD and the
-        // stamina boost both use this real maximum.
-        int survivalLevel = mx.jume.aquahunger.compat.IntegrationManager.getSkillLevel(ref, store, "SURVIVAL");
-        float newMax = config.getMaxThirst() + (survivalLevel * 2.5f);
+        // The RPG Leveling / Endless Leveling level raises the maximum above the configured base
+        // (+2.5 per level); the HUD and the stamina boost both use this real maximum.
+        int levelingLevel = mx.jume.aquahunger.compat.IntegrationManager.getLevelingLevel(ref, store);
+        float newMax = config.getMaxThirst() + (levelingLevel * 2.5f);
         if (thirst.getMaxThirst() != newMax) {
             thirst.setMaxThirst(newMax);
         }
