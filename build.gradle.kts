@@ -1,10 +1,14 @@
-import java.net.URL
 plugins {
     id("java")
 }
 
 group = "mx.jume.aquahunger"
-version = "1.0.0"
+version = "1.1.0"
+
+// Server API the mod is compiled against (the minimum supported version) and the
+// range written to manifest.json. Bump both together after testing a new Hytale release.
+val hytaleServerVersion = "0.7.2"
+val hytaleServerRange = ">=0.7.2 <0.8.0"
 
 java {
     toolchain {
@@ -14,11 +18,14 @@ java {
 
 repositories {
     mavenCentral()
+    maven("https://maven.hytale.com/release")
 }
 
 dependencies {
-    compileOnly(fileTree("libs") { include("*.jar") })
+    compileOnly("com.hypixel.hytale:Server:$hytaleServerVersion")
     compileOnly("com.google.code.gson:gson:2.10.1")
+    testImplementation("com.hypixel.hytale:Server:$hytaleServerVersion")
+    testImplementation("com.google.code.gson:gson:2.10.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -27,47 +34,40 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-// Generate Manifest Task based on AquaSanity template
+tasks.test {
+    useJUnitPlatform()
+}
+
 val generateManifest by tasks.registering {
     val outputDir = layout.buildDirectory.dir("generated/resources")
+    val modGroup = project.group.toString()
+    val modVersion = project.version.toString()
     outputs.dir(outputDir)
-    
-    inputs.property("group", project.group)
-    inputs.property("name", "Aqua-Thirst-hunger")
-    inputs.property("version", project.version)
+
+    inputs.property("group", modGroup)
+    inputs.property("version", modVersion)
+    inputs.property("serverRange", hytaleServerRange)
 
     doLast {
-        var activeServerVersion = "2026.03.26-89796e57b" // Base version
-        try {
-            val xmlText = URL("https://maven.hytale.com/release/com/hypixel/hytale/Server/maven-metadata.xml").readText()
-            val regex = "<release>(.*?)</release>".toRegex()
-            val match = regex.find(xmlText)
-            if (match != null) {
-                activeServerVersion = match.groupValues[1]
-            }
-        } catch (e: Exception) {
-            println("Warning: Could not connect to Hytale Maven. Using base version.")
-        }
-
         val json = """
             {
-              "Group": "${project.group}",
+              "Group": "$modGroup",
               "Name": "Aqua-Thirst-hunger",
-              "Version": "${project.version}",
+              "Version": "$modVersion",
               "Description": "A mod that adds thirst and hunger mechanics to Hytale.",
               "Authors": [
                   { "Name": "jume" },
                   { "Name": "andiemg" },
                   { "Name": "antigravity" }
               ],
-              "ServerVersion": "$activeServerVersion",
-              "Main": "${project.group}.AquaThirstHunger",
+              "ServerVersion": "$hytaleServerRange",
+              "Main": "$modGroup.AquaThirstHunger",
               "Dependencies": {
                 "Hytale:EntityModule": "*"
               },
               "OptionalDependencies": {
                 "Zuxaw:RPGLeveling": "*",
-                "ziggfreed:MMOSkillTree": "*",
+                "Ziggfreed:MMOSkillTree": "*",
                 "airijko:EndlessLeveling": "*"
               },
               "IncludesAssetPack": true,

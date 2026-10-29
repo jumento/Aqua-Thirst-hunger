@@ -111,14 +111,8 @@ public class HHMUtils {
     }
 
     public static boolean activeEntityEffectIs(ActiveEntityEffect effect, String entityEffectId) {
-        try {
-            Field f = ActiveEntityEffect.class.getDeclaredField("entityEffectId");
-            f.setAccessible(true);
-            String id = (String) f.get(effect);
-            return id.equals(entityEffectId);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        int index = EntityEffect.getAssetMap().getIndex(entityEffectId);
+        return index >= 0 && effect.getEntityEffectIndex() == index;
     }
 
     public static boolean activeEntityEffectIsStarving(ActiveEntityEffect effect) {

@@ -128,33 +128,4 @@ public class IntegrationManager {
     public static boolean isAnyLevelingAvailable() {
         return isRpgLevelingAvailable() || isEndlessLevelingAvailable();
     }
-
-    public static ClassLoader getPluginClassLoader(String pluginId) {
-        try {
-            java.lang.reflect.Field initField = com.hypixel.hytale.server.core.plugin.JavaPlugin.class.getDeclaredField("init");
-            initField.setAccessible(true);
-            
-            mx.jume.aquahunger.AquaThirstHunger main = mx.jume.aquahunger.AquaThirstHunger.get();
-            if (main == null) return null;
-            
-            Object init = initField.get(main);
-            if (init == null) return null;
-            
-            java.lang.reflect.Method getPm = init.getClass().getMethod("getPluginManager");
-            Object pm = getPm.invoke(init);
-            if (pm == null) return null;
-            
-            java.lang.reflect.Method getPlugins = pm.getClass().getMethod("getPlugins");
-            java.util.Collection<?> plugins = (java.util.Collection<?>) getPlugins.invoke(pm);
-            
-            for (Object p : plugins) {
-                java.lang.reflect.Method getId = p.getClass().getMethod("getId");
-                String id = (String) getId.invoke(p);
-                if (id != null && id.equalsIgnoreCase(pluginId)) {
-                    return p.getClass().getClassLoader();
-                }
-            }
-        } catch (Exception ignored) {}
-        return null;
-    }
 }

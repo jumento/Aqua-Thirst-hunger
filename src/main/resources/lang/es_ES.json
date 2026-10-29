@@ -50,6 +50,10 @@
     "command.help.set.self": "/aquahunger set <hungerLevel> - Establece tu propio nivel de hambre (0-100).",
     "command.help.set.other": "/aquahunger set <player> <hungerLevel> - Establece el nivel de hambre de otro jugador (0-100).",
     "command.help.stats": "/aquahunger stats - Muestra récords del servidor (Más Glotón, etc).",
+    "command.help.hide": "/aquahunger hide - Oculta tus barras de hambre y sed.",
+    "command.help.show": "/aquahunger show - Vuelve a mostrar tus barras de hambre y sed.",
+    "command.hud.hidden": "Barras de hambre y sed ocultas. Usa /aquahunger show para volver a verlas.",
+    "command.hud.shown": "Barras de hambre y sed visibles.",
     "command.thirst.help.base": "Comandos de Sed\n\n/aquathirst - Muestra este mensaje de ayuda.",
     "command.thirst.help.set.self": "/aquathirst set <thirstLevel> - Establece tu propio nivel de sed (0-100).",
     "command.thirst.help.set.other": "/aquathirst set <player> <thirstLevel> - Establece el nivel de sed de otro jugador (0-100).",
@@ -66,7 +70,7 @@
     "ui.cheff.closed": "Editor de configuración cerrado.",
     "ui.bars.current": "Actual: %s",
     "ui.bars.error": "Error al guardar/recargar: %s",
-    "ui.bars.restart_warning": "ADVERTENCIA: El servidor debe reiniciarse para que los cambios del HUD surtan efecto.",
+    "ui.bars.applied": "Posición del HUD actualizada.",
     "ui.config.reload_success": "Sistema recargado exitosamente.",
     "ui.config.reload_failed": "Error al recargar: %s."
 }

@@ -11,6 +11,8 @@ import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -83,44 +85,14 @@ public class AquaCheffPage extends InteractiveCustomUIPage<AquaCheffPage.ConfigE
         // Load the UI definition file
         cmd.append("Pages/AquaCheffUI.ui");
 
-        // Attempt to pre-populate Item ID using reflection to avoid hard dependency on
-        // unimported classes
-        // Pre-populate Item ID using reflection based on debug findings
+        // Pre-populate Item ID with the item in hand (the inventory lives in the ECS)
         try {
-            Player player = store.getComponent(ref, Player.getComponentType());
-            if (player != null) {
-                java.lang.reflect.Method getInventory = player.getClass().getMethod("getInventory");
-                Object inventory = getInventory.invoke(player);
-
-                if (inventory != null) {
-                    // Use 'getItemInHand' as identified
-                    Object itemStack = inventory.getClass().getMethod("getItemInHand").invoke(inventory);
-
-                    if (itemStack != null) {
-                        // Check if not empty
-                        boolean isEmpty = false;
-                        try {
-                            isEmpty = (boolean) itemStack.getClass().getMethod("isEmpty").invoke(itemStack);
-                        } catch (Exception ignored) {
-                        }
-
-                        if (!isEmpty) {
-                            // Get Item
-                            Object item = itemStack.getClass().getMethod("getItem").invoke(itemStack);
-                            if (item != null) {
-                                // Get ID
-                                String id = (String) item.getClass().getMethod("getId").invoke(item);
-                                if (id != null) {
-                                    cmd.set("#ItemIdInput.Value", id);
-                                }
-                            }
-                        }
-                    }
-                }
+            ItemStack itemInHand = InventoryComponent.getItemInHand(store, ref);
+            if (!ItemStack.isEmpty(itemInHand) && itemInHand.getItemId() != null) {
+                cmd.set("#ItemIdInput.Value", itemInHand.getItemId());
             }
-        } catch (Exception e) {
-            //mx.jume.aquahunger.AquaThirstHunger
-            //        .logInfo("Info: Could not auto-fill held item ID (Reflection error: " + e.getMessage() + ")");
+        } catch (RuntimeException e) {
+            mx.jume.aquahunger.AquaThirstHunger.logDebug("Could not auto-fill held item ID: " + e.getMessage());
         }
 
         // Bind the Save button event

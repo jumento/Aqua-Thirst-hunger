@@ -46,6 +46,10 @@
     "command.help.set.self": "/aquahunger set <hungerLevel> - Set your own hunger level (0-100).",
     "command.help.set.other": "/aquahunger set <player> <hungerLevel> - Set another player's hunger level (0-100).",
     "command.help.stats": "/aquahunger stats - Show server records (Most Gluttonous, etc).",
+    "command.help.hide": "/aquahunger hide - Hide your hunger and thirst bars.",
+    "command.help.show": "/aquahunger show - Show your hunger and thirst bars again.",
+    "command.hud.hidden": "Hunger and thirst bars hidden. Use /aquahunger show to bring them back.",
+    "command.hud.shown": "Hunger and thirst bars visible.",
     "command.thirst.help.base": "Thirst commands\n\n/aquathirst - Show this help message.",
     "command.thirst.help.set.self": "/aquathirst set <thirstLevel> - Set your own thirst level (0-100).",
     "command.thirst.help.set.other": "/aquathirst set <player> <thirstLevel> - Set another player's thirst level (0-100).",
@@ -62,7 +66,7 @@
     "ui.cheff.closed": "Configuration editor closed.",
     "ui.bars.current": "Current: %s",
     "ui.bars.error": "Error saving/reloading: %s",
-    "ui.bars.restart_warning": "WARNING: The server needs to restart for the HUD changes to take effect.",
+    "ui.bars.applied": "HUD position updated.",
     "ui.config.reload_success": "System Reloaded Successfully.",
     "ui.config.reload_failed": "Reload Failed: %s."
 }

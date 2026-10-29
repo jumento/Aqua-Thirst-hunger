@@ -18,14 +18,14 @@ import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HHMFoodValuesConfig;
 import mx.jume.aquahunger.events.GameModePacketWatcher;
 import mx.jume.aquahunger.events.HHMPlayerReady;
-import mx.jume.aquahud.AquaHudBridge;
-import mx.jume.aquahud.AquaHudWatcher;
 import mx.jume.aquahunger.interactions.FailedFeedingInteraction;
 import mx.jume.aquahunger.interactions.FeedInteraction;
 import mx.jume.aquahunger.interactions.StartFeedingInteraction;
+import mx.jume.aquahunger.systems.GameModeTypeHudSystems;
 import mx.jume.aquahunger.systems.OnBlockHitSystem;
 import mx.jume.aquahunger.systems.OnDeathSystem;
 import mx.jume.aquahunger.systems.StarveSystem;
+import mx.jume.aquahunger.ui.HudService;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import javax.annotation.Nonnull;
 
@@ -64,6 +64,8 @@ public class AquaThirstHunger extends JavaPlugin {
         entityStoreRegistry.registerSystem(new OnBlockHitSystem());
         entityStoreRegistry.registerSystem(new OnDeathSystem());
         entityStoreRegistry.registerSystem(new mx.jume.aquahunger.systems.HungerLifeSystem());
+        entityStoreRegistry.registerSystem(new GameModeTypeHudSystems.Enter());
+        entityStoreRegistry.registerSystem(new GameModeTypeHudSystems.Exit());
 
         final var interactionRegistry = this.getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("Hungry_Feed", FeedInteraction.class, FeedInteraction.CODEC);
@@ -79,8 +81,6 @@ public class AquaThirstHunger extends JavaPlugin {
 
         //logDebug("Registering events...");
 
-        AquaHudBridge.detect(this);
-        AquaHudWatcher.ensureRegistered();
         PacketAdapters.registerOutbound(new GameModePacketWatcher());
 
         this.getCommandRegistry().registerCommand(new HungryCommand());
@@ -98,8 +98,6 @@ public class AquaThirstHunger extends JavaPlugin {
     @Override
     protected void start() {
         super.start();
-
-        AquaHudBridge.recheckMhud();
 
         mx.jume.aquahunger.compat.IntegrationManager.init();
 
@@ -130,8 +128,7 @@ public class AquaThirstHunger extends JavaPlugin {
     }
 
     public void syncHUDs() {
-        mx.jume.aquahunger.ui.HHMHud.refreshAllHuds(getHungerConfig());
-        mx.jume.aquahunger.ui.HHMThirstHud.refreshAllHuds(getThirstConfig());
+        HudService.refreshAll();
     }
 
     public static AquaThirstHunger get() { return instance; }

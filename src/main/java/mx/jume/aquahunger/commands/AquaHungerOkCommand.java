@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -15,11 +16,7 @@ import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 public class AquaHungerOkCommand extends AbstractPlayerCommand {
     public AquaHungerOkCommand() {
         super("aquahungerok", "Cierra el aviso de bienvenida de AquaThirst", false);
-    }
-
-    @Override
-    protected boolean canGeneratePermission() {
-        return false; // Cualquier jugador puede usar /aquahungerok
+        this.requireNoPermission(); // Cualquier jugador puede usar /aquahungerok
     }
 
     @Override
@@ -30,7 +27,8 @@ public class AquaHungerOkCommand extends AbstractPlayerCommand {
             @NonNullDecl PlayerRef playerRef,
             @NonNullDecl World world) {
         String lang = playerRef.getLanguage();
-        if (WelcomeNoticeManager.dismissNotice(playerRef)) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null && WelcomeNoticeManager.dismissNotice(player, playerRef)) {
             Message msg = Message.empty()
                 .insert(LangManager.getForLanguage(lang, "integration.welcome.ok_response"))
                 .color("#55FF55");

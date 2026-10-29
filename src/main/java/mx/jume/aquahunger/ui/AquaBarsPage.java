@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.HudPosition;
 import javax.annotation.Nonnull;
 
@@ -42,8 +43,11 @@ public class AquaBarsPage extends InteractiveCustomUIPage<AquaBarsPage.BindingDa
         HudPosition currentThirstPos = AquaThirstHunger.get().getThirstConfig().getHudPosition();
 
         // Set initial text values showing current positions
-        uiCommandBuilder.set("#TextHunger.Text", "Current: " + currentHungerPos.name());
-        uiCommandBuilder.set("#TextThirst.Text", "Current: " + currentThirstPos.name());
+        String lang = this.playerRef.getLanguage();
+        uiCommandBuilder.set("#TextHunger.Text",
+                String.format(LangManager.getForLanguage(lang, "ui.bars.current"), currentHungerPos.name()));
+        uiCommandBuilder.set("#TextThirst.Text",
+                String.format(LangManager.getForLanguage(lang, "ui.bars.current"), currentThirstPos.name()));
 
         // Loop binding matching the user's manual ID format
         for (HudPosition.Preset preset : HudPosition.Preset.values()) {
@@ -101,22 +105,21 @@ public class AquaBarsPage extends InteractiveCustomUIPage<AquaBarsPage.BindingDa
         }
 
         if (changed) {
-            // Immediate save and reload on every click
+            String lang = this.playerRef.getLanguage();
+            // Immediate save and reload on every click; the reload rebuilds every HUD in place.
             AquaThirstHunger.get().saveHungerConfig();
             try {
                 AquaThirstHunger.get().reloadConfig();
+                this.playerRef.sendMessage(Message.empty()
+                        .insert(LangManager.getForLanguage(lang, "ui.bars.applied"))
+                        .color("#55FF55"));
             } catch (Exception e) {
-                this.playerRef.sendMessage(Message.empty().insert("Error saving/reloading: " + e.getMessage()));
+                this.playerRef.sendMessage(Message.empty()
+                        .insert(String.format(LangManager.getForLanguage(lang, "ui.bars.error"), e.getMessage())));
             }
 
             // Close the page automatically
             player.getPageManager().setPage(ref, store, com.hypixel.hytale.protocol.packets.interface_.Page.None);
-
-            // Announce restart requirement
-            this.playerRef
-                    .sendMessage(Message.empty()
-                            .insert("WARNING: The server needs to restart for the HUD changes to take effect.")
-                            .color("#FF2A00"));
         }
     }
 }

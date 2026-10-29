@@ -1,65 +1,54 @@
 package mx.jume.aquahunger.ui;
 
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.GameMode;
-import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
 import mx.jume.aquahunger.components.HungerComponent;
-import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HudPosition;
 import mx.jume.aquahunger.interactions.FeedInteraction;
-import mx.jume.aquahud.AquaHudBridge;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 // https://www.youtube.com/watch?v=cha7YFULwxY&t=1330s
 
-public class HHMHud extends CustomUIHud {
-    static private final Map<PlayerRef, HHMHud> hudMap = Collections.synchronizedMap(new WeakHashMap<>());
-    static public final String hudIdentifier = "mx.jume.aquahunger.hud.hunger";
-
-    // Throttle: intervalo mínimo entre updates HUD enviados al cliente.
-    // Reduce colisiones con RPGLeveling (NativeHudBackend clear=true) via AutoMultiHud.
-    private static final long MIN_UPDATE_INTERVAL_NANOS = 200_000_000L;
-    private static final Map<PlayerRef, Long> lastUpdateNanos = Collections.synchronizedMap(new WeakHashMap<>());
+public class HHMHud extends AquaCustomHud {
+    public static final String HUD_KEY = "AquaThirstHunger_Hunger";
 
     private HudPosition hudPosition;
     private GameMode gameMode;
     private float hungerLevel;
+    private float maxHunger = HungerComponent.DEFAULT_MAX_HUNGER;
     private float previewHungerRestoration = 0.0f;
     private float previewMaxHungerSaturation = 0.0f;
-    private boolean visible = true;
+    private boolean hiddenByPlayer = false;
+    private boolean spectating = false;
+
+    // Last bar state sent to the client, so unchanged values are not re-sent every tick.
+    private float sentHungerBar = Float.NaN;
+    private float sentSaturationBar = Float.NaN;
+    private boolean sentXpUp = false;
+    private boolean sentXpDown = false;
 
     public HHMHud(@NonNullDecl PlayerRef playerRef, GameMode gameMode, float hungerLevel) {
-        super(playerRef);
+        super(playerRef, HUD_KEY);
         this.gameMode = gameMode;
         this.hungerLevel = hungerLevel;
-        HHMHungerConfig config = AquaThirstHunger.get().getHungerConfig();
-        this.hudPosition = config.getHudPosition();
-        hudMap.put(playerRef, this);
+        this.hudPosition = AquaThirstHunger.get().getHungerConfig().getHudPosition();
     }
 
     @Override
     protected void build(@NonNullDecl UICommandBuilder uiCommandBuilder) {
         uiCommandBuilder.append("Hungry/HUD/Hunger.ui");
-        updateHudPosition(uiCommandBuilder, this.hudPosition);
-        updateGameMode(uiCommandBuilder, this.gameMode);
-        updateHungerLevel(uiCommandBuilder, this.hungerLevel);
-        updateVisibility(uiCommandBuilder, this.visible);
+        writeHudPosition(uiCommandBuilder);
+        writeGameMode(uiCommandBuilder);
+        writeHungerLevel(uiCommandBuilder);
+        writeVisibility(uiCommandBuilder);
     }
 
-    protected void updateHudPosition(UICommandBuilder uiCommandBuilder, HudPosition hudPosition) {
-        this.hudPosition = hudPosition;
+    private void writeHudPosition(UICommandBuilder uiCommandBuilder) {
+        HudPosition hudPosition = this.hudPosition;
         Anchor anchor = new Anchor();
         anchor.setHeight(Value.of(20));
 
@@ -91,55 +80,48 @@ public class HHMHud extends CustomUIHud {
         uiCommandBuilder.setObject("#HHMContainer.Anchor", anchor);
     }
 
-    protected void updateHungerLevel(UICommandBuilder uiCommandBuilder, float hungerLevel) {
-        this.hungerLevel = hungerLevel;
-        float hungerBarValue = Math.min(hungerLevel, 100.0f) / 100.0f;
-        float saturationBarValue = Math.max(hungerLevel - 100.0f, 0.0f) / 100.0f;
+    private void writeHungerLevel(UICommandBuilder uiCommandBuilder) {
+        HungerComponent hunger = readHungerComponent();
+        if (hunger != null) {
+            this.maxHunger = hunger.getMaxHunger();
+        }
+        float hungerBarValue = hungerBarValue(this.hungerLevel);
+        float saturationBarValue = saturationBarValue(this.hungerLevel, this.maxHunger);
+        boolean xpUp = hunger != null && hunger.isXpUp();
+        boolean xpDown = hunger != null && hunger.isXpDown();
 
         uiCommandBuilder.set("#HHMHungerBar.Value", hungerBarValue);
         uiCommandBuilder.set("#HHMHungerBarEffect.Value", 0.0f);
         uiCommandBuilder.set("#HHMCreativeHungerBar.Value", hungerBarValue);
         uiCommandBuilder.set("#HHMHungerSaturationBar.Value", saturationBarValue);
+        uiCommandBuilder.set("#HHMXpUp.Visible", xpUp);
+        uiCommandBuilder.set("#HHMXpDown.Visible", xpDown);
 
-        // Paso 4: Lógica de sincronización XP
-        HungerComponent hunger = this.getPlayerRef().getComponent(HungerComponent.getComponentType());
-        if (hunger != null) {
-            uiCommandBuilder.set("#HHMXpUp.Visible", hunger.isXpUp());
-            uiCommandBuilder.set("#HHMXpDown.Visible", hunger.isXpDown());
-        }
+        this.sentHungerBar = hungerBarValue;
+        this.sentSaturationBar = saturationBarValue;
+        this.sentXpUp = xpUp;
+        this.sentXpDown = xpDown;
 
         if (this.previewHungerRestoration != 0.0f || this.previewMaxHungerSaturation != 0.0f) {
-            updateHungerRestorationPreview(uiCommandBuilder, this.previewHungerRestoration,
-                    this.previewMaxHungerSaturation);
+            writeRestorationPreview(uiCommandBuilder);
         }
     }
 
-    protected void updateHungerRestorationPreview(UICommandBuilder uiCommandBuilder, float hungerRestoration,
-            float maxHungerSaturation) {
-        this.previewHungerRestoration = hungerRestoration;
-        this.previewMaxHungerSaturation = maxHungerSaturation;
-        if (hungerRestoration == 0.0f && maxHungerSaturation == 0.0f) {
+    private void writeRestorationPreview(UICommandBuilder uiCommandBuilder) {
+        if (this.previewHungerRestoration == 0.0f && this.previewMaxHungerSaturation == 0.0f) {
             uiCommandBuilder.set("#HHMHungerRestorePreviewBar.Value", 0.0f);
             uiCommandBuilder.set("#HHMHungerSaturationRestorePreviewBar.Value", 0.0f);
             return;
         }
-        ;
 
-        float expectedHungerLevel = FeedInteraction.getExpectedHungerLevel(this.hungerLevel, hungerRestoration,
-                maxHungerSaturation);
-        float hungerBarValue = Math.min(expectedHungerLevel, 100.0f) / 100.0f;
-        float saturationBarValue = Math.max(expectedHungerLevel - 100.0f, 0.0f) / 100.0f;
-
-        uiCommandBuilder.set("#HHMHungerRestorePreviewBar.Value", hungerBarValue);
-        uiCommandBuilder.set("#HHMHungerSaturationRestorePreviewBar.Value", saturationBarValue);
+        float expectedHungerLevel = Math.min(FeedInteraction.getExpectedHungerLevel(this.hungerLevel,
+                this.previewHungerRestoration, this.previewMaxHungerSaturation), this.maxHunger);
+        uiCommandBuilder.set("#HHMHungerRestorePreviewBar.Value", hungerBarValue(expectedHungerLevel));
+        uiCommandBuilder.set("#HHMHungerSaturationRestorePreviewBar.Value",
+                saturationBarValue(expectedHungerLevel, this.maxHunger));
     }
 
-    public void setGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    protected void updateGameMode(UICommandBuilder uiCommandBuilder, GameMode gameMode) {
-        this.gameMode = gameMode;
+    private void writeGameMode(UICommandBuilder uiCommandBuilder) {
         String iconBackground = gameMode == GameMode.Adventure
                 ? "Hungry/HUD/HungerIcon.png"
                 : "Hungry/HUD/CreativeHungerIcon.png";
@@ -149,97 +131,127 @@ public class HHMHud extends CustomUIHud {
         uiCommandBuilder.set("#HHMCreativeHungerBar.Visible", gameMode == GameMode.Creative);
     }
 
-    protected void updateVisibility(UICommandBuilder uiCommandBuilder, boolean visible) {
-        // If hunger is disabled via config, force visible to false
-        boolean configEnabled = AquaThirstHunger.get().getHungerConfig().isEnableHunger();
-        this.visible = visible && configEnabled;
-        uiCommandBuilder.set("#HHMContainer.Visible", this.visible);
+    private void writeVisibility(UICommandBuilder uiCommandBuilder) {
+        uiCommandBuilder.set("#HHMContainer.Visible", isShown());
     }
 
-    static public boolean hasHud(@NonNullDecl PlayerRef playerRef) {
-        return hudMap.containsKey(playerRef);
+    private boolean isShown() {
+        return AquaThirstHunger.get().getHungerConfig().isEnableHunger() && !hiddenByPlayer && !spectating;
     }
+
+    /** Hunger 0-100 fills the main bar. */
+    static float hungerBarValue(float hungerLevel) {
+        return Math.max(0.0f, Math.min(hungerLevel, 100.0f)) / 100.0f;
+    }
+
+    /** Everything above 100 is saturation, drawn relative to the real maximum. */
+    static float saturationBarValue(float hungerLevel, float maxHunger) {
+        float saturationRange = maxHunger - 100.0f;
+        if (saturationRange <= 0.0f) {
+            return 0.0f;
+        }
+        return Math.min(Math.max(hungerLevel - 100.0f, 0.0f) / saturationRange, 1.0f);
+    }
+
+    private HungerComponent readHungerComponent() {
+        try {
+            return this.getPlayerRef().getComponent(HungerComponent.getComponentType());
+        } catch (RuntimeException e) {
+            return null;
+        }
+    }
+
+    // ---------- state changes (each sends only what changed) ----------
+
+    public void setHungerLevel(float hungerLevel) {
+        this.hungerLevel = hungerLevel;
+        if (!isAttached()) {
+            return;
+        }
+        HungerComponent hunger = readHungerComponent();
+        float max = hunger != null ? hunger.getMaxHunger() : this.maxHunger;
+        boolean unchanged = Math.abs(hungerBarValue(hungerLevel) - sentHungerBar) < 0.0005f
+                && Math.abs(saturationBarValue(hungerLevel, max) - sentSaturationBar) < 0.0005f
+                && (hunger != null && hunger.isXpUp()) == sentXpUp
+                && (hunger != null && hunger.isXpDown()) == sentXpDown;
+        if (unchanged) {
+            return;
+        }
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        writeHungerLevel(uiCommandBuilder);
+        sendUpdate(uiCommandBuilder);
+    }
+
+    public void setRestorationPreview(float hungerRestoration, float maxHungerSaturation) {
+        if (hungerRestoration == this.previewHungerRestoration
+                && maxHungerSaturation == this.previewMaxHungerSaturation) {
+            return;
+        }
+        this.previewHungerRestoration = hungerRestoration;
+        this.previewMaxHungerSaturation = maxHungerSaturation;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        writeRestorationPreview(uiCommandBuilder);
+        sendUpdate(uiCommandBuilder);
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        writeGameMode(uiCommandBuilder);
+        writeHungerLevel(uiCommandBuilder);
+        sendUpdate(uiCommandBuilder);
+    }
+
+    public void setHiddenByPlayer(boolean hiddenByPlayer) {
+        this.hiddenByPlayer = hiddenByPlayer;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        writeVisibility(uiCommandBuilder);
+        sendUpdate(uiCommandBuilder);
+    }
+
+    public void setSpectating(boolean spectating) {
+        if (this.spectating == spectating) {
+            return;
+        }
+        this.spectating = spectating;
+        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
+        writeVisibility(uiCommandBuilder);
+        sendUpdate(uiCommandBuilder);
+    }
+
+    /** Picks up the current config (position, enabled flag) on the next build. */
+    void reloadConfig() {
+        this.hudPosition = AquaThirstHunger.get().getHungerConfig().getHudPosition();
+    }
+
+    /** State refresh before (re)attaching; the build that follows sends all of it. */
+    void prepare(GameMode gameMode, float hungerLevel, boolean spectating) {
+        this.gameMode = gameMode;
+        this.hungerLevel = hungerLevel;
+        this.spectating = spectating;
+        this.previewHungerRestoration = 0.0f;
+        this.previewMaxHungerSaturation = 0.0f;
+        reloadConfig();
+    }
+
+    // ---------- static helpers used by systems, interactions and commands ----------
 
     static public HHMHud getHud(@NonNullDecl PlayerRef playerRef) {
-        return hudMap.get(playerRef);
-    }
-
-    static public void removeHud(@NonNullDecl PlayerRef playerRef) {
-        hudMap.remove(playerRef);
-    }
-
-    public void appendAllCommands(UICommandBuilder uiCommandBuilder) {
-        this.build(uiCommandBuilder);
+        return HudService.getHungerHud(playerRef);
     }
 
     static public void updatePlayerHungerLevel(@NonNullDecl PlayerRef playerRef, float hungerLevel) {
-        HHMHud hud = hudMap.get(playerRef);
-        if (hud == null) {
-            return;
+        HHMHud hud = getHud(playerRef);
+        if (hud != null) {
+            hud.setHungerLevel(hungerLevel);
         }
-
-        long now = System.nanoTime();
-        Long last = lastUpdateNanos.get(playerRef);
-        if (last != null && now - last < MIN_UPDATE_INTERVAL_NANOS)
-            return;
-        lastUpdateNanos.put(playerRef, now);
-
-        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
-        hud.updateHungerLevel(uiCommandBuilder, hungerLevel);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
     }
 
     static public void updatePlayerHungerRestorationPreview(@NonNullDecl PlayerRef playerRef, float hungerRestoration,
             float maxHungerSaturation) {
-        HHMHud hud = hudMap.get(playerRef);
-        if (hud == null)
-            return;
-        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
-        hud.updateHungerRestorationPreview(uiCommandBuilder, hungerRestoration, maxHungerSaturation);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
-    }
-
-    static public void updatePlayerGameMode(@NonNullDecl PlayerRef playerRef, GameMode gameMode) {
-        HHMHud hud = hudMap.get(playerRef);
-        if (hud == null)
-            return;
-        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
-        hud.updateGameMode(uiCommandBuilder, gameMode);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
-    }
-
-    static public void updatePlayerHudVisibility(@NonNullDecl PlayerRef playerRef, boolean visible) {
-        HHMHud hud = hudMap.get(playerRef);
-        if (hud == null)
-            return;
-        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
-        hud.updateVisibility(uiCommandBuilder, visible);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
-    }
-
-    static public void updatePlayerHudPosition(@NonNullDecl PlayerRef playerRef, HudPosition hudPosition) {
-        HHMHud hud = hudMap.get(playerRef);
-        if (hud == null)
-            return;
-        UICommandBuilder uiCommandBuilder = new UICommandBuilder();
-        hud.updateHudPosition(uiCommandBuilder, hudPosition);
-        AquaHudBridge.update(playerRef, hudIdentifier, uiCommandBuilder, hud);
-    }
-
-    static public void refreshAllHuds(HHMHungerConfig config) {
-        for (PlayerRef playerRef : hudMap.keySet()) {
-            updatePlayerHudPosition(playerRef, config.getHudPosition());
-            updatePlayerHudVisibility(playerRef, true);
+        HHMHud hud = getHud(playerRef);
+        if (hud != null) {
+            hud.setRestorationPreview(hungerRestoration, maxHungerSaturation);
         }
-    }
-
-    static public void createPlayerHud(
-            @NonNullDecl Store<EntityStore> store,
-            @NonNullDecl Ref<EntityStore> ref,
-            @NonNullDecl PlayerRef playerRef,
-            @NonNullDecl Player player) {
-        HungerComponent hunger = store.ensureAndGetComponent(ref, HungerComponent.getComponentType());
-        HHMHud hud = new HHMHud(playerRef, player.getGameMode(), hunger.getHungerLevel());
-        AquaHudBridge.register(player, playerRef, hudIdentifier, hud);
     }
 }

@@ -10,10 +10,10 @@ import mx.jume.aquahunger.AquaThirstHunger;
 
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.AddReason;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
@@ -441,32 +441,19 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
             // Create ItemStack
             ItemStack itemStack = new ItemStack(itemId, quantity);
 
-            // Try inventory first
-            InventoryComponent.Storage storage = store.getComponent(ref, InventoryComponent.Storage.getComponentType());
-
-            if (storage != null) {
-                ItemStackTransaction tx = storage.getInventory().addItemStack(itemStack);
-                ItemStack remainder = tx.getRemainder();
-                if (remainder == null || ItemStack.isEmpty(remainder)) {
-                    return; // Item delivered to inventory successfully
-                }
-                // Update quantity for drop if some items were added but not all
-                quantity = remainder.getQuantity();
+            // Try inventory first (uses the container the player's pickup settings choose)
+            ItemStackTransaction tx = Player.giveItem(itemStack, ref, commandBuffer);
+            ItemStack remainder = tx != null ? tx.getRemainder() : itemStack;
+            if (remainder == null || ItemStack.isEmpty(remainder)) {
+                return; // Item delivered to inventory successfully
             }
 
-            // Inventory full or not available — drop on ground
-            // Creating a fresh ItemStack for the drop to avoid side effects
-            ItemStack dropStack = new ItemStack(itemId, quantity);
-
+            // Inventory full or not available — drop the remainder on the ground
             Holder<EntityStore>[] holders = ItemComponent.generateItemDrops(
                     store,
-                    Collections.singletonList(dropStack),
-                    pos,
-                    new Vector3f(
-                            (float) (random.nextFloat() * 2 - 1), // X velocity
-                            2.0f,                                 // Y velocity (upwards)
-                            (float) (random.nextFloat() * 2 - 1)  // Z velocity
-                    ));
+                    Collections.singletonList(remainder),
+                    new Vector3d(pos),
+                    Rotation3f.ZERO);
 
             for (Holder<EntityStore> holder : holders) {
                 commandBuffer.addEntity(holder, AddReason.SPAWN);

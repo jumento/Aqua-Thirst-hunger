@@ -2,19 +2,21 @@ package mx.jume.aquahunger.commands;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import mx.jume.aquahunger.ui.HHMHud;
+import mx.jume.aquahunger.compat.LangManager;
+import mx.jume.aquahunger.ui.HudService;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 
 public class HungryShowCommand extends AbstractPlayerCommand {
     public static final String requiredPermission = "hungry.hunger.show";
 
     public HungryShowCommand() {
-        super("show", "Show Hunger Bar", false);
+        super("show", "Show the hunger and thirst bars", false);
         this.requirePermission(requiredPermission);
     }
 
@@ -26,7 +28,8 @@ public class HungryShowCommand extends AbstractPlayerCommand {
             @NonNullDecl PlayerRef playerRef,
             @NonNullDecl World world
     ) {
-        HHMHud.updatePlayerHudVisibility(playerRef, true);
+        if (HudService.setHiddenByPlayer(playerRef, false)) {
+            playerRef.sendMessage(Message.raw(LangManager.getForLanguage(playerRef.getLanguage(), "command.hud.shown")));
+        }
     }
 }
-
