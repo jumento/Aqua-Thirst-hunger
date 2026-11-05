@@ -5,41 +5,58 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import mx.jume.aquahunger.AquaThirstHunger;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IntegrationManager {
     private static final List<HungerThirstIntegrationBridge> bridges = new ArrayList<>();
 
+    private static RPGLevelingBridge rpg;
+    private static EndlessLevelingBridge endless;
+    private static MMOSkillTreeBridge mmo;
+
+    /** Runs from our start(): RPG Leveling and Endless Leveling (optional dependencies) have started by then. */
     public static void init() {
-        bridges.clear();
-        MMOSkillTreeBridge mmo = new MMOSkillTreeBridge();
+        shutdown();
+
+        mmo = new MMOSkillTreeBridge();
         if (mmo.isAvailable()) {
             bridges.add(mmo);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[mmo] Success: MMOSkillTree bridge initialized and registered.");
-        } else {
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[mmo] MMOSkillTree bridge is not available.");
+            AquaThirstHunger.logInfo("[mmo] Connected to MMO Skill Tree " + versionOf(OptionalPlugins.MMO_SKILL_TREE)
+                    + (mmo.isRewardReadingAvailable() ? "." : " (without skill tree rewards)."));
         }
 
-        RPGLevelingBridge rpg = new RPGLevelingBridge();
+        rpg = new RPGLevelingBridge();
+        rpg.initialize();
         if (rpg.isAvailable()) {
             bridges.add(rpg);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg] Success: RPGLeveling bridge initialized and registered.");
-        } else {
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg] RPGLeveling bridge is not available.");
+            AquaThirstHunger.logInfo("[rpg] Connected to RPG Leveling " + versionOf(OptionalPlugins.RPG_LEVELING) + ".");
         }
 
-        EndlessLevelingBridge endless = new EndlessLevelingBridge();
+        endless = new EndlessLevelingBridge();
+        endless.initialize();
         if (endless.isAvailable()) {
             bridges.add(endless);
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[endless] Success: EndlessLeveling bridge initialized and registered.");
-        } else {
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[endless] EndlessLeveling bridge is not available.");
+            AquaThirstHunger.logInfo("[endless] Connected to Endless Leveling " + versionOf(OptionalPlugins.ENDLESS_LEVELING) + ".");
         }
 
         if (bridges.isEmpty()) {
-            //mx.jume.aquahunger.AquaThirstHunger.logInfo("[rpg|mmo|endless] Running without active XP bridges.");
+            AquaThirstHunger.logInfo("[rpg|mmo|endless] Running without active XP bridges.");
         }
+    }
+
+    /** Unregisters the listeners the bridges left in the other mods. */
+    public static void shutdown() {
+        for (HungerThirstIntegrationBridge b : bridges) b.shutdown();
+        bridges.clear();
+    }
+
+    private static String versionOf(com.hypixel.hytale.common.plugin.PluginIdentifier id) {
+        String version = OptionalPlugins.version(id);
+        return version != null ? version : "";
     }
 
     public static float getStaminaLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
@@ -91,7 +108,6 @@ public class IntegrationManager {
     }
 
     public static void awardXP(Ref<EntityStore> ref, Store<EntityStore> store, String skillId, float amount, String reason) {
-        //mx.jume.aquahunger.AquaThirstHunger.logInfo("[aquahunger] Awarding " + amount + " XP for skill " + skillId + " reason: " + reason);
         for (HungerThirstIntegrationBridge b : bridges) b.awardXP(ref, store, skillId, amount, reason);
     }
 
@@ -102,59 +118,33 @@ public class IntegrationManager {
         }
     }
 
-    public static int getSkillLevel(Ref<EntityStore> ref, Store<EntityStore> store, String skillId) {
+    /**
+     * The player's level in RPG Leveling or Endless Leveling (the higher one), which raises the
+     * maximum thirst. MMO Skill Tree has no overall level and does not count here.
+     */
+    public static int getLevelingLevel(Ref<EntityStore> ref, Store<EntityStore> store) {
         int max = 0;
         for (HungerThirstIntegrationBridge b : bridges) {
-            max = Math.max(max, b.getSkillLevel(ref, store, skillId));
+            max = Math.max(max, b.getLevelingLevel(ref, store));
         }
         return max;
     }
 
-    public static boolean isRpgLevelingAvailable() {
-        for (HungerThirstIntegrationBridge b : bridges) {
-            if (b instanceof RPGLevelingBridge) return b.isAvailable();
-        }
-        return false;
+    /** @return the RPG Leveling bridge when it is connected, else null. */
+    @Nullable
+    public static RPGLevelingBridge getRpgBridge() {
+        return rpg != null && rpg.isAvailable() ? rpg : null;
     }
 
-    public static boolean isEndlessLevelingAvailable() {
-        for (HungerThirstIntegrationBridge b : bridges) {
-            if (b instanceof EndlessLevelingBridge) return b.isAvailable();
-        }
-        return false;
+    /** @return the Endless Leveling bridge when it is connected, else null. */
+    @Nullable
+    public static EndlessLevelingBridge getEndlessBridge() {
+        return endless != null && endless.isAvailable() ? endless : null;
     }
 
-    /** @return true si algún bridge de leveling (RPG o Endless) está activo. */
-    public static boolean isAnyLevelingAvailable() {
-        return isRpgLevelingAvailable() || isEndlessLevelingAvailable();
-    }
-
-    public static ClassLoader getPluginClassLoader(String pluginId) {
-        try {
-            java.lang.reflect.Field initField = com.hypixel.hytale.server.core.plugin.JavaPlugin.class.getDeclaredField("init");
-            initField.setAccessible(true);
-            
-            mx.jume.aquahunger.AquaThirstHunger main = mx.jume.aquahunger.AquaThirstHunger.get();
-            if (main == null) return null;
-            
-            Object init = initField.get(main);
-            if (init == null) return null;
-            
-            java.lang.reflect.Method getPm = init.getClass().getMethod("getPluginManager");
-            Object pm = getPm.invoke(init);
-            if (pm == null) return null;
-            
-            java.lang.reflect.Method getPlugins = pm.getClass().getMethod("getPlugins");
-            java.util.Collection<?> plugins = (java.util.Collection<?>) getPlugins.invoke(pm);
-            
-            for (Object p : plugins) {
-                java.lang.reflect.Method getId = p.getClass().getMethod("getId");
-                String id = (String) getId.invoke(p);
-                if (id != null && id.equalsIgnoreCase(pluginId)) {
-                    return p.getClass().getClassLoader();
-                }
-            }
-        } catch (Exception ignored) {}
-        return null;
+    /** @return the MMO Skill Tree bridge when it is connected, else null. */
+    @Nullable
+    public static MMOSkillTreeBridge getMmoBridge() {
+        return mmo != null && mmo.isAvailable() ? mmo : null;
     }
 }

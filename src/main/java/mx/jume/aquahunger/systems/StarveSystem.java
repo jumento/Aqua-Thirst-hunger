@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import mx.jume.aquahunger.config.HHMHungerConfig;
@@ -30,6 +30,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class StarveSystem extends EntityTickingSystem<EntityStore> {
+    // AFK detection: after this long without moving or hitting blocks, the passive
+    // metabolism (not mining or sprint costs) slows down to a tenth.
+    public static final float AFK_DELAY_SECONDS = 5.0f;
+    public static final float AFK_METABOLISM_MULTIPLIER = 0.1f;
 
     private StarveSystem() {
     }
@@ -83,7 +87,13 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
         }
 
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        if (hunger.getMaxHunger() != config.getMaxHungerLevel()) {
+            hunger.setMaxHunger(config.getMaxHungerLevel());
+        }
         float hungerLevel = hunger.getHungerLevel();
+
+        Velocity velocity = archetypeChunk.getComponent(index, Velocity.getComponentType());
+        hunger.trackIdle(velocity != null && velocity.getSpeed() < 0.1, dt);
 
         // --- Stomach Growl System (Per-frame check for threshold crossing) ---
         hunger.addGrowlCooldown(dt);
@@ -102,7 +112,7 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
                         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
                         if (transform != null) {
                             Vector3d pos = transform.getPosition();
-                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.getX(), pos.getY(), pos.getZ(), false, store);
+                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.x, pos.y, pos.z, false, store);
                             soundTriggered = true;
                         }
                     }
@@ -131,12 +141,10 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
         damagedBlocksModifier *= mx.jume.aquahunger.compat.IntegrationManager.getWorkLossMultiplier(ref, store);
 
         float baseTick = config.getStarvationPerTick() * mx.jume.aquahunger.compat.IntegrationManager.getMetabolismLossMultiplier(ref, store);
-        float depletion = baseTick + staminaModifier + damagedBlocksModifier;
-
-        Velocity velocity = archetypeChunk.getComponent(index, Velocity.getComponentType());
-        if (velocity != null && velocity.getSpeed() < 0.1) {
-            depletion *= 0.1f;
+        if (hunger.getIdleTime() >= AFK_DELAY_SECONDS) {
+            baseTick *= AFK_METABOLISM_MULTIPLIER;
         }
+        float depletion = baseTick + staminaModifier + damagedBlocksModifier;
 
         hunger.starve(depletion);
 
@@ -147,8 +155,8 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
 
         // Apply hungry effect when hunger level is below threshold
         if (hungerLevel != 0 && hungerLevel < config.getHungryThreshold()) {
-            if (effectController != null) {
-                EntityEffect hungryEffect = HHMUtils.getHungryEntityEffect();
+            EntityEffect hungryEffect = HHMUtils.getHungryEntityEffect();
+            if (effectController != null && hungryEffect != null) {
                 effectController.addEffect(ref, hungryEffect, commandBuffer);
             }
         }
@@ -176,7 +184,9 @@ public class StarveSystem extends EntityTickingSystem<EntityStore> {
                     StarveSystem::shouldRemoveEffectOnStarvation);
             // apply starving effect
             EntityEffect starvingEffect = HHMUtils.getStarvingEntityEffect();
-            effectController.addEffect(ref, starvingEffect, commandBuffer);
+            if (starvingEffect != null) {
+                effectController.addEffect(ref, starvingEffect, commandBuffer);
+            }
         }
 
         // --- MMO Glutton Trigger (Based on base 100 hunger, ignoring saturation) ---

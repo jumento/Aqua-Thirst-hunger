@@ -38,23 +38,24 @@ public class OnDeathSystem extends DeathSystems.OnDeathSystem {
             @NonNullDecl Store<EntityStore> store, @NonNullDecl CommandBuffer<EntityStore> commandBuffer) {
         HHMHungerConfig config = AquaThirstHunger.get().getHungerConfig();
 
+        // Effects are removed while the store is processing systems, so changes go through the CommandBuffer.
         if (config.isResetHungerOnDeath()) {
-            HHMUtils.setPlayerHungerLevel(ref, store, config.getRespawnHungerLevel());
+            HHMUtils.setPlayerHungerLevel(ref, commandBuffer, config.getRespawnHungerLevel());
         } else {
             HungerComponent hunger = store.getComponent(ref, HungerComponent.getComponentType());
             if (hunger != null && hunger.getHungerLevel() < config.getRespawnHungerLevel()) {
-                HHMUtils.setPlayerHungerLevel(ref, store, config.getRespawnHungerLevel());
+                HHMUtils.setPlayerHungerLevel(ref, commandBuffer, config.getRespawnHungerLevel());
             }
         }
 
         mx.jume.aquahunger.config.HHMThirstConfig thirstConfig = AquaThirstHunger.get().getThirstConfig();
         if (thirstConfig.isResetThirstOnDeath()) {
-            HHMUtils.setPlayerThirstLevel(ref, store, thirstConfig.getRespawnThirstLevel());
+            HHMUtils.setPlayerThirstLevel(ref, commandBuffer, thirstConfig.getRespawnThirstLevel());
         } else {
             mx.jume.aquahunger.components.ThirstComponent thirst = store.getComponent(ref,
                     mx.jume.aquahunger.components.ThirstComponent.getComponentType());
             if (thirst != null && thirst.getThirstLevel() < thirstConfig.getRespawnThirstLevel()) {
-                HHMUtils.setPlayerThirstLevel(ref, store, thirstConfig.getRespawnThirstLevel());
+                HHMUtils.setPlayerThirstLevel(ref, commandBuffer, thirstConfig.getRespawnThirstLevel());
             }
         }
     }

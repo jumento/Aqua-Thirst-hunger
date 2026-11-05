@@ -33,8 +33,9 @@ replay_pid*.log
 # Logs
 *.log
 
-# Hytale proprietary server JAR — do NOT commit
+# Proprietary JARs (Hytale server, optional mods used only to inspect their API) — do NOT commit
 /libs/*.jar
+/libs/optional/
 
 # Per-installation runtime configs (regenerated on first run)
 /mods/Aqua-Thirst-hunger/HungerConfig.json
@@ -42,3 +43,5 @@ replay_pid*.log
 /mods/Aqua-Thirst-hunger/FoodValuesConfig.json
 /mods/Aqua-Thirst-hunger/ThirstFoodValuesConfig.json
 /mods/Aqua-Thirst-hunger/ExternalFoodsConfig.json
+/mods/Aqua-Thirst-hunger/ExternalFoodsDefaultConfig.json
+/mods/Aqua-Thirst-hunger/notified_players.json

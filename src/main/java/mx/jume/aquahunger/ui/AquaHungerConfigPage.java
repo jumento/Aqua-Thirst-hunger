@@ -17,6 +17,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.AquaThirstHunger;
+import mx.jume.aquahunger.compat.LangManager;
 import mx.jume.aquahunger.config.ConfigManager;
 import mx.jume.aquahunger.config.HHMHungerConfig;
 
@@ -104,18 +105,20 @@ public class AquaHungerConfigPage extends InteractiveCustomUIPage<AquaHungerConf
         cmd.append("Pages/AquaHungerConfigUI.ui");
 
         // Display Active Status
-        cmd.set("#configtype.Text", "Config: " + config.getActivePreset());
+        cmd.set("#configtype.Text", String.format(
+                LangManager.getForLanguage(this.playerRef.getLanguage(), "ui.config.active_preset"),
+                config.getActivePreset()));
 
-        // Set form values
-        cmd.set("#InputInitialHunger.Value", String.valueOf((int) config.getInitialHungerLevel()));
-        cmd.set("#InputMaxHunger.Value", String.valueOf((int) config.getMaxHungerLevel()));
-        cmd.set("#InputRespawnHunger.Value", String.valueOf((int) config.getRespawnHungerLevel()));
-        cmd.set("#InputStarveTick.Value", String.valueOf((int) config.getStarvationTickRate()));
-        cmd.set("#InputStarvePerTick.Value", String.valueOf(config.getStarvationPerTick()));
-        cmd.set("#InputStarveBlockHit.Value", String.valueOf(config.getStarvationPerBlockHit()));
-        cmd.set("#InputStaminaMod.Value", String.valueOf(config.getStarvationStaminaModifier()));
-        cmd.set("#InputHungryThreshold.Value", String.valueOf(config.getHungryThreshold()));
-        cmd.set("#InputStarvationDamage.Value", String.valueOf(config.getStarvationDamage()));
+        // Set form values (never truncated, so closing the page does not change them)
+        cmd.set("#InputInitialHunger.Value", ConfigForm.format(config.getInitialHungerLevel()));
+        cmd.set("#InputMaxHunger.Value", ConfigForm.format(config.getMaxHungerLevel()));
+        cmd.set("#InputRespawnHunger.Value", ConfigForm.format(config.getRespawnHungerLevel()));
+        cmd.set("#InputStarveTick.Value", ConfigForm.format(config.getStarvationTickRate()));
+        cmd.set("#InputStarvePerTick.Value", ConfigForm.format(config.getStarvationPerTick()));
+        cmd.set("#InputStarveBlockHit.Value", ConfigForm.format(config.getStarvationPerBlockHit()));
+        cmd.set("#InputStaminaMod.Value", ConfigForm.format(config.getStarvationStaminaModifier()));
+        cmd.set("#InputHungryThreshold.Value", ConfigForm.format(config.getHungryThreshold()));
+        cmd.set("#InputStarvationDamage.Value", ConfigForm.format(config.getStarvationDamage()));
 
         // CheckBoxes (Hytale Macro Protocol: Deep Selectors)
         cmd.set("#ChkResetDeath #CheckBox.Value", config.isResetHungerOnDeath());
@@ -156,78 +159,25 @@ public class AquaHungerConfigPage extends InteractiveCustomUIPage<AquaHungerConf
 
         HHMHungerConfig config = configManager.getHungerConfig();
 
-        // 1. Capture and Compare Form Values
-        boolean modifiedManually = false;
-        try {
-            float iH = Float.parseFloat(data.initialHunger.trim());
-            if (iH != config.getInitialHungerLevel()) {
-                config.setInitialHungerLevel(iH);
-                modifiedManually = true;
-            }
-
-            float mH = Float.parseFloat(data.maxHunger.trim());
-            if (mH != config.getMaxHungerLevel()) {
-                config.setMaxHungerLevel(mH);
-                modifiedManually = true;
-            }
-
-            float rH = Float.parseFloat(data.respawnHunger.trim());
-            if (rH != config.getRespawnHungerLevel()) {
-                config.setRespawnHungerLevel(rH);
-                modifiedManually = true;
-            }
-
-            float sT = Float.parseFloat(data.starveTick.trim());
-            if (sT != config.getStarvationTickRate()) {
-                config.setStarvationTickRate(sT);
-                modifiedManually = true;
-            }
-
-            float sPT = Float.parseFloat(data.starvePerTick.trim());
-            if (sPT != config.getStarvationPerTick()) {
-                config.setStarvationPerTick(sPT);
-                modifiedManually = true;
-            }
-
-            float sBH = Float.parseFloat(data.starveBlockHit.trim());
-            if (sBH != config.getStarvationPerBlockHit()) {
-                config.setStarvationPerBlockHit(sBH);
-                modifiedManually = true;
-            }
-
-            float sM = Float.parseFloat(data.staminaMod.trim());
-            if (sM != config.getStarvationStaminaModifier()) {
-                config.setStarvationStaminaModifier(sM);
-                modifiedManually = true;
-            }
-
-            float hT = Float.parseFloat(data.hungryThreshold.trim());
-            if (hT != config.getHungryThreshold()) {
-                config.setHungryThreshold(hT);
-                modifiedManually = true;
-            }
-
-            float sD = Float.parseFloat(data.starveDamage.trim());
-            if (sD != config.getStarvationDamage()) {
-                config.setStarvationDamage(sD);
-                modifiedManually = true;
-            }
-
-            if (data.resetDeath != config.isResetHungerOnDeath()) {
-                config.setResetHungerOnDeath(data.resetDeath);
-                modifiedManually = true;
-            }
-            if (data.singlePlayer != config.isSinglePlayer()) {
-                config.setSinglePlayer(data.singlePlayer);
-                modifiedManually = true;
-            }
-            if (data.enableHunger != config.isEnableHunger()) {
-                config.setEnableHunger(data.enableHunger);
-                modifiedManually = true;
-            }
-
-        } catch (Exception ignored) {
-        }
+        // 1. Capture and Compare Form Values (each field on its own: one invalid number no longer discards the rest)
+        ConfigForm form = new ConfigForm();
+        form.number("InitialHungerLevel", data.initialHunger, config.getInitialHungerLevel(), config::setInitialHungerLevel);
+        form.number("MaxHungerLevel", data.maxHunger, config.getMaxHungerLevel(), config::setMaxHungerLevel);
+        form.number("RespawnHungerLevel", data.respawnHunger, config.getRespawnHungerLevel(), config::setRespawnHungerLevel);
+        form.number("StarvationTickRate", data.starveTick, config.getStarvationTickRate(), config::setStarvationTickRate);
+        form.number("StarvationPerTick", data.starvePerTick, config.getStarvationPerTick(), config::setStarvationPerTick);
+        form.number("StarvationPerBlockHit", data.starveBlockHit, config.getStarvationPerBlockHit(),
+                config::setStarvationPerBlockHit);
+        form.number("StarvationStaminaModifier", data.staminaMod, config.getStarvationStaminaModifier(),
+                config::setStarvationStaminaModifier);
+        form.number("HungryThreshold", data.hungryThreshold, config.getHungryThreshold(), config::setHungryThreshold);
+        form.number("StarvationDamage", data.starveDamage, config.getStarvationDamage(), config::setStarvationDamage);
+        form.bool(data.resetDeath, config.isResetHungerOnDeath(), config::setResetHungerOnDeath);
+        form.bool(data.singlePlayer, config.isSinglePlayer(), config::setSinglePlayer);
+        form.bool(data.enableHunger, config.isEnableHunger(), config::setEnableHunger);
+        config.sanitize();
+        form.reportInvalid(this.playerRef);
+        boolean modifiedManually = form.isModified();
 
         // 2. Handle Actions
         if ("close".equals(data.action)) {
@@ -257,8 +207,10 @@ public class AquaHungerConfigPage extends InteractiveCustomUIPage<AquaHungerConf
             // Refresh the page
             player.getPageManager().openCustomPage(ref, store,
                     new AquaHungerConfigPage(this.playerRef, Objects.requireNonNull(configManager)));
-            this.playerRef.sendMessage(
-                    Message.empty().insert("Preset applied: ").insert(Objects.requireNonNull(preset)).color("#00BFFF"));
+            this.playerRef.sendMessage(Message.empty()
+                    .insert(String.format(LangManager.getForLanguage(this.playerRef.getLanguage(),
+                            "ui.config.preset_applied"), Objects.requireNonNull(preset)))
+                    .color("#00BFFF"));
             return;
         }
 

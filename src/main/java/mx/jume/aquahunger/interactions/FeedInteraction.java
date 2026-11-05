@@ -57,11 +57,16 @@ public class FeedInteraction extends SimpleInstantInteraction {
             "Food_Chicken_Raw",
             "Food_Wildmeat_Raw");
 
+    /** The mod's own canteens and bottles only hydrate; items from other mods are not affected. */
+    public static boolean isAquaDrinkItem(String itemId) {
+        return itemId != null
+                && (itemId.contains("AquaThirstHunger_Canteen") || itemId.contains("AquaThirstHunger_BasicBottle"));
+    }
+
     public static float getHungerRestoration(Item item, Float interactionValue) {
         // Hardcoded safety for canteens
         String id = item.getId();
-        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
-            //AquaThirstHunger.logInfo("Force-zeroing hunger for canteen item: " + id);
+        if (isAquaDrinkItem(id)) {
             return 0.0f;
         }
 
@@ -101,7 +106,7 @@ public class FeedInteraction extends SimpleInstantInteraction {
     public static float getMaxHungerSaturation(Item item, Float interactionValue) {
         // Hardcoded safety for canteens
         String id = item.getId();
-        if (id != null && (id.contains("Canteen") || id.contains("Canteenpro"))) {
+        if (isAquaDrinkItem(id)) {
             return 0.0f;
         }
 

@@ -139,7 +139,7 @@ public class HHMHungerConfig {
     @SerializedName("ThirstCost")
     private float thirstCost = 0.35f;
     @SerializedName("ConfigVersion")
-    private String configVersion = "1.7.5";
+    private String configVersion = ConfigMigrationManager.LATEST_VERSION;
     @SerializedName("ActivePreset")
     private String activePreset = "NORMAL";
     @SerializedName("SatiatedThreshold")
@@ -325,6 +325,33 @@ public class HHMHungerConfig {
 
     public void ensureDefaults() {
         ConfigMigrationManager.migrate(this);
+        sanitize();
+    }
+
+    /** Clamps values that would break the hunger systems. */
+    public void sanitize() {
+        final String file = "HungerConfig.json";
+        maxHungerLevel = ConfigValues.atLeast(file, "MaxHungerLevel", maxHungerLevel, 100.0f);
+        initialHungerLevel = ConfigValues.within(file, "InitialHungerLevel", initialHungerLevel, 0.0f, maxHungerLevel);
+        respawnHungerLevel = ConfigValues.within(file, "RespawnHungerLevel", respawnHungerLevel, 0.0f, maxHungerLevel);
+        starvationTickRate = ConfigValues.atLeast(file, "StarvationTickRate", starvationTickRate, 0.1f);
+        starvationPerTick = ConfigValues.atLeast(file, "StarvationPerTick", starvationPerTick, 0.0f);
+        starvationPerBlockHit = ConfigValues.atLeast(file, "StarvationPerBlockHit", starvationPerBlockHit, 0.0f);
+        starvationStaminaModifier = ConfigValues.atLeast(file, "StarvationStaminaModifier", starvationStaminaModifier, 0.0f);
+        hungryThreshold = ConfigValues.within(file, "HungryThreshold", hungryThreshold, 0.0f, maxHungerLevel);
+        starvationDamage = ConfigValues.atLeast(file, "StarvationDamage", starvationDamage, 0.0f);
+        pulseInterval = ConfigValues.atLeast(file, "PulseInterval", pulseInterval, 0.1f);
+        healthPerPulse = ConfigValues.atLeast(file, "HealthPerPulse", healthPerPulse, 0.0f);
+        hungerCost = ConfigValues.atLeast(file, "HungerCost", hungerCost, 0.0f);
+        thirstCost = ConfigValues.atLeast(file, "ThirstCost", thirstCost, 0.0f);
+        satiatedThreshold = ConfigValues.within(file, "SatiatedThreshold", satiatedThreshold, 0.0f, 100.0f);
+        starveResilienceThreshold = ConfigValues.within(file, "StarveResilienceThreshold", starveResilienceThreshold, 0.0f, 100.0f);
+        if (hudPosition == null) {
+            hudPosition = HudPosition.Preset.BelowHotbarLeft;
+        }
+        if (activePreset == null) {
+            activePreset = "CUSTOM";
+        }
     }
 
     public void applyPreset(String preset) {

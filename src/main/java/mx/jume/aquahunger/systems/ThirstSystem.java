@@ -20,7 +20,7 @@ import mx.jume.aquahunger.ui.HHMThirstHud;
 import mx.jume.aquahunger.components.ThirstComponent;
 import mx.jume.aquahunger.components.HungerComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.math.vector.Vector3d;
+import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 
@@ -85,6 +85,20 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         float thirstLevel = thirst.getThirstLevel();
 
+        Velocity velocity = archetypeChunk.getComponent(index, Velocity.getComponentType());
+        thirst.trackIdle(velocity != null && velocity.getSpeed() < 0.1, dt);
+
+        // Dehydration damage runs on its own interval (DamageIntervalSeconds), not on the depletion tick.
+        if (thirstLevel <= 0.0f && config.getDehydrationDamage() > 0) {
+            if (thirst.tickDehydrationDamage(dt, config.getDamageIntervalSeconds())) {
+                Damage damage = new Damage(Damage.NULL_SOURCE, HHMUtils.getStarvationDamageCause(),
+                        config.getDehydrationDamage());
+                DamageSystems.executeDamage(ref, commandBuffer, damage);
+            }
+        } else {
+            thirst.resetDehydrationDamage();
+        }
+
         thirst.addCoughCooldown(dt);
         float[] thresholds = { 30f, 25f, 22f, 18f, 15f, 10f, 5f };
         float lastLevel = thirst.getLastThirstLevel();
@@ -100,7 +114,7 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
                         TransformComponent transform = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
                         if (transform != null) {
                             Vector3d pos = transform.getPosition();
-                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.getX(), pos.getY(), pos.getZ(), false, store);
+                            SoundUtil.playSoundEvent3d(ref, soundIdx, pos.x, pos.y, pos.z, false, store);
                             soundTriggered = true;
                         }
                     }
@@ -127,21 +141,21 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
         damagedBlocksModifier *= mx.jume.aquahunger.compat.IntegrationManager.getThirstWorkLossMultiplier(ref, store);
 
         float baseTick = config.getDepletionPerTick() * mx.jume.aquahunger.compat.IntegrationManager.getThirstMetabolismLossMultiplier(ref, store);
+        if (thirst.getIdleTime() >= StarveSystem.AFK_DELAY_SECONDS) {
+            baseTick *= StarveSystem.AFK_METABOLISM_MULTIPLIER;
+        }
         float depletion = baseTick + staminaModifier + damagedBlocksModifier;
 
-        Velocity velocity = archetypeChunk.getComponent(index, Velocity.getComponentType());
-        if (velocity != null && velocity.getSpeed() < 0.1) {
-            depletion *= 0.1f;
-        }
-
         thirst.dehydrate(depletion);
-        thirstLevel = thirst.getThirstLevel();
 
-        int survivalLevel = mx.jume.aquahunger.compat.IntegrationManager.getSkillLevel(ref, store, "SURVIVAL");
-        float newMax = ThirstComponent.DEFAULT_MAX_THIRST + (survivalLevel * 2.5f);
+        // The RPG Leveling / Endless Leveling level raises the maximum above the configured base
+        // (+2.5 per level); the HUD and the stamina boost both use this real maximum.
+        int levelingLevel = mx.jume.aquahunger.compat.IntegrationManager.getLevelingLevel(ref, store);
+        float newMax = config.getMaxThirst() + (levelingLevel * 2.5f);
         if (thirst.getMaxThirst() != newMax) {
             thirst.setMaxThirst(newMax);
         }
+        thirstLevel = thirst.getThirstLevel();
 
         EffectControllerComponent effectController = archetypeChunk.getComponent(index,
                 EffectControllerComponent.getComponentType());
@@ -168,12 +182,6 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
                     effectController.addEffect(ref, dehydrationEffect, commandBuffer);
                 }
             }
-
-            if (config.getDehydrationDamage() > 0) {
-                Damage damage = new Damage(Damage.NULL_SOURCE, HHMUtils.getStarvationDamageCause(),
-                        config.getDehydrationDamage());
-                DamageSystems.executeDamage(ref, commandBuffer, damage);
-            }
         }
 
         if (thirstLevel > 0) {
@@ -184,15 +192,19 @@ public class ThirstSystem extends EntityTickingSystem<EntityStore> {
         }
 
         if (effectController != null) {
-            float thirstPercent = (thirstLevel / config.getMaxThirst()) * 100f;
+            float thirstPercent = (thirstLevel / thirst.getMaxThirst()) * 100f;
             if (thirstPercent >= config.getStaminaBoostThreshold() && config.getStaminaBoostThreshold() <= 100f) {
                 EntityEffect boostEffect = HHMUtils.getStaminaBoostEntityEffect();
                 if (boostEffect != null) {
                     effectController.addEffect(ref, boostEffect, commandBuffer);
+                    thirst.setStaminaBoostApplied(true);
                 }
-            } else {
+            } else if (thirst.isStaminaBoostApplied()) {
+                // The boost reuses the vanilla FruitVeggie_Buff_T2 effect: only take back the one this
+                // system gave, never a buff the player got from eating fruit or vegetables.
                 HHMUtils.removeActiveEffects(ref, commandBuffer, effectController,
                         HHMUtils::activeEntityEffectIsStaminaBoost);
+                thirst.setStaminaBoostApplied(false);
             }
         }
 

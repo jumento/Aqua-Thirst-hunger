@@ -13,19 +13,21 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import mx.jume.aquahunger.assets.FoodValue;
 import mx.jume.aquahunger.assets.HungryAssetRegistryLoader;
 import mx.jume.aquahunger.commands.*;
+import mx.jume.aquahunger.compat.MMOSkillTreeRegistrar;
+import mx.jume.aquahunger.compat.OptionalPlugins;
 import mx.jume.aquahunger.components.HungerComponent;
 import mx.jume.aquahunger.config.HHMHungerConfig;
 import mx.jume.aquahunger.config.HHMFoodValuesConfig;
 import mx.jume.aquahunger.events.GameModePacketWatcher;
 import mx.jume.aquahunger.events.HHMPlayerReady;
-import mx.jume.aquahud.AquaHudBridge;
-import mx.jume.aquahud.AquaHudWatcher;
 import mx.jume.aquahunger.interactions.FailedFeedingInteraction;
 import mx.jume.aquahunger.interactions.FeedInteraction;
 import mx.jume.aquahunger.interactions.StartFeedingInteraction;
+import mx.jume.aquahunger.systems.GameModeTypeHudSystems;
 import mx.jume.aquahunger.systems.OnBlockHitSystem;
 import mx.jume.aquahunger.systems.OnDeathSystem;
 import mx.jume.aquahunger.systems.StarveSystem;
+import mx.jume.aquahunger.ui.HudService;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 import javax.annotation.Nonnull;
 
@@ -55,6 +57,11 @@ public class AquaThirstHunger extends JavaPlugin {
 
         mx.jume.aquahunger.compat.NotifiedPlayersManager.load(java.nio.file.Paths.get("mods/Aqua-Thirst-hunger"));
 
+        // MMO Skill Tree reads its skill files in its own setup; the manifest's LoadBefore makes ours run first.
+        if (OptionalPlugins.isPresent(OptionalPlugins.MMO_SKILL_TREE)) {
+            MMOSkillTreeRegistrar.ensureRegistered();
+        }
+
         final var entityStoreRegistry = this.getEntityStoreRegistry();
         this.hungerComponentType = entityStoreRegistry.registerComponent(HungerComponent.class, "HungerComponent", HungerComponent.CODEC);
         this.thirstComponentType = entityStoreRegistry.registerComponent(mx.jume.aquahunger.components.ThirstComponent.class, "ThirstComponent", mx.jume.aquahunger.components.ThirstComponent.CODEC);
@@ -64,6 +71,8 @@ public class AquaThirstHunger extends JavaPlugin {
         entityStoreRegistry.registerSystem(new OnBlockHitSystem());
         entityStoreRegistry.registerSystem(new OnDeathSystem());
         entityStoreRegistry.registerSystem(new mx.jume.aquahunger.systems.HungerLifeSystem());
+        entityStoreRegistry.registerSystem(new GameModeTypeHudSystems.Enter());
+        entityStoreRegistry.registerSystem(new GameModeTypeHudSystems.Exit());
 
         final var interactionRegistry = this.getCodecRegistry(Interaction.CODEC);
         interactionRegistry.register("Hungry_Feed", FeedInteraction.class, FeedInteraction.CODEC);
@@ -79,8 +88,6 @@ public class AquaThirstHunger extends JavaPlugin {
 
         //logDebug("Registering events...");
 
-        AquaHudBridge.detect(this);
-        AquaHudWatcher.ensureRegistered();
         PacketAdapters.registerOutbound(new GameModePacketWatcher());
 
         this.getCommandRegistry().registerCommand(new HungryCommand());
@@ -99,8 +106,6 @@ public class AquaThirstHunger extends JavaPlugin {
     protected void start() {
         super.start();
 
-        AquaHudBridge.recheckMhud();
-
         mx.jume.aquahunger.compat.IntegrationManager.init();
 
         if (this.getHungerConfig().isSinglePlayer()) {
@@ -112,6 +117,12 @@ public class AquaThirstHunger extends JavaPlugin {
             PermissionsModule.get().addGroupPermission("Creative", permissions);
             //logDebug("Singleplayer module detected, added permissions to Adventure and Creative groups.");
         }
+    }
+
+    @Override
+    protected void shutdown() {
+        mx.jume.aquahunger.compat.IntegrationManager.shutdown();
+        super.shutdown();
     }
 
     public ComponentType<EntityStore, HungerComponent> getHungerComponentType() { return this.hungerComponentType; }
@@ -130,62 +141,46 @@ public class AquaThirstHunger extends JavaPlugin {
     }
 
     public void syncHUDs() {
-        mx.jume.aquahunger.ui.HHMHud.refreshAllHuds(getHungerConfig());
-        mx.jume.aquahunger.ui.HHMThirstHud.refreshAllHuds(getThirstConfig());
+        HudService.refreshAll();
     }
 
     public static AquaThirstHunger get() { return instance; }
 
+    // Installed checks go through the plugin manager: on 0.7 our class loader cannot see
+    // plugins the manifest does not declare (MMO Skill Tree, AquaSanity).
     public boolean isRpgLevelingPresent() {
-        if (checkClass("org.zuxaw.plugin.api.RPGLevelingAPI")) return true;
-        if (checkClass("com.zuxaw.rpgleveling.api.RPGLevelingAPI")) return true;
-        return false;
+        return OptionalPlugins.isPresent(OptionalPlugins.RPG_LEVELING);
     }
 
     public boolean isEndlessLevelingPresent() {
-        return checkClass("com.airijko.endlessleveling.api.EndlessLevelingAPI");
+        return OptionalPlugins.isPresent(OptionalPlugins.ENDLESS_LEVELING);
     }
 
     public boolean isHytaleMMOPresent() {
-        return checkClass("com.ziggfreed.mmoskilltree.api.MMOSkillTreeAPI");
-    }
-
-    private boolean checkClass(String className) {
-        try {
-            Class.forName(className);
-            //logDebug("Found class: " + className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            try {
-                Thread.currentThread().getContextClassLoader().loadClass(className);
-                //logDebug("Found class via CtxCL: " + className);
-                return true;
-            } catch (ClassNotFoundException e2) {
-                return false;
-            }
-        }
+        return OptionalPlugins.isPresent(OptionalPlugins.MMO_SKILL_TREE);
     }
 
     public boolean isAquaSanityPresent() {
-        return checkClass("mx.jume.aquasanity.AquaSanity");
+        return OptionalPlugins.isPresent(OptionalPlugins.AQUA_SANITY);
     }
 
     public static void logInfo(String message) {
-        // LOGGER.at(Level.INFO).log(message);
+        LOGGER.at(Level.INFO).log(message);
     }
 
     public static void logWarning(String message) {
-        // LOGGER.at(Level.WARNING).log(message);
+        LOGGER.at(Level.WARNING).log(message);
     }
 
     public static void logSevere(String message) {
-        // LOGGER.at(Level.SEVERE).log(message);
+        LOGGER.at(Level.SEVERE).log(message);
     }
 
+    /** Verbose diagnostics, only when EnableDebugLogs is on in ThirstConfig.json. */
     public static void logDebug(String message) {
-        if (instance != null && instance.getThirstConfig().isEnableDebugLogs()) {
+        if (instance != null && instance.getThirstConfig() != null && instance.getThirstConfig().isEnableDebugLogs()) {
             String tag = message.startsWith("[") ? "" : "[aquathirst] ";
-            // LOGGER.at(Level.INFO).log(tag + "[debug] " + message);
+            LOGGER.at(Level.INFO).log(tag + "[debug] " + message);
         }
     }
 

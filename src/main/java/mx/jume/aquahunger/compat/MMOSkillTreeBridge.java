@@ -1,5 +1,6 @@
 package mx.jume.aquahunger.compat;
 
+import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -10,10 +11,10 @@ import mx.jume.aquahunger.AquaThirstHunger;
 
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.AddReason;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import org.joml.Vector3d;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.item.ItemComponent;
@@ -24,10 +25,15 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Bridge to MMOSkillTree mod (ziggfreed).
+ * Bridge to MMO Skill Tree ({@code Ziggfreed:MMOSkillTree}). Checked against 1.7.4.
  * Reads claimed skill tree rewards to calculate multipliers and trigger Glutton/Junk systems.
+ *
+ * <p>Our NUTRITION and THIRST skills are written to MMO's config files by
+ * {@link MMOSkillTreeRegistrar} during our setup, before MMO reads them.
  */
 public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
+
+    private static final String API_CLASS = "com.ziggfreed.mmoskilltree.api.MMOSkillTreeAPI";
 
     private boolean available = false;
 
@@ -40,8 +46,21 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
     private Method getClaimedRewardsMethod;
     private Method rewardGetIdMethod;
 
+    // --- Reward IDs of our skill tree (resources/mmo/skill-tree.json) ---
+    static final String NUTRITION_KING_FITNESS = "nutrition_king_fitness";
+    static final String NUTRITION_MEGA_GLUTTON = "nutrition_mega_glutton";
+    static final String NUTRITION_HUNGRY_SUPREME = "nutrition_hungry_supreme";
+    static final String THIRST_HYDRATION_MASTER = "thirst_hydration_master";
+    /** "Super Healthy" in the tree: -20% running, -20% mining and -15% passive thirst drain. */
+    static final String THIRST_SUPER_HEALTHY = "thirst_healthy_lifestyle";
+    /** Rewards repeated across tiers (runner_1, runner_2, ...). */
+    static final String[] REWARD_PREFIXES = {
+        "nutrition_runner_", "nutrition_miner_", "nutrition_fitness_", "nutrition_hungry_",
+        "thirst_runner_", "thirst_miner_", "thirst_fitness_", "thirst_rehydrated_"
+    };
+
     // --- Glutton item pool: [choiceId, itemId] ---
-    private static final String[][] NUTRITION_GLUTTON_ITEMS = {
+    static final String[][] NUTRITION_GLUTTON_ITEMS = {
         {"nutrition_glutton_1", "Food_Wildmeat_Raw"},
         {"nutrition_glutton_2", "Food_Fish_Raw"},
         {"nutrition_glutton_3", "Plant_Fruit_Berries_Red"},
@@ -51,11 +70,11 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         {"nutrition_glutton_7", "Food_Salad_Berry"},
         {"nutrition_glutton_8", "Food_Popcorn"},
         {"nutrition_glutton_9", "Food_Pie_Meat"},
-        {"nutrition_mega_glutton", "Food_Pie_Meat"}
+        {NUTRITION_MEGA_GLUTTON, "Food_Pie_Meat"}
     };
 
     // --- Junk system ---
-    private static final String[] JUNK_ITEMS = {"Ingredient_Bone_Fragment", "Deco_Trash"};
+    static final String[] JUNK_ITEMS = {"Ingredient_Bone_Fragment", "Deco_Trash"};
     private static final float BASE_JUNK_CHANCE = 0.65f;
     private static final float MIN_JUNK_CHANCE = 0.25f;
 
@@ -67,47 +86,53 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
     // ========================================================================
 
     public MMOSkillTreeBridge() {
+        PluginIdentifier mmo = OptionalPlugins.MMO_SKILL_TREE;
         try {
-            Class<?> apiClass = Class.forName("com.ziggfreed.mmoskilltree.api.MMOSkillTreeAPI");
-            
-            // ALWAYS register/overwrite the skill tree file if MMO is present.
-            MMOSkillTreeRegistrar.ensureRegistered();
+            Class<?> apiClass = OptionalPlugins.loadClass(mmo, API_CLASS);
 
+            // addXp only updates the player's existing skill component, so it is safe from a system tick.
             addXpMethod = apiClass.getMethod("addXp", Store.class, Ref.class, String.class, long.class);
             getLevelMethod = apiClass.getMethod("getLevel", Store.class, Ref.class, String.class);
             available = true;
-            //AquaThirstHunger.logInfo("[mmo] API detected and initialized via static reflection.");
 
             // Reward reading (optional — if MMO version doesn't have it, multipliers fall back to level-based)
             try {
                 getSkillComponentMethod = apiClass.getMethod("getSkillComponent", Store.class, Ref.class);
 
-                Class<?> serviceClass = Class.forName("com.ziggfreed.mmoskilltree.service.SkillTreeService");
-                Class<?> skillCompClass = Class.forName("com.ziggfreed.mmoskilltree.data.SkillComponent");
+                // MMO 1.7 moved the skill tree classes from .service / .data to .skilltree.
+                Class<?> serviceClass = OptionalPlugins.loadFirstClass(mmo,
+                        "com.ziggfreed.mmoskilltree.skilltree.SkillTreeService",
+                        "com.ziggfreed.mmoskilltree.service.SkillTreeService");
+                Class<?> skillCompClass = OptionalPlugins.loadClass(mmo, "com.ziggfreed.mmoskilltree.data.SkillComponent");
                 getClaimedRewardsMethod = serviceClass.getMethod("getClaimedRewardsForSkillByName", skillCompClass, String.class);
 
-                Class<?> rewardClass = Class.forName("com.ziggfreed.mmoskilltree.data.SkillReward");
+                Class<?> rewardClass = OptionalPlugins.loadFirstClass(mmo,
+                        "com.ziggfreed.mmoskilltree.skilltree.SkillReward",
+                        "com.ziggfreed.mmoskilltree.data.SkillReward");
                 rewardGetIdMethod = rewardClass.getMethod("getId");
 
                 rewardReadingAvailable = true;
-                //AquaThirstHunger.logInfo("[mmo] Skill tree reward reading is available. Glutton/multiplier system active.");
             } catch (Exception e) {
                 rewardReadingAvailable = false;
-                //AquaThirstHunger.logInfo("[mmo] Reward reading not available (older MMO version?). Using level-based fallback.");
+                AquaThirstHunger.logWarning("[mmo] Skill tree rewards cannot be read from this MMO Skill Tree version: "
+                        + "level-based bonuses are used and Glutton items are off. " + e);
             }
-            
-            // ALWAYS register/overwrite the skill tree file if MMO is present.
-            MMOSkillTreeRegistrar.ensureRegistered();
-            
+        } catch (ClassNotFoundException e) {
+            available = false; // MMO Skill Tree is not installed.
         } catch (Exception e) {
             available = false;
-
+            AquaThirstHunger.logWarning("[mmo] Could not connect to MMO Skill Tree: " + e);
         }
     }
 
     @Override
     public boolean isAvailable() {
         return available;
+    }
+
+    /** True when claimed skill tree rewards drive the bonuses and the Glutton items. */
+    public boolean isRewardReadingAvailable() {
+        return rewardReadingAvailable;
     }
 
     // ========================================================================
@@ -154,7 +179,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("nutrition_runner_")) reduction += 0.05f;
-            if ("nutrition_king_fitness".equals(id)) reduction += 0.20f;
+            if (NUTRITION_KING_FITNESS.equals(id)) reduction += 0.20f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
@@ -170,7 +195,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("nutrition_miner_")) reduction += 0.05f;
-            if ("nutrition_king_fitness".equals(id)) reduction += 0.20f;
+            if (NUTRITION_KING_FITNESS.equals(id)) reduction += 0.20f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
@@ -186,7 +211,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("nutrition_fitness_")) reduction += 0.05f;
-            if ("nutrition_king_fitness".equals(id)) reduction += 0.15f;
+            if (NUTRITION_KING_FITNESS.equals(id)) reduction += 0.15f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
@@ -240,7 +265,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
 
     /**
      * Stamina drain multiplier for THIRST.
-     * Reduced by thirst_runner_* (-5% each) and thirst_king_fitness (-20%).
+     * Reduced by thirst_runner_* (-5% each) and Super Healthy (-20%).
      */
     @Override
     public float getThirstStaminaLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
@@ -249,14 +274,14 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("thirst_runner_")) reduction += 0.05f;
-            if ("thirst_king_fitness".equals(id)) reduction += 0.20f;
+            if (THIRST_SUPER_HEALTHY.equals(id)) reduction += 0.20f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
 
     /**
      * Mining drain multiplier for THIRST.
-     * Reduced by thirst_miner_* (-5% each) and thirst_king_fitness (-20%).
+     * Reduced by thirst_miner_* (-5% each) and Super Healthy (-20%).
      */
     @Override
     public float getThirstWorkLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
@@ -265,14 +290,14 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("thirst_miner_")) reduction += 0.05f;
-            if ("thirst_king_fitness".equals(id)) reduction += 0.20f;
+            if (THIRST_SUPER_HEALTHY.equals(id)) reduction += 0.20f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
 
     /**
      * Passive depletion multiplier for THIRST.
-     * Reduced by thirst_fitness_* (-5% each) and thirst_super_healthy (-15%).
+     * Reduced by thirst_fitness_* (-5% each) and Super Healthy (-15%).
      */
     @Override
     public float getThirstMetabolismLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
@@ -281,7 +306,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         float reduction = 0f;
         for (String id : claimed) {
             if (id.startsWith("thirst_fitness_")) reduction += 0.05f;
-            if ("thirst_super_healthy".equals(id)) reduction += 0.15f;
+            if (THIRST_SUPER_HEALTHY.equals(id)) reduction += 0.15f;
         }
         return Math.max(0.1f, 1.0f - reduction);
     }
@@ -310,7 +335,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
                      "thirst_rehydrated_7", "thirst_rehydrated_9":
                     bonus += 0.10f;
                     break;
-                case "thirst_hydration_master":
+                case THIRST_HYDRATION_MASTER:
                     bonus += 0.20f;
                     break;
             }
@@ -352,7 +377,7 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
         boolean isJunk = random.nextFloat() < junkChance;
 
         // Mega Glutton doubling logic: global x2 if unlocked, but never x2 for junk.
-        int quantity = (claimed.contains("nutrition_mega_glutton") && !isJunk) ? 2 : 1;
+        int quantity = (claimed.contains(NUTRITION_MEGA_GLUTTON) && !isJunk) ? 2 : 1;
 
         if (isJunk) {
             itemId = JUNK_ITEMS[random.nextInt(JUNK_ITEMS.length)];
@@ -384,24 +409,12 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
     }
 
     /**
-     * Maps technical item IDs to player-friendly casual names for chat display.
+     * Player-friendly item name for chat display, from the {@code mmo.item.<ItemId>} lang keys.
      */
     private String getCasualName(String itemId, String lang) {
-        boolean isEs = lang != null && lang.startsWith("es");
-        switch (itemId) {
-            case "Food_Wildmeat_Raw": return isEs ? "Carne de fauna silvestre cruda" : "Raw Wildmeat";
-            case "Food_Fish_Raw": return isEs ? "Pescado crudo" : "Raw Fish";
-            case "Plant_Fruit_Berries_Red": return isEs ? "Bayas rojas" : "Red Berries";
-            case "Food_Egg": return isEs ? "Huevo" : "Egg";
-            case "Plant_Fruit_Apple": return isEs ? "Manzana" : "Apple";
-            case "Food_Cheese": return isEs ? "Queso" : "Cheese";
-            case "Food_Salad_Berry": return isEs ? "Ensalada de bayas" : "Berry Salad";
-            case "Food_Popcorn": return isEs ? "Palomitas" : "Popcorn";
-            case "Food_Pie_Meat": return isEs ? "Pastel de carne" : "Meat Pie";
-            case "Ingredient_Bone_Fragment": return isEs ? "Fragmento de hueso" : "Bone Fragment";
-            case "Deco_Trash": return isEs ? "Basura" : "Trash";
-            default: return itemId;
-        }
+        String key = "mmo.item." + itemId;
+        String name = LangManager.getForLanguage(lang, key);
+        return name.equals(key) ? itemId : name;
     }
 
     /**
@@ -415,11 +428,11 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
 
         for (String id : claimed) {
             // Hambriento I/II/III: -5% each
-            if (id.startsWith("nutrition_hungry_") && !id.equals("nutrition_hungry_supreme")) {
+            if (id.startsWith("nutrition_hungry_") && !id.equals(NUTRITION_HUNGRY_SUPREME)) {
                 reduction += 0.05f;
             }
             // Hambriento Supremo: -15%
-            if ("nutrition_hungry_supreme".equals(id)) {
+            if (NUTRITION_HUNGRY_SUPREME.equals(id)) {
                 reduction += 0.15f;
             }
             // Inherent reductions from specific glutton items (applied when UNLOCKED, not per-roll)
@@ -441,32 +454,19 @@ public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
             // Create ItemStack
             ItemStack itemStack = new ItemStack(itemId, quantity);
 
-            // Try inventory first
-            InventoryComponent.Storage storage = store.getComponent(ref, InventoryComponent.Storage.getComponentType());
-
-            if (storage != null) {
-                ItemStackTransaction tx = storage.getInventory().addItemStack(itemStack);
-                ItemStack remainder = tx.getRemainder();
-                if (remainder == null || ItemStack.isEmpty(remainder)) {
-                    return; // Item delivered to inventory successfully
-                }
-                // Update quantity for drop if some items were added but not all
-                quantity = remainder.getQuantity();
+            // Try inventory first (uses the container the player's pickup settings choose)
+            ItemStackTransaction tx = Player.giveItem(itemStack, ref, commandBuffer);
+            ItemStack remainder = tx != null ? tx.getRemainder() : itemStack;
+            if (remainder == null || ItemStack.isEmpty(remainder)) {
+                return; // Item delivered to inventory successfully
             }
 
-            // Inventory full or not available — drop on ground
-            // Creating a fresh ItemStack for the drop to avoid side effects
-            ItemStack dropStack = new ItemStack(itemId, quantity);
-
+            // Inventory full or not available — drop the remainder on the ground
             Holder<EntityStore>[] holders = ItemComponent.generateItemDrops(
                     store,
-                    Collections.singletonList(dropStack),
-                    pos,
-                    new Vector3f(
-                            (float) (random.nextFloat() * 2 - 1), // X velocity
-                            2.0f,                                 // Y velocity (upwards)
-                            (float) (random.nextFloat() * 2 - 1)  // Z velocity
-                    ));
+                    Collections.singletonList(remainder),
+                    new Vector3d(pos),
+                    Rotation3f.ZERO);
 
             for (Holder<EntityStore> holder : holders) {
                 commandBuffer.addEntity(holder, AddReason.SPAWN);

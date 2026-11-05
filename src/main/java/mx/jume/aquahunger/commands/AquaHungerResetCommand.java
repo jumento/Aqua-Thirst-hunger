@@ -15,11 +15,7 @@ import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
 public class AquaHungerResetCommand extends AbstractPlayerCommand {
     public AquaHungerResetCommand() {
         super("aquahungerreset", "Resetea el estado de notificacion para poder ver el aviso de nuevo", false);
-    }
-
-    @Override
-    protected boolean canGeneratePermission() {
-        return false;
+        this.requireNoPermission();
     }
 
     @Override

@@ -10,99 +10,72 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
 
+/**
+ * Bridge for RPG Leveling And Stats/Skills ({@code Zuxaw:RPGLeveling}), API package
+ * {@code org.zuxaw.plugin.api}. Checked against 0.4.2.
+ *
+ * <p>Uses reflection so the mod loads without RPG Leveling. {@code addXP} is safe to call from a
+ * system tick: RPG Leveling hands the award to the player's world thread itself.
+ */
 public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
+    private static final String API_CLASS = "org.zuxaw.plugin.api.RPGLevelingAPI";
+    private static final String XP_SOURCE_CLASS = "org.zuxaw.plugin.api.XPSource";
+
     private boolean available = false;
     private Object apiInstance;
     private Method addXpMethod;
     private Method getLevelMethod;
     private Object xpSource;
+    private Object levelUpListener;
+    private Method unregisterListenerMethod;
 
     public RPGLevelingBridge() {
-        // Constructor remains lightweight to allow lazy initialization later
+        // Lightweight: initialize() runs once RPG Leveling has started (from our start()).
     }
 
     public synchronized void initialize() {
-        if (available)
-            return; // Already initialized successfully
-
+        if (available) {
+            return;
+        }
         try {
-            //AquaThirstHunger.logInfo("[rpg] Initializing RPG Integration...");
+            Class<?> apiClass = OptionalPlugins.loadClass(OptionalPlugins.RPG_LEVELING, API_CLASS);
 
-            // DIAGNOSTIC START
-            ClassLoader cl = AquaThirstHunger.class.getClassLoader();
-            //AquaThirstHunger.logInfo("[rpg] ClassLoader: " + cl.getClass().getName());
-            //AquaThirstHunger.logInfo("[rpg] Parent CL: " + (cl.getParent() != null ? cl.getParent().getClass().getName() : "null"));
-
-            // Intentar con el context classloader del thread
-            try {
-                Class<?> test = Thread.currentThread().getContextClassLoader()
-                        .loadClass("com.zuxaw.rpgleveling.api.RPGLevelingAPI");
-                //AquaThirstHunger.logInfo("[rpg] Package com.zuxaw.rpgleveling found via context CL: " + test);
-            } catch (ClassNotFoundException e) {
-                //AquaThirstHunger.logInfo("[rpg] Package com.zuxaw.rpgleveling not found via context CL");
-            }
-            // DIAGNOSTIC END
-
-            Class<?> apiClass = null;
-            try {
-                apiClass = Class.forName("org.zuxaw.plugin.api.RPGLevelingAPI");
-                //AquaThirstHunger.logInfo("[rpg] Found RPGLevelingAPI at: org.zuxaw.plugin.api.RPGLevelingAPI");
-            } catch (ClassNotFoundException e) {
-                available = false;
-                //AquaThirstHunger.logWarning("[rpg] RPGLevelingAPI class not found. Check manifest.json and IDs.");
-                return;
-            }
-
-            //AquaThirstHunger.logInfo("[rpg] Verifying API Availability...");
             Method isAvailable = apiClass.getMethod("isAvailable");
             if (!(boolean) isAvailable.invoke(null)) {
-                available = false;
-                //AquaThirstHunger.logInfo("[rpg] RPGLevelingAPI reported as NOT available.");
+                AquaThirstHunger.logWarning("[rpg] RPG Leveling is installed but its API is not available.");
                 return;
             }
 
-            //AquaThirstHunger.logInfo("[rpg] Fetching API Instance...");
-            Method get = apiClass.getMethod("get");
-            apiInstance = get.invoke(null);
+            apiInstance = apiClass.getMethod("get").invoke(null);
             if (apiInstance == null) {
-                //AquaThirstHunger.logWarning("[rpg] RPGLevelingAPI.get() returned null instance.");
-                available = false;
+                AquaThirstHunger.logWarning("[rpg] RPGLevelingAPI.get() returned null.");
                 return;
             }
 
-            Class<?> xpSourceClass = null;
-            try {
-                xpSourceClass = Class.forName("org.zuxaw.plugin.api.XPSource");
-                //AquaThirstHunger.logInfo("[rpg] Found XPSource at: org.zuxaw.plugin.api.XPSource");
-            } catch (ClassNotFoundException e) {
-                available = false;
-                //AquaThirstHunger.logWarning("[rpg] XPSource class not found.");
-                return;
-            }
+            Class<?> xpSourceClass = OptionalPlugins.loadClass(OptionalPlugins.RPG_LEVELING, XP_SOURCE_CLASS);
+            xpSource = xpSourceClass.getMethod("create", String.class).invoke(null, "AQUATHIRST_HYDRATION");
 
-            //AquaThirstHunger.logInfo("[rpg] Creating XPSource instance...");
-            Method createSource = xpSourceClass.getMethod("create", String.class);
-            xpSource = createSource.invoke(null, "AQUATHIRST_HYDRATION");
-
-            //AquaThirstHunger.logInfo("[rpg] Mapping API methods...");
             addXpMethod = apiClass.getMethod("addXP", UUID.class, double.class, xpSourceClass);
             getLevelMethod = apiClass.getMethod("getPlayerLevel", UUID.class);
 
-            // Registrar listeners vía Proxy (inspirado en AquaSanity)
             registerListeners(apiClass);
 
             available = true;
-            //AquaThirstHunger.logInfo("[rpg] RPG Integration bridge successfully initialized.");
+        } catch (ClassNotFoundException e) {
+            // RPG Leveling is not installed.
         } catch (Exception e) {
-            available = false;
-            //AquaThirstHunger.logWarning("[rpg] Error during RPG Bridge Initialization: " + e.toString());
-            e.printStackTrace();
+            AquaThirstHunger.logWarning("[rpg] Could not connect to RPG Leveling: " + e);
         }
     }
 
     @Override
     public boolean isAvailable() {
         return available;
+    }
+
+    /** True when RPG Leveling's level-up events reach the HUD. */
+    public boolean hasLevelUpListener() {
+        return levelUpListener != null;
     }
 
     @Override
@@ -123,7 +96,7 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
                 // Set flags in components for HUD feedback depending on the actual interaction
                 mx.jume.aquahunger.components.HungerComponent hunger = store.getComponent(ref, mx.jume.aquahunger.components.HungerComponent.getComponentType());
                 mx.jume.aquahunger.components.ThirstComponent thirst = store.getComponent(ref, mx.jume.aquahunger.components.ThirstComponent.getComponentType());
-                
+
                 boolean isEatingReason = reason != null && reason.contains("EATING");
                 boolean isDrinkingReason = reason != null && reason.contains("DRINKING");
                 boolean isResilienceH = reason != null && reason.equals("RESILIENCE");
@@ -140,53 +113,15 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
 
                 addXpMethod.invoke(apiInstance, playerRef.getUuid(), finalXp, xpSource);
 
-                // Paso 4: Retrasar la primera inyección 500ms
-                com.hypixel.hytale.server.core.universe.world.World world = store.getExternalData().getWorld();
-                if (world != null) {
-                    java.util.concurrent.CompletableFuture.delayedExecutor(500, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (playerRef != null && playerRef.getReference() != null) {
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(playerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                            
-                    // Limpieza (TTL) a los 3 segundos
-                    java.util.concurrent.CompletableFuture.delayedExecutor(3000, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (playerRef != null && playerRef.getReference() != null) {
-                                        if (hunger != null) {
-                                            hunger.setXpUp(false);
-                                            hunger.setXpDown(false);
-                                        }
-                                        if (thirst != null) {
-                                            thirst.setXpUp(false);
-                                            thirst.setXpDown(false);
-                                        }
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(playerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(playerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                }
+                // +XP / -XP en el HUD durante unos segundos
+                XpFeedback.show(playerRef);
 
-                if (hungerMod != 0.0f || thirstMod != 0.0f) {
-                    double xpDiff = finalXp - amount;
-                    //AquaThirstHunger.logInfo(String.format(
-                    //        "[rpg] XP concedido a %s | Base: %.1f | Final: %.2f | Diff: %+.2f | Mods: [H: %+.1f%%, T: %+.1f%%] | Nivel: %d",
-                    //        playerRef.getUsername(), (double) amount, finalXp, xpDiff, hungerMod * 100,
-                    //        thirstMod * 100, rpgLevel));
-                }
+                AquaThirstHunger.logDebug(String.format(
+                        "[rpg] XP to %s | base %.1f | final %.2f | mods [H %+.1f%%, T %+.1f%%] | level %d",
+                        playerRef.getUsername(), (double) amount, finalXp, hungerMod * 100, thirstMod * 100, rpgLevel));
             }
         } catch (Exception e) {
-            //AquaThirstHunger.logWarning("[rpg] Error al concedir XP: " + e.getMessage());
+            AquaThirstHunger.logDebug("[rpg] Could not award XP: " + e);
         }
     }
 
@@ -210,7 +145,7 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
         }
 
         float percent = (barValue / maxValue) * 100f;
-        
+
         float highThreshold = isHunger ? AquaThirstHunger.get().getHungerConfig().getSatiatedThreshold() : AquaThirstHunger.get().getThirstConfig().getSatiatedThreshold();
         float lowThreshold = isHunger ? AquaThirstHunger.get().getHungerConfig().getStarveResilienceThreshold() : AquaThirstHunger.get().getThirstConfig().getStarveResilienceThreshold();
 
@@ -241,6 +176,11 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
     }
 
     @Override
+    public int getLevelingLevel(Ref<EntityStore> ref, Store<EntityStore> store) {
+        return getSkillLevel(ref, store, "GLOBAL");
+    }
+
+    @Override
     public float getStaminaLossMultiplier(Ref<EntityStore> ref, Store<EntityStore> store) {
         return getLossMultiplier(ref, store);
     }
@@ -266,8 +206,21 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
         return Math.max(0.1f, 1.0f - reduction);
     }
 
+    @Override
+    public synchronized void shutdown() {
+        if (levelUpListener == null || unregisterListenerMethod == null) {
+            return;
+        }
+        try {
+            unregisterListenerMethod.invoke(apiInstance, levelUpListener);
+        } catch (Exception ignored) {
+            // RPG Leveling may already be shutting down.
+        }
+        levelUpListener = null;
+    }
+
     // ==========================================
-    // Lógica de Proxy (vía AquaSanity)
+    // Level-up listener (Proxy, via AquaSanity)
     // ==========================================
 
     private void registerListeners(Class<?> apiClass) {
@@ -277,21 +230,28 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
 
             Class<?> listenerInterface = registerMethod.getParameterTypes()[0];
 
+            // RPG Leveling may keep listeners in a collection that calls equals/hashCode.
             Object proxy = Proxy.newProxyInstance(
                     listenerInterface.getClassLoader(),
                     new Class<?>[]{ listenerInterface },
-                    (proxyObj, method, args) -> {
-                        if (args != null && args.length > 0 && !method.getName().equals("toString")) {
-                            handleLevelUpEvent(args[0]);
+                    (proxyObj, method, args) -> switch (method.getName()) {
+                        case "equals" -> args != null && args.length == 1 && proxyObj == args[0];
+                        case "hashCode" -> System.identityHashCode(proxyObj);
+                        case "toString" -> "AquaThirstHunger level-up listener";
+                        default -> {
+                            if (args != null && args.length == 1) {
+                                handleLevelUpEvent(args[0]);
+                            }
+                            yield null;
                         }
-                        return null;
                     }
             );
 
             registerMethod.invoke(apiInstance, proxy);
-            //AquaThirstHunger.logInfo("[rpg] LevelUpListener registrado (Proxy activado).");
+            levelUpListener = proxy;
+            unregisterListenerMethod = findMethod(apiClass, "unregisterLevelUpListener");
         } catch (Exception e) {
-            //AquaThirstHunger.logWarning("[rpg] No se pudo registrar LevelUpListener: " + e.getMessage());
+            AquaThirstHunger.logWarning("[rpg] Could not register the level-up listener: " + e);
         }
     }
 
@@ -301,62 +261,12 @@ public class RPGLevelingBridge implements HungerThirstIntegrationBridge {
             Object playerRefObj = getPlayerMethod.invoke(event);
 
             if (playerRefObj instanceof PlayerRef hytalePlayerRef) {
-                // Sincronización HUD post-subida de nivel
-                Ref<EntityStore> ref = hytalePlayerRef.getReference();
-                if (ref == null) return;
-
-                int newLevel = 0;
-                try {
-                    Method getNewLevel = event.getClass().getMethod("getNewLevel");
-                    newLevel = (int) getNewLevel.invoke(event);
-                } catch (Exception ignored) {}
-
-                //AquaThirstHunger.logInfo(String.format("[rpg] Player %s subió de nivel RPG! (Nivel: %d).",
-                //    hytalePlayerRef.getUsername(), newLevel));
-                
-                // Forzar feedback visual WOW pero retrasado para evadir el reinject
-                mx.jume.aquahunger.components.HungerComponent hunger = ref.getStore().getComponent(ref, mx.jume.aquahunger.components.HungerComponent.getComponentType());
-                mx.jume.aquahunger.components.ThirstComponent thirst = ref.getStore().getComponent(ref, mx.jume.aquahunger.components.ThirstComponent.getComponentType());
-                if (hunger != null) hunger.setXpUp(true);
-                
-                com.hypixel.hytale.server.core.universe.world.World world = ref.getStore().getExternalData().getWorld();
-                if (world != null) {
-                    java.util.concurrent.CompletableFuture.delayedExecutor(500, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (hytalePlayerRef != null && hytalePlayerRef.getReference() != null && hytalePlayerRef.getReference().getStore() != null) {
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(hytalePlayerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(hytalePlayerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                            
-                    // Limpieza (TTL) a los 3 segundos
-                    java.util.concurrent.CompletableFuture.delayedExecutor(3000, java.util.concurrent.TimeUnit.MILLISECONDS)
-                            .execute(() -> world.execute(() -> {
-                                try {
-                                    if (hytalePlayerRef != null && hytalePlayerRef.getReference() != null && hytalePlayerRef.getReference().getStore() != null) {
-                                        if (hunger != null) {
-                                            hunger.setXpUp(false);
-                                            hunger.setXpDown(false);
-                                        }
-                                        if (thirst != null) {
-                                            thirst.setXpUp(false);
-                                            thirst.setXpDown(false);
-                                        }
-                                        float hLvl = hunger != null ? hunger.getHungerLevel() : 100.0f;
-                                        float tLvl = thirst != null ? thirst.getThirstLevel() : 100.0f;
-                                        mx.jume.aquahunger.ui.HHMHud.updatePlayerHungerLevel(hytalePlayerRef, hLvl);
-                                        mx.jume.aquahunger.ui.HHMThirstHud.updatePlayerThirstLevel(hytalePlayerRef, tLvl);
-                                    }
-                                } catch (Exception ignored) {}
-                            }));
-                }
+                // El listener puede llegar desde otro hilo: el feedback se aplica en el mundo del jugador.
+                mx.jume.aquahunger.ui.HudService.runOnPlayerWorld(hytalePlayerRef,
+                        () -> XpFeedback.showLevelUp(hytalePlayerRef));
             }
         } catch (Exception e) {
-            //AquaThirstHunger.logWarning("[rpg] Error en LevelUpListener Proxy: " + e.getMessage());
+            AquaThirstHunger.logDebug("[rpg] Level-up event not handled: " + e);
         }
     }
 

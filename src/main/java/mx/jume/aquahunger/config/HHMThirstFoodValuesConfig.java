@@ -42,7 +42,7 @@ public class HHMThirstFoodValuesConfig {
     @SerializedName("FruitMultiplier")
     private float fruitMultiplier = 3.5f;
     @SerializedName("ConfigVersion")
-    private String configVersion = "1.7.5";
+    private String configVersion = ConfigMigrationManager.LATEST_VERSION;
     @SerializedName("TierThirstRestoration")
     private final Map<ItemTier, Float> tierThirstRestoration = new EnumMap<>(ItemTier.class);
     @SerializedName("ItemThirstRestoration")

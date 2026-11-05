@@ -3,7 +3,7 @@
 **The most complete hunger and thirst system for Hytale.** Balanced survival, custom foods, stamina buffs, poisoning, AFK detection, and seamless RPG leveling integration. 🍖💧
 
 > Public release distributed on [CurseForge — Aqua Thirst & Hunger](https://www.curseforge.com/hytale/mods/aqua-thirst-hunger).
-> Project ID `1450021` · License AGPLv3 · Game version: Early Access
+> Project ID `1450021` · License AGPLv3 · Game version: Early Access · Requires Hytale server **0.7.5 or newer (0.7.x)**
 
 ---
 
@@ -36,7 +36,9 @@ When you combine the mod with **MMO Skill Tree**, **RPG Leveling And Stats/Skill
 - 🏹 **[RPG Leveling And Stats/Skills](https://www.curseforge.com/hytale/mods/rpg-leveling-and-stats)** → Earn XP boosts and let your level dynamically affect your food and water consumption, as well as your XP gains.
 - 🗡️ **[Endless Leveling](https://www.curseforge.com/hytale/mods/endlessleveling)** → The higher your level, the more stable your hunger and thirst stats become. Gain extra XP when you keep your stats healthy… and lose XP when you neglect them.
 - 🧙‍♂️ **[MMO Skill Tree](https://www.curseforge.com/hytale/mods/mmo-skill-tree)** → We use this powerful API to create a survival skill tree with rewards. It's incredible how much deeper the mod becomes once you have room to grow!
-  - *Requires restarting the server twice (the first to initialize systems, the second to load the tree).*
+  - *No restarts needed: the NUTRITION and THIRST skills are set up before MMO Skill Tree loads.*
+
+Built against RPG Leveling 0.4.2, Endless Leveling 14.1.0 and MMO Skill Tree 1.7.4 (their Hytale 0.7 versions). `/aquahunger integrations` shows which ones are connected.
 
 ### ⚙️ Main commands
 
@@ -50,6 +52,8 @@ Requires operator permissions (`/op self`).
   - Life per hunger, thirst and hunger toggleable and customizable
 - `/aquahunger set <0-100>` → set hunger level
 - `/aquathirst set <0-100>` → set hydration level
+- `/aquahunger hide` / `/aquahunger show` → hide or show your own hunger and thirst bars
+- `/aquahunger integrations` → which RPG and skill mods are connected, and your levels in them
 
 ### 🧬 Universal Compatibility
 
@@ -60,7 +64,7 @@ Designed to integrate with virtually any mod setup:
 - Automatic integration based on item rarity
 - Scales with player progression through RPG mods (skills / leveling)
 
-In the rare case of HUD conflicts, it's easily solved using **AutoMultiHUD** or disabling **MultipleHUD** depending on the case. This is a known Hytale issue, not caused by our mod, but we'll gladly help you fix it in the comments.
+The bars use Hytale's native multi-HUD support (0.7+), so they coexist with other mods' HUDs out of the box: **AutoMultiHUD** and **MultipleHUD** are no longer needed.
 
 ### 📖 Manifest
 
@@ -101,7 +105,9 @@ Cuando combinas el mod con **MMO Skill Tree**, **RPG Leveling And Stats/Skills**
 - 🏹 **RPG Leveling And Stats/Skills** → Obtén mejoras de XP y haz que tu nivel afecte dinámicamente tu consumo de agua y comida, así como tu ganancia de XP.
 - 🗡️ **Endless Leveling** → Cuanto más nivel consigas, más estables serán tus niveles de hambre y sed. Ganas XP adicional si mantienes tus stats en buen estado… y menos XP si los descuidas.
 - 🧙‍♂️ **MMO Skill Tree** → Usamos esta robusta API para crear un árbol de habilidades y recompensas de supervivencia. ¡Es increíble lo interesante que se vuelve el mod cuando tienes posibilidades de mejora!
-  - *Requiere reiniciar el servidor 2 veces (la primera para arrancar sistemas, la segunda para cargar el árbol).*
+  - *Sin reinicios: las skills NUTRITION y THIRST se preparan antes de que cargue MMO Skill Tree.*
+
+Hecho sobre RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (sus versiones para Hytale 0.7). `/aquahunger integrations` muestra cuáles están conectados.
 
 ### ⚙️ Comandos principales
 
@@ -115,6 +121,8 @@ Requiere permisos (`/op self`).
   - Life per hunger, sed y hambre activables y customizables
 - `/aquahunger set <0-100>` → ajustar hambre
 - `/aquathirst set <0-100>` → ajustar hidratación
+- `/aquahunger hide` / `/aquahunger show` → ocultar o mostrar tus barras de hambre y sed
+- `/aquahunger integrations` → qué mods de RPG y habilidades están conectados, y tus niveles en ellos
 
 ### 🧬 Compatibilidad Universal
 
@@ -125,7 +133,7 @@ Diseñado para integrarse con prácticamente cualquier configuración de mods:
 - Integración automática basada en la rareza de los ítems
 - Escala con la progresión del jugador con mods RPG (skills / leveling)
 
-En casos raros de conflictos con HUDs, se resuelve fácilmente con **AutoMultiHUD** o deshabilitando **MultipleHUD** dependiendo del caso. Este es un problema conocido de Hytale, no depende de nuestro mod, pero con gusto en los comentarios te ayudamos a resolverlo.
+Las barras usan el soporte nativo de múltiples HUDs de Hytale (0.7+), así que conviven con los HUDs de otros mods sin configurar nada: ya no hacen falta **AutoMultiHUD** ni **MultipleHUD**.
 
 ### 📖 Manifiesto
 
@@ -139,37 +147,40 @@ Esto es apenas el comienzo.
 
 ## Building from source
 
-Requires Java 25 and access to the Hytale Server JAR.
+Requires Java 25. Gradle downloads the Hytale server API (`com.hypixel.hytale:Server`) from `https://maven.hytale.com/release` as a `compileOnly` dependency, so no JAR has to be copied by hand.
 
-1. Drop the Hytale Server JAR into `libs/`. It is a `compileOnly` dependency and is intentionally **not** committed (proprietary).
-2. Build:
+1. Build:
    ```bash
    ./gradlew jar
    ```
-3. The output JAR appears under `build/libs/`. Drop it into your server's `mods/` directory.
+2. The output JAR appears under `build/libs/`. Drop it into your server's `mods/` directory.
+3. Unit tests:
+   ```bash
+   ./gradlew test
+   ```
+
+The supported server range lives in `build.gradle.kts` (`hytaleServerVersion` / `hytaleServerRange`) and is written to `manifest.json` at build time.
 
 ### Project layout
 
 ```
-src/main/java/mx/jume/
-  aquahud/                  HUD bridge + multi-HUD container
-  aquahunger/
-    AquaThirstHunger.java   Plugin entry point
-    assets/                 FoodValue asset registration
-    commands/               /aquahunger, /aquathirst, /aquacheff, ...
-    compat/                 RPGLeveling, EndlessLeveling, MMOSkillTree bridges
-    components/             HungerComponent, ThirstComponent (ECS)
-    config/                 Config files + migration manager
-    events/                 PlayerReady, PlayerDisconnect, GameMode watcher
-    interactions/           FeedInteraction, StartFeedingInteraction
-    systems/                StarveSystem, ThirstSystem, HungerLifeSystem
-    ui/                     HUDs and configuration pages
+src/main/java/mx/jume/aquahunger/
+  AquaThirstHunger.java     Plugin entry point
+  assets/                   FoodValue asset registration
+  commands/                 /aquahunger, /aquathirst, /aquacheff, ...
+  compat/                   RPGLeveling, EndlessLeveling, MMOSkillTree bridges
+  components/               HungerComponent, ThirstComponent (ECS)
+  config/                   Config files + migration manager
+  events/                   PlayerReady, PlayerDisconnect, GameMode watcher
+  interactions/             FeedInteraction, StartFeedingInteraction
+  systems/                  StarveSystem, ThirstSystem, HungerLifeSystem, spectator HUD hiding
+  ui/                       Native keyed HUDs (HudService) and configuration pages
 src/main/resources/
   Common/UI/Custom/Hungry/  HUD .ui definitions
   Server/                   Items, interactions, entity effects, languages
   mmo/                      Custom skills, skill tree, XP maps
-mods/Aqua-Thirst-hunger/
   ExternalFoodsDefaultConfig.json   bundled defaults (250+ external foods)
+docs/                       Update plan and technical notes
 ```
 
 ### Configuration files

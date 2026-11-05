@@ -20,6 +20,9 @@ public class HungryCommand extends AbstractPlayerCommand {
         super("aquahunger", "Aquahunger Command", false);
         this.addSubCommand(new SetHungerCommand());
         this.addSubCommand(new HungryStatsCommand());
+        this.addSubCommand(new HungryHideCommand());
+        this.addSubCommand(new HungryShowCommand());
+        this.addSubCommand(new HungryIntegrationsCommand());
         this.requirePermission(requiredPermission);
     }
 
@@ -42,7 +45,16 @@ public class HungryCommand extends AbstractPlayerCommand {
             message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.set.other"));
         }
         message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.stats"));
-        
+        if (context.sender().hasPermission(HungryHideCommand.requiredPermission)) {
+            message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.hide"));
+        }
+        if (context.sender().hasPermission(HungryShowCommand.requiredPermission)) {
+            message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.show"));
+        }
+        if (context.sender().hasPermission(HungryIntegrationsCommand.requiredPermission)) {
+            message.insert("\n").insert(LangManager.getForLanguage(lang, "command.help.integrations"));
+        }
+
         playerRef.sendMessage(message);
     }
 }
