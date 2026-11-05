@@ -3,7 +3,7 @@
 **The most complete hunger and thirst system for Hytale.** Balanced survival, custom foods, stamina buffs, poisoning, AFK detection, and seamless RPG leveling integration. 🍖💧
 
 > Public release distributed on [CurseForge — Aqua Thirst & Hunger](https://www.curseforge.com/hytale/mods/aqua-thirst-hunger).
-> Project ID `1450021` · License AGPLv3 · Game version: Early Access · Requires Hytale server **0.7.2 or newer (0.7.x)**
+> Project ID `1450021` · License AGPLv3 · Game version: Early Access · Requires Hytale server **0.7.5 or newer (0.7.x)**
 
 ---
 

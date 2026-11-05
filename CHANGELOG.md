@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.1.0 (unreleased)
+## 1.1.1 (unreleased)
 
-Port to Hytale server 0.7.x. Requires a 0.7.2 or newer 0.7 server; 1.0.0 does not load on 0.7.
+Port to Hytale server 0.7.x. Requires a 0.7.5 or newer 0.7 server; 1.0.0 does not load on 0.7. (1.1.0 was never published: it became 1.1.1 when the minimum moved to 0.7.5.)
 
 ### Changed
 - HUDs use Hytale's native multi-HUD support. The old HUD bridge (AutoMultiHUD / MultipleHUD
