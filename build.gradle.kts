@@ -5,9 +5,11 @@ plugins {
 group = "mx.jume.aquahunger"
 version = "1.1.0"
 
-// Server API the mod is compiled against (the minimum supported version) and the
-// range written to manifest.json. Bump both together after testing a new Hytale release.
-val hytaleServerVersion = "0.7.2"
+// Server API the mod is compiled against and the range written to manifest.json.
+// Maven only keeps recent patches (0.7.2 was removed), so compile against the newest one;
+// the minimum stays 0.7.2 because every server class the mod uses has the same signatures
+// in 0.7.2 and 0.7.5. Re-check both after a new Hytale release.
+val hytaleServerVersion = "0.7.5"
 val hytaleServerRange = ">=0.7.2 <0.8.0"
 
 java {

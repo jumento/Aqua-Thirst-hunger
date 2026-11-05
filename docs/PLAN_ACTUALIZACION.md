@@ -16,7 +16,9 @@ Plan aprobado con las decisiones recomendadas de la §12 (HUD solo nativo, sed m
 | 3 — Gameplay y config | Hecha |
 | 4 — Integraciones | Hecha en código, contra las APIs de RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (inspeccionadas, no ejecutadas; ver §6.1). Falta verificar en juego con cada mod |
 | 5 — Documentación | Parcial: README y `CHANGELOG.md` actualizados |
-| 6 — Verificación y release | Parcial: 27 pruebas unitarias; en un servidor dedicado 0.7.2 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod), y migra a 1.8.0 copias de configs reales de 1.6.0 y 1.6.1 sin perder valores. Falta la prueba en juego (§10.3) |
+| 6 — Verificación y release | Parcial: 27 pruebas unitarias; en servidores dedicados 0.7.2 y 0.7.5 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod), y migra a 1.8.0 copias de configs reales de 1.6.0 y 1.6.1 sin perder valores. Falta la prueba en juego (§10.3) |
+
+**Parche 0.7.5 (revisado el 5-nov-2026):** Maven retiró la 0.7.2, así que el build compila contra la 0.7.5. Las 139 clases del servidor que usa el mod tienen las mismas firmas en 0.7.2 y 0.7.5 (incluido el campo `EntityEffect.damageCalculatorCooldown` que se lee por reflexión), por lo que el rango del manifest sigue en `>=0.7.2 <0.8.0`. RPG Leveling, Endless Leveling y MMO Skill Tree no sacaron versiones nuevas desde las revisadas.
 
 Bugs corregidos: B01–B27 (B23–B27 aparecieron en la fase 4, ver §7). Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
 
