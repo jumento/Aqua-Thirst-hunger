@@ -179,7 +179,7 @@ src/main/resources/
   Common/UI/Custom/Hungry/  HUD .ui definitions
   Server/                   Items, interactions, entity effects, languages
   mmo/                      Custom skills, skill tree, XP maps
-  ExternalFoodsDefaultConfig.json   bundled defaults (250+ external foods)
+  defaults/                 ExternalFoodsDefaultConfig.json: bundled defaults (250+ external foods)
 docs/                       Update plan and technical notes
 ```
 

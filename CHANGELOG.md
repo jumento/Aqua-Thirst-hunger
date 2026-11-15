@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.1.1 (unreleased)
+## 1.1.2
 
-Port to Hytale server 0.7.x. Requires a 0.7.5 or newer 0.7 server; 1.0.0 does not load on 0.7. (1.1.0 was never published: it became 1.1.1 when the minimum moved to 0.7.5.)
+Port to Hytale server 0.7.x. Requires a 0.7.5 or newer 0.7 server (checked against 0.7.5 and
+0.7.7); 1.0.0 does not load on 0.7. This is the first public release since 1.0.0: 1.1.0 was never
+published and 1.1.1 was rejected by CurseForge's automated file processing.
+
+### Packaging (what changed from 1.1.1)
+- The optional mods are loaded the way 1.0.0 did it: all three are `OptionalDependencies` again and
+  their classes are found with a plain `Class.forName`. 1.1.1 declared MMO Skill Tree as
+  `LoadBefore` and loaded classes through the other mods' class loaders, which is the kind of class
+  loading automated scanners flag.
+- MMO Skill Tree still needs no restarts: its skill files are now written when our plugin is
+  created, which Hytale does for every plugin before it runs any `setup()`.
+- `ExternalFoodsDefaultConfig.json` moved inside the JAR to `defaults/`; the JAR root only holds
+  `manifest.json` and the icon. Nothing changes on disk.
 
 ### Changed
 - HUDs use Hytale's native multi-HUD support. The old HUD bridge (AutoMultiHUD / MultipleHUD
@@ -27,8 +39,8 @@ versions of those mods for Hytale 0.7.
 - Endless Leveling is found under its current plugin ID (`Airijko:EndlessLevelingCore`); before,
   it was not detected at all on Hytale 0.7. Level-ups come from its own event.
 - MMO Skill Tree no longer needs two restarts: the NUTRITION and THIRST skills are written to
-  `mods/mmoskilltree/` before MMO Skill Tree reads its config (the manifest loads us first).
-  The files are only rewritten when they change.
+  `mods/mmoskilltree/` before MMO Skill Tree reads its config. The files are only rewritten
+  when they change.
 - With MMO Skill Tree 1.7, skill tree rewards and Glutton items work again. MMO moved the classes
   we read them from, and the mod had silently fallen back to level-based bonuses.
 - `/aquahunger integrations` shows which of these mods are connected and your levels in them.

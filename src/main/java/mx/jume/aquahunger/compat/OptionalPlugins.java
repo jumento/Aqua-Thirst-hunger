@@ -10,10 +10,10 @@ import javax.annotation.Nullable;
 /**
  * Lookup of the optional mods we integrate with, by their real plugin IDs.
  *
- * <p>Since Hytale 0.7 a plugin's class loader only sees the plugins its manifest declares, and
- * MMO Skill Tree is declared as {@code LoadBefore} instead of an optional dependency (its skill
- * files have to be written before it reads them in its own setup). So classes of these mods are
- * loaded through the mod's own class loader, which works however the mod is declared.
+ * <p>Since Hytale 0.7 a plugin's class loader only sees the plugins its manifest declares. The
+ * three leveling mods are declared as OptionalDependencies, so Hytale loads them before us and
+ * their classes resolve through our own class loader with a plain {@code Class.forName}.
+ * Whether a mod is installed is asked to the plugin manager, which needs no class loading.
  */
 public final class OptionalPlugins {
     public static final PluginIdentifier RPG_LEVELING = new PluginIdentifier("Zuxaw", "RPGLeveling");
@@ -57,15 +57,14 @@ public final class OptionalPlugins {
     }
 
     /**
-     * Loads a class of an optional plugin through that plugin's own class loader. The class is not
-     * initialized here: MMO Skill Tree starts after us, so its static state is left for the first real call.
+     * Loads a class of an optional mod. Call it from start() or later: the mod has started by then
+     * (optional dependencies start before us), so initializing its class is safe.
      */
     public static Class<?> loadClass(PluginIdentifier id, String className) throws ClassNotFoundException {
-        PluginBase plugin = find(id);
-        if (plugin == null) {
+        if (find(id) == null) {
             throw new ClassNotFoundException(className + " (" + id + " is not loaded)");
         }
-        return Class.forName(className, false, plugin.getClass().getClassLoader());
+        return Class.forName(className);
     }
 
     /** Like {@link #loadClass} but tries each name in order, for classes a mod moved between versions. */

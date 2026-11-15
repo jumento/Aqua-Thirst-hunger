@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.hypixel.hytale.server.core.plugin.PluginBase;
+import com.hypixel.hytale.server.core.plugin.PluginState;
 import mx.jume.aquahunger.AquaThirstHunger;
 
 import java.io.*;
@@ -20,8 +22,9 @@ import java.nio.file.Paths;
  * <p>MMO reads {@code custom-skills.json}, {@code xp-maps.json} and {@code skill-tree.json} once,
  * in its own setup, and only keeps skill-tree overrides for skills that are already registered
  * at that moment. So the skills cannot come from a content pack (packs load later) and the files
- * must be written before MMO's setup: the manifest declares {@code LoadBefore: Ziggfreed:MMOSkillTree}
- * and this runs from our setup. MMO 1.7 still accepts a skill-tree override written as a list of tiers.
+ * must be written before MMO's setup. MMO is an optional dependency, so its setup runs before
+ * ours; but Hytale creates every plugin before it calls any setup, so this runs from our plugin's
+ * constructor. MMO 1.7 still accepts a skill-tree override written as a list of tiers.
  */
 public final class MMOSkillTreeRegistrar {
 
@@ -39,17 +42,30 @@ public final class MMOSkillTreeRegistrar {
 
     private MMOSkillTreeRegistrar() {}
 
-    public static void ensureRegistered() {
+    /**
+     * Writes the skills if MMO Skill Tree is installed. Meant for our plugin's constructor, which
+     * must never fail because of this: every problem ends up as a log line.
+     */
+    public static void registerIfInstalled() {
         if (registered) return;
-        registered = true;
-
         try {
-            if (register(MMO_CONFIG_DIR)) {
-                AquaThirstHunger.logInfo("[mmo] NUTRITION and THIRST skills written to " + MMO_CONFIG_DIR + ".");
-            } else {
-                AquaThirstHunger.logDebug("[mmo] NUTRITION and THIRST skills already up to date in " + MMO_CONFIG_DIR + ".");
+            PluginBase mmo = OptionalPlugins.find(OptionalPlugins.MMO_SKILL_TREE);
+            if (mmo == null) return;
+            registered = true;
+
+            PluginState state = mmo.getState();
+            boolean mmoAlreadyLoaded = state == PluginState.SETUP || state == PluginState.START
+                    || state == PluginState.ENABLED;
+
+            if (!register(MMO_CONFIG_DIR)) {
+                return; // already up to date
             }
-        } catch (Exception e) {
+            AquaThirstHunger.logInfo("[mmo] NUTRITION and THIRST skills written to " + MMO_CONFIG_DIR + ".");
+            if (mmoAlreadyLoaded) {
+                AquaThirstHunger.logWarning("[mmo] MMO Skill Tree had already read its config: "
+                        + "restart the server once to load the NUTRITION and THIRST skills.");
+            }
+        } catch (Exception | LinkageError e) {
             AquaThirstHunger.logWarning("[mmo] Could not write the NUTRITION and THIRST skills to " + MMO_CONFIG_DIR
                     + " (" + e + "). MMO Skill Tree will start without them.");
         }

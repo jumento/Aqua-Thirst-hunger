@@ -3,12 +3,13 @@ plugins {
 }
 
 group = "mx.jume.aquahunger"
-version = "1.1.1"
+version = "1.1.2"
 
 // Server API the mod is compiled against and the range written to manifest.json.
 // Maven only keeps recent patches (0.7.2 was removed). The minimum is the version the mod is
 // compiled and tested against. Bump both together after testing a new Hytale release.
-val hytaleServerVersion = "0.7.5"
+// To check a newer patch without editing this file: ./gradlew test -PhytaleServerVersion=0.7.7
+val hytaleServerVersion = providers.gradleProperty("hytaleServerVersion").getOrElse("0.7.5")
 val hytaleServerRange = ">=0.7.5 <0.8.0"
 
 java {
@@ -72,10 +73,8 @@ val generateManifest by tasks.registering {
               },
               "OptionalDependencies": {
                 "Zuxaw:RPGLeveling": "*",
+                "Ziggfreed:MMOSkillTree": "*",
                 "Airijko:EndlessLevelingCore": "*"
-              },
-              "LoadBefore": {
-                "Ziggfreed:MMOSkillTree": "*"
               },
               "IncludesAssetPack": true,
               "DisabledByDefault": false

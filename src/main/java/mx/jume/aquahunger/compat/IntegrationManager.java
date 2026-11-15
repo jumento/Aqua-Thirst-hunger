@@ -18,7 +18,7 @@ public class IntegrationManager {
     private static EndlessLevelingBridge endless;
     private static MMOSkillTreeBridge mmo;
 
-    /** Runs from our start(): RPG Leveling and Endless Leveling (optional dependencies) have started by then. */
+    /** Runs from our start(): the three mods are optional dependencies and have started by then. */
     public static void init() {
         shutdown();
 

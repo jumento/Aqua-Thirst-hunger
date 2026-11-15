@@ -14,11 +14,13 @@ Plan aprobado con las decisiones recomendadas de la §12 (HUD solo nativo, sed m
 | 1 — Migración de API | Hecha |
 | 2 — HUD nativo | Hecha |
 | 3 — Gameplay y config | Hecha |
-| 4 — Integraciones | Hecha en código, contra las APIs de RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (inspeccionadas, no ejecutadas; ver §6.1). Falta verificar en juego con cada mod |
+| 4 — Integraciones | Hecha en código, contra las APIs de RPG Leveling 0.4.2, Endless Leveling 14.1.0 y MMO Skill Tree 1.7.4 (inspeccionadas, no ejecutadas; ver §6.1). Probada en un servidor 0.7.5 real con plugins de prueba que imitan los IDs y las firmas de los tres mods (§6.2). Falta verificar en juego con los mods reales |
 | 5 — Documentación | Parcial: README y `CHANGELOG.md` actualizados |
-| 6 — Verificación y release | Parcial: 27 pruebas unitarias; en servidores dedicados 0.7.2 y 0.7.5 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores (solo con nuestro mod), y migra a 1.8.0 copias de configs reales de 1.6.0 y 1.6.1 sin perder valores. Falta la prueba en juego (§10.3) |
+| 6 — Verificación y release | Parcial: 27 pruebas unitarias (también contra el servidor 0.7.7); en servidores dedicados 0.7.2 y 0.7.5 el plugin carga su asset pack, pasa `--validate-assets`, se habilita y se apaga sin errores, y migra a 1.8.0 copias de configs reales de 1.6.0 y 1.6.1 sin perder valores. Falta la prueba en juego (§10.3) |
 
-**Parche 0.7.5 (revisado el 5-nov-2026):** Maven retiró la 0.7.2, así que el build compila contra la 0.7.5. Las 139 clases del servidor que usa el mod tienen las mismas firmas en 0.7.2 y 0.7.5 (incluido el campo `EntityEffect.damageCalculatorCooldown` que se lee por reflexión), A pedido tuyo, el manifest pasa a `>=0.7.5 <0.8.0` y el mod a **1.1.1** (la 1.1.0 nunca se publicó). RPG Leveling, Endless Leveling y MMO Skill Tree no sacaron versiones nuevas desde las revisadas.
+**Parches de Hytale:** Maven retiró la 0.7.2, así que el build compila contra la 0.7.5; a pedido tuyo, el manifest exige `>=0.7.5 <0.8.0`. Las 139 clases del servidor que usa el mod tienen las mismas firmas en 0.7.2, 0.7.5 y 0.7.7 (incluido el campo `EntityEffect.damageCalculatorCooldown`, que se lee por reflexión). Para comprobar un parche nuevo sin editar el build: `./gradlew test -PhytaleServerVersion=0.7.7`.
+
+**Versiones:** la 1.1.0 nunca se publicó. La 1.1.1 se subió a CurseForge el 5-nov-2026 y fue rechazada (§6.2). La versión a publicar es la **1.1.2**.
 
 Bugs corregidos: B01–B27 (B23–B27 aparecieron en la fase 4, ver §7). Además se corrigieron tres problemas encontrados durante la implementación: life-per-hunger gastaba sed con la sed desactivada, el buff de stamina quitaba el buff vanilla de frutas/verduras, y las páginas de config truncaban decimales al cerrar (`1.5` → `1`).
 
@@ -166,15 +168,42 @@ JARs descargados de CurseForge (archivos oficiales, versión para Hytale 0.7) a 
 |---|---|---|---|
 | RPG Leveling 0.4.2 (`RPGLeveling-0.4.2.jar`) | `Zuxaw:RPGLeveling` | Nada de lo que usamos: `isAvailable/get/addXP(UUID,double,XPSource)/getPlayerLevel/registerLevelUpListener`. `addXP` pasa la XP al hilo del mundo por su cuenta | Se llama a `initialize()` en nuestro `start()` (RPG ya arrancó, es dependencia opcional); listener de nivel con proxy completo, desregistrado al apagar |
 | Endless Leveling 14.1.0 (`EndlessLeveling.jar`) | `Airijko:EndlessLevelingCore` (antes `airijko:EndlessLeveling`) | `grantXp(UUID,double)` y `getPlayerLevel(UUID)` siguen; nuevo `addLevelUpListener(Consumer<LevelUpEvent>)` | ID nuevo en el manifest; level-up por listener (el sondeo de 200 ms queda solo como respaldo si falta el método); `grantXp` sigue diferido con `world.execute` |
-| MMO Skill Tree 1.7.4 (`MMOSkillTree-1.7.4.jar`) | `Ziggfreed:MMOSkillTree` | Lee `custom-skills.json`, `xp-maps.json` y `skill-tree.json` de `mods/mmoskilltree/` **en su `setup()`**, y descarta overrides de skills que no estén registradas en ese momento. `SkillTreeService`/`SkillReward` pasaron a `.skilltree`. `addXp` solo modifica el componente existente (seguro desde un tick) | `LoadBefore: Ziggfreed:MMOSkillTree` (y fuera de `OptionalDependencies`, que crearía un ciclo) y escritura de los 3 archivos en nuestro `setup()`: las skills existen desde el primer arranque. Las clases de MMO se cargan con su propio class loader (`OptionalPlugins`) |
+| MMO Skill Tree 1.7.4 (`MMOSkillTree-1.7.4.jar`) | `Ziggfreed:MMOSkillTree` | Lee `custom-skills.json`, `xp-maps.json` y `skill-tree.json` de `mods/mmoskilltree/` **en su `setup()`**, y descarta overrides de skills que no estén registradas en ese momento. `SkillTreeService`/`SkillReward` pasaron a `.skilltree`. `addXp` solo modifica el componente existente (seguro desde un tick) | Dependencia opcional, como RPG y Endless. Los 3 archivos se escriben en el constructor de nuestro plugin: Hytale crea todos los plugins antes de llamar a ningún `setup()`, así que las skills existen desde el primer arranque (§6.2). La 1.1.1 usaba `LoadBefore` y el class loader de MMO; se cambió por el rechazo de CurseForge |
 
 Notas:
 - **Por qué no un content pack para MMO:** MMO 1.6+ acepta skills y XP maps como assets (`Server/MMOSkillTree/CustomSkills/`), pero los nodos del árbol solo vienen de `skill-tree.json` del dueño y MMO ignora los overrides de skills que no conoce cuando lo lee en `setup()`, antes de cargar los assets. Con las skills en un pack, el árbol de NUTRITION y THIRST se perdería.
 - MMO 1.7 sigue aceptando un override escrito como lista de tiers (nuestra plantilla); los que guarda él usan un mapa por tier. Los archivos solo se reescriben si cambia su contenido, y un archivo con JSON inválido no se toca.
-- **Class loader de 0.7:** un plugin ve las clases de sus `Dependencies` y `OptionalDependencies`, no las de cualquier plugin cargado. Por eso la detección de mods va por ID de plugin (`PluginManager.getPlugin`) y las clases se piden al class loader del mod.
+- **Class loader de 0.7:** un plugin ve las clases de sus `Dependencies` y `OptionalDependencies`, no las de cualquier plugin cargado. Por eso los tres mods van en `OptionalDependencies` (sus clases se cargan con un `Class.forName` normal) y la detección de mods instalados va por ID de plugin (`PluginManager.getPlugin`), que es lo que arregla el caso de AquaSanity.
 - **XP fuera del tick:** no hizo falta mover las llamadas. RPG ya difiere sus `addXP`, el `addXp` de MMO es seguro y la de Endless ya se difería.
 - **"SURVIVAL" (B08):** el nivel que sube la sed máxima es ahora explícito: el nivel global de RPG Leveling o Endless Leveling (el mayor). MMO no tiene nivel global y no cuenta, igual que antes.
 - **Posible mejora (no hecha):** Endless Leveling expone `HudSuppression.addCinematicListener` para sus cinemáticas; se podrían ocultar nuestras barras durante ellas, pero hay que verlo en juego primero.
+
+### 6.2 Rechazo de la 1.1.1 en CurseForge y cambios de la 1.1.2
+
+**Qué pasó.** El archivo `Aqua-Thirst-hunger-1.1.1.jar` falló el procesamiento automático ("failed processing, this could be caused due to obfuscated code or corrupt files"), pasó a revisión manual y fue rechazado sin motivo visible. Soporte no dio la causa. CurseForge no publica qué revisa su escáner, así que la causa exacta **no está confirmada**; lo que sigue es lo que se pudo medir.
+
+**Comparación con la 1.0.0 (aprobada), sobre los dos JARs:**
+
+| Aspecto | Resultado |
+|---|---|
+| Integridad | ZIP válido, sin duplicados ni nombres raros; `javap` lee todas las clases; los JSON son válidos. Nada corrupto ni ofuscado |
+| Bytecode | Mismo compilador (Java 25) y las mismas clases de construcciones; ninguna nueva |
+| APIs de Java | La 1.1.1 usa **menos** reflexión que la 1.0.0. La única llamada nueva de tipo sensible es `Class.forName(String, boolean, ClassLoader)` sobre el class loader de otros plugins: es la firma típica de los cargadores de malware en Java y lo que soporte describió como "complex class loading" |
+| Manifest | Clave nueva `LoadBefore`; `ServerVersion` pasó a ser un rango (formato que ya usan mods aprobados) |
+| Recursos | Nuevo `ExternalFoodsDefaultConfig.json` en la raíz del JAR |
+| Subida | Changelog **vacío**. La política de moderación (*Fair Play*) exige que cada archivo lleve changelog; la 1.0.0 lo llevaba |
+
+**Qué cambia la 1.1.2** (sin perder funciones):
+- Vuelve al esquema de la 1.0.0: los tres mods en `OptionalDependencies`, sin `LoadBefore`, y un `Class.forName(String)` normal. El manifest tiene las mismas claves que el de la 1.0.0.
+- El arranque de MMO sin reinicios se conserva escribiendo sus archivos en el constructor del plugin. Verificado en el bytecode de `PluginManager.setup()` (0.7.5 y 0.7.7): primero se crean todos los plugins y después se llama a `setup()`. Si un Hytale futuro cambiara ese orden, el mod lo detecta y pide un reinicio en el log.
+- `ExternalFoodsDefaultConfig.json` va en `defaults/` dentro del JAR.
+- La subida debe llevar changelog y una nota para moderación con el enlace al código.
+
+**Verificación.** Tres plugins de prueba (propios, fuera del repositorio) con los IDs, clases y firmas de RPG Leveling, Endless Leveling y MMO Skill Tree, en un servidor 0.7.5 real:
+- en el primer arranque, el `setup()` del MMO de prueba ya encuentra NUTRITION y THIRST en `custom-skills.json`, `skill-tree.json` y `xp-maps.json`;
+- los tres bridges conectan, con lectura de recompensas del árbol;
+- los listeners de subida de nivel se registran (el de RPG en un `HashSet`), reciben un evento de prueba sin errores y se quitan al apagar;
+- un segundo arranque no reescribe los archivos; sin los mods no se crea `mods/mmoskilltree/`.
 
 ### MultipleHUD y AutoMultiHUD
 Ya no son necesarios. Se elimina toda la integración, incluida la escritura en `PlayerPacketTracker.incomingJarOverride` de AutoMultiHUD.
@@ -214,7 +243,7 @@ Severidad: **A** = rompe una función o provoca un crash · **M** = comportamien
 | B20 | B | En cada tick con sed > 0 se recorren y quitan los efectos de deshidratación, y se vuelve a aplicar el buff de stamina | `ThirstSystem` | actuar solo en las transiciones |
 | B21 | B | Comandos sin registrar: `RpgStatusCommand`, `HungryHideCommand`, `HungryShowCommand` (código muerto) | `commands/` | registrarlos como subcomandos útiles o eliminarlos |
 | B22 | B | Textos fijos en inglés en las páginas ("System Reloaded Successfully.", "WARNING: …") y traducciones a mano en `getCasualName` | `ui/`, `MMOSkillTreeBridge` | moverlos a `lang/` |
-| B23 | A | Endless Leveling ahora se registra como `Airijko:EndlessLevelingCore`; con el ID viejo del manifest y el class loader de 0.7 el bridge nunca encuentra su API | `build.gradle.kts`, `EndlessLevelingBridge` | ID nuevo y carga por el class loader del mod |
+| B23 | A | Endless Leveling ahora se registra como `Airijko:EndlessLevelingCore`; con el ID viejo del manifest y el class loader de 0.7 el bridge nunca encuentra su API | `build.gradle.kts`, `EndlessLevelingBridge` | ID nuevo en `OptionalDependencies` |
 | B24 | A | MMO 1.7 movió `SkillTreeService` y `SkillReward` a `com.ziggfreed.mmoskilltree.skilltree`: la lectura de recompensas falla, el sistema Glotón queda apagado y los bonos del árbol pasan al cálculo por nivel | `MMOSkillTreeBridge` | probar el paquete nuevo y el viejo |
 | B25 | M | La recompensa final de Hidratación "Super Healthy" (`thirst_healthy_lifestyle`) no hace nada: el código buscaba `thirst_king_fitness` y `thirst_super_healthy`, que nunca existieron en el árbol | `MMOSkillTreeBridge` | ID real y prueba que cruza el código con la plantilla |
 | B26 | M | En 0.7 el class loader de un plugin solo ve sus dependencias declaradas: la detección de AquaSanity por nombre de clase siempre falla y el aviso de bienvenida sale aunque AquaSanity esté instalado | `AquaThirstHunger`, `WelcomeNoticeManager` | detectar por ID de plugin (`PluginManager`) |

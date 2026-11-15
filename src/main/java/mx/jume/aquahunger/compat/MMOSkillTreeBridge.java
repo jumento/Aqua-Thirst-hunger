@@ -29,7 +29,7 @@ import java.util.Random;
  * Reads claimed skill tree rewards to calculate multipliers and trigger Glutton/Junk systems.
  *
  * <p>Our NUTRITION and THIRST skills are written to MMO's config files by
- * {@link MMOSkillTreeRegistrar} during our setup, before MMO reads them.
+ * {@link MMOSkillTreeRegistrar} when our plugin is created, before MMO reads them.
  */
 public class MMOSkillTreeBridge implements HungerThirstIntegrationBridge {
 

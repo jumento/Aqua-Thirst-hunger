@@ -223,20 +223,18 @@ public class HHMExternalFoodsConfig {
     }
 
     private void overwriteDefaultsFromResource() {
-        // The source is now bundled at the root of the JAR (pulled from mods folder
-        // during build)
-        String resourcePath = "/ExternalFoodsDefaultConfig.json";
+        // Bundled in the JAR under defaults/ (the JAR root only holds manifest.json)
+        String resourcePath = "/defaults/ExternalFoodsDefaultConfig.json";
         try {
             if (defaultConfigFile.getParentFile() != null) {
                 defaultConfigFile.getParentFile().mkdirs();
             }
 
-            // Get resource from JAR root
             try (java.io.InputStream in = HHMExternalFoodsConfig.class.getResourceAsStream(resourcePath)) {
                 if (in == null) {
                     // Try without leading slash
                     try (java.io.InputStream in2 = HHMExternalFoodsConfig.class.getClassLoader()
-                            .getResourceAsStream("ExternalFoodsDefaultConfig.json")) {
+                            .getResourceAsStream("defaults/ExternalFoodsDefaultConfig.json")) {
                         if (in2 == null) {
                             LOGGER.severe("CRITICAL: Default config not found inside the mod JAR!");
                             return;

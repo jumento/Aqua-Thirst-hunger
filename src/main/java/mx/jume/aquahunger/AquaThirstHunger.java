@@ -45,6 +45,11 @@ public class AquaThirstHunger extends JavaPlugin {
     public AquaThirstHunger(@NonNullDecl JavaPluginInit init) {
         super(init);
         instance = this;
+
+        // MMO Skill Tree reads its skill files once, in its own setup(), and as an optional dependency
+        // it is set up before us. Hytale creates every plugin before it calls any setup(), so this is
+        // the moment that comes before MMO's setup.
+        MMOSkillTreeRegistrar.registerIfInstalled();
     }
 
     @Override
@@ -56,11 +61,6 @@ public class AquaThirstHunger extends JavaPlugin {
         //logDebug("Configuration loaded.");
 
         mx.jume.aquahunger.compat.NotifiedPlayersManager.load(java.nio.file.Paths.get("mods/Aqua-Thirst-hunger"));
-
-        // MMO Skill Tree reads its skill files in its own setup; the manifest's LoadBefore makes ours run first.
-        if (OptionalPlugins.isPresent(OptionalPlugins.MMO_SKILL_TREE)) {
-            MMOSkillTreeRegistrar.ensureRegistered();
-        }
 
         final var entityStoreRegistry = this.getEntityStoreRegistry();
         this.hungerComponentType = entityStoreRegistry.registerComponent(HungerComponent.class, "HungerComponent", HungerComponent.CODEC);
@@ -106,6 +106,9 @@ public class AquaThirstHunger extends JavaPlugin {
     protected void start() {
         super.start();
 
+        // Does nothing if the constructor already wrote the MMO Skill Tree files; otherwise it writes
+        // them now and asks for one restart in the log.
+        MMOSkillTreeRegistrar.registerIfInstalled();
         mx.jume.aquahunger.compat.IntegrationManager.init();
 
         if (this.getHungerConfig().isSinglePlayer()) {
@@ -147,7 +150,7 @@ public class AquaThirstHunger extends JavaPlugin {
     public static AquaThirstHunger get() { return instance; }
 
     // Installed checks go through the plugin manager: on 0.7 our class loader cannot see
-    // plugins the manifest does not declare (MMO Skill Tree, AquaSanity).
+    // plugins the manifest does not declare (AquaSanity).
     public boolean isRpgLevelingPresent() {
         return OptionalPlugins.isPresent(OptionalPlugins.RPG_LEVELING);
     }
@@ -178,7 +181,8 @@ public class AquaThirstHunger extends JavaPlugin {
 
     /** Verbose diagnostics, only when EnableDebugLogs is on in ThirstConfig.json. */
     public static void logDebug(String message) {
-        if (instance != null && instance.getThirstConfig() != null && instance.getThirstConfig().isEnableDebugLogs()) {
+        if (instance != null && instance.configManager != null && instance.getThirstConfig() != null
+                && instance.getThirstConfig().isEnableDebugLogs()) {
             String tag = message.startsWith("[") ? "" : "[aquathirst] ";
             LOGGER.at(Level.INFO).log(tag + "[debug] " + message);
         }
