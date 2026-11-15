@@ -8,7 +8,7 @@ version = "1.1.2"
 // Server API the mod is compiled against and the range written to manifest.json.
 // Maven only keeps recent patches (0.7.2 was removed). The minimum is the version the mod is
 // compiled and tested against. Bump both together after testing a new Hytale release.
-// To check a newer patch without editing this file: ./gradlew test -PhytaleServerVersion=0.7.7
+// To check a newer patch without editing this file: ./gradlew jar -PhytaleServerVersion=0.7.7
 val hytaleServerVersion = providers.gradleProperty("hytaleServerVersion").getOrElse("0.7.5")
 val hytaleServerRange = ">=0.7.5 <0.8.0"
 
@@ -26,22 +26,10 @@ repositories {
 dependencies {
     compileOnly("com.hypixel.hytale:Server:$hytaleServerVersion")
     compileOnly("com.google.code.gson:gson:2.10.1")
-    testImplementation("com.hypixel.hytale:Server:$hytaleServerVersion")
-    testImplementation("com.google.code.gson:gson:2.10.1")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-}
-
-tasks.test {
-    useJUnitPlatform()
-    // Config code writes backups under mods/Aqua-Thirst-hunger relative to the working directory.
-    val testWorkDir = layout.buildDirectory.dir("test-work").get().asFile
-    workingDir = testWorkDir
-    doFirst { testWorkDir.mkdirs() }
 }
 
 val generateManifest by tasks.registering {
