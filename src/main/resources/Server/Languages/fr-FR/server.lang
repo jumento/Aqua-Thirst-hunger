@@ -1,0 +1,23 @@
+items.AquaThirstHunger_Canteen.name = Gourde Rustique
+items.AquaThirstHunger_Canteen.description = Pas la meilleure option, mais le moyen le plus accessible pour obtenir de l'eau
+
+items.AquaThirstHunger_Canteen_Pro_Empty.name = Gourde Pro Vide
+items.AquaThirstHunger_Canteen_Pro_Empty.description = Trouvez une source d'eau pour la remplir
+
+items.AquaThirstHunger_Canteen_Pro.name = Gourde Pro (Remplie)
+items.AquaThirstHunger_Canteen_Pro.description = Remplie d'eau, prête à boire
+
+items.AquaThirstHunger_BasicBottle_Empty.name = Bouteille Basique Vide
+items.AquaThirstHunger_BasicBottle_Empty.description = Une simple bouteille pour transporter de l'eau.
+items.AquaThirstHunger_BasicBottle.name = Bouteille Basique (Remplie)
+items.AquaThirstHunger_BasicBottle.description = Bouteille basique remplie d'eau, contient 5 utilisations.
+
+chat.xp.satiated = #F39C12[Survie] #FFFFFFVous vous sentez rassasié. #2ECC71+100 XP
+chat.xp.gluttony = #E67E22[Gourmandise] #FFFFFFVous avez mangé plus que nécessaire ! #27AE60+50 XP
+chat.xp.resilience = #C0392B[Résilience] #FFFFFFVous avez survécu à la limite ! #27AE60+50 XP
+chat.xp.resilience_thirst = #2980B9[Résilience] #FFFFFFHydratation extrême atteinte. #27AE60+25 XP
+
+title.most_gluttonous = Le Plus Glouton
+title.most_hungry = Le Plus Affamé
+title.most_thirsty = Le Plus Assoiffé
+title.most_dehydrated = Le Plus Déshydraté
