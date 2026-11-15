@@ -17,21 +17,26 @@ public class LangManager {
     
     private static final Map<String, String> SHORT_CODE_MAP = Map.of(
         "en", "en_US",
-        "es", "es_ES"
+        "es", "es_ES",
+        "fr", "fr_FR"
     );
 
     public static @javax.annotation.Nonnull String getForLanguage(String hytaleLang, String key) {
         if (hytaleLang == null) hytaleLang = "en-US";
         String langCode = hytaleLang.replace('-', '_');
-        
+
         Map<String, String> messages = loadLanguage(langCode);
         if (messages == null || !messages.containsKey(key)) {
             // Fallback to family
-            String family = langCode.length() >= 2 ? langCode.substring(0, 2) : "en";
+            String family = langCode.length() >= 2 ? langCode.substring(0, 2).toLowerCase() : "en";
             String fallback = SHORT_CODE_MAP.getOrDefault(family, "en_US");
             messages = loadLanguage(fallback);
         }
-        
+        if (messages == null || !messages.containsKey(key)) {
+            // A translation that lacks this key: English instead of showing the raw key
+            messages = loadLanguage("en_US");
+        }
+
         String result = (messages != null) ? messages.getOrDefault(key, key) : key;
         return result != null ? result : key;
     }

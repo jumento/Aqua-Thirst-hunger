@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "mx.jume.aquahunger"
-version = "1.1.2"
+version = "1.1.3"
 
 // Server API the mod is compiled against and the range written to manifest.json.
 // Maven only keeps recent patches (0.7.2 was removed). The minimum is the version the mod is
